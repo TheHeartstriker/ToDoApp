@@ -4,23 +4,36 @@ body {
   margin: 0;
   padding: 0;
 }
-
+/* Need to ajust fr for rows as more todos are added */
 .ToDoContainer {
   display: grid;
-  height: 500px;
-  gap: 25px;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  height: 100%;
+  width: 100vw;
+  gap: 100px;
+  grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+  grid-template-rows: repeat(3, 1fr); /* Three equal rows */
   background-color: hsl(0, 5%, 10%);
   border-color: #000000;
 }
 
 .grid-item {
+  margin: 50px;
+  aspect-ratio: 1 / 1;
   background-color: hsl(0, 5%, 15%);
   border-radius: 5px;
   color: #ffffff;
+  padding: 10px;
+}
+
+.Creator {
+  width: 500px;
+  height: 500px;
+  margin: auto;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(0, 5%, 15%);
+  border-radius: 5px;
+  color: #ffffff;
   padding: 10px;
 }
