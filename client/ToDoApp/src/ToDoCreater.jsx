@@ -7,8 +7,9 @@ function ToDoCreater() {
         <h1>Create box center</h1>
       </div> */}
       <div className="Creator">
-        <input type="text" placeholder="Enter your task" />
-        <button>Add</button>
+        <input type="text" id="Input" placeholder="Enter your task" />
+        <button id="Add">Create</button>
+        <button id="Reset">Reset</button>
       </div>
     </>
   );
