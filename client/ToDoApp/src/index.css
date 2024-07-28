@@ -1,8 +1,16 @@
 body {
-  background-color: #505963;
+  background-color: #000000;
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
+}
+
+#ContainerHeader {
+  color: #ffffff;
+  background-color: hsl(0, 0%, 0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /* Need to ajust fr for rows as more todos are added */
 .ToDoContainer {
@@ -17,13 +25,15 @@ body {
 }
 
 .grid-item {
-  margin: 50px;
+  margin: 75px;
   aspect-ratio: 1 / 1;
   background-color: hsl(0, 5%, 15%);
   border-radius: 5px;
   color: #ffffff;
   padding: 10px;
 }
+
+/* Create todo styles */
 
 .Creator {
   position: absolute;
@@ -52,4 +62,24 @@ body {
   position: absolute;
   bottom: 10px;
   right: 10px;
+}
+
+/* Left and right nav */
+
+#Left {
+  height: 100%;
+  width: 50px;
+  position: fixed;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+}
+
+#Right {
+  position: fixed;
+  height: 100%;
+  width: 50px;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
 }
