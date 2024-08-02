@@ -3,8 +3,10 @@ import { useState } from "react";
 function Nav() {
   return (
     <>
-      <button id="Left"></button>
-      <button id="Right"></button>
+      <div id="ContainerHeader">
+        <button id="Home">ToDo's</button>
+        <button id="About">Create</button>
+      </div>
     </>
   );
 }

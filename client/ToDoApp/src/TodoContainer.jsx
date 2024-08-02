@@ -5,9 +5,6 @@ function Container() {
 
   return (
     <>
-      <div id="ContainerHeader">
-        <h1>Todo's</h1>
-      </div>
       <div className="ToDoContainer">
         <div className="grid-item">Item 1</div>
         <div className="grid-item">Item 2</div>

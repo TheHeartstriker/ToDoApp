@@ -10,7 +10,13 @@ body {
   background-color: hsl(0, 0%, 0%);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+}
+
+#ContainerHeader button {
+  margin: 10px;
+  padding: 10px;
+  width: 1000px;
 }
 /* Need to ajust fr for rows as more todos are added */
 .ToDoContainer {
@@ -40,6 +46,9 @@ body {
   width: 90vw;
   height: 90vh;
 
+  display: flex;
+  flex-direction: column;
+
   background-color: hsl(0, 5%, 15%);
   color: #ffffff;
   padding: 10px;
@@ -66,20 +75,6 @@ body {
 
 /* Left and right nav */
 
-#Left {
-  height: 100%;
-  width: 50px;
-  position: fixed;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-}
-
-#Right {
-  position: fixed;
-  height: 100%;
-  width: 50px;
-  top: 50%;
-  right: 5px;
-  transform: translateY(-50%);
+#HeaderTask {
+  height: 100px;
 }
