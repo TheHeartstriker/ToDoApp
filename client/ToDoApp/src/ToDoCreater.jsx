@@ -1,16 +1,50 @@
 import { useState, useEffect } from "react";
 
 function ToDoCreater() {
+  const [TaskName, setTaskName] = useState("");
+  const [TaskDescription, setTaskDescription] = useState("");
+
+  const handleTaskNameChange = (event) => {
+    setTaskName(event.target.value);
+  };
+
+  const handleTaskDesChange = (event) => {
+    setTaskDescription(event.target.value);
+  };
+
+  const log = () => {
+    console.log(TaskName);
+    console.log(TaskDescription);
+  };
+
+  const handleReset = () => {
+    setTaskName("");
+    setTaskDescription("");
+  };
+
   return (
     <>
-      {/* <div>
-        <h1>Create box center</h1>
-      </div> */}
       <div className="Creator">
-        <input type="text" id="HeaderTask" placeholder="Task Name" />
-        <input type="text" id="DescriptTask" placeholder="Task Description" />
-        <button id="Add">Create</button>
-        <button id="Reset">Reset</button>
+        <input
+          type="text"
+          id="HeaderTask"
+          placeholder="Task Name"
+          value={TaskName}
+          onChange={handleTaskNameChange}
+        />
+        <input
+          type="text"
+          id="DescriptTask"
+          placeholder="Task Description"
+          value={TaskDescription}
+          onChange={handleTaskDesChange}
+        />
+        <button id="Add" onClick={log}>
+          Create
+        </button>
+        <button id="Reset" onClick={handleReset}>
+          Reset
+        </button>
       </div>
     </>
   );

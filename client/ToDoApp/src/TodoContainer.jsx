@@ -1,22 +1,17 @@
 import { useState, useEffect } from "react";
 
 function Container() {
-  console.log("Container component is rendered");
+  const [items, setItems] = useState(["Item 1", "Item 2", "Item 3", "Item 4"]);
 
   return (
-    <>
-      <div className="ToDoContainer">
-        <div className="grid-item">Item 1</div>
-        <div className="grid-item">Item 2</div>
-        <div className="grid-item">Item 3</div>
-        <div className="grid-item">Item 4</div>
-        <div className="grid-item">Item 5</div>
-        <div className="grid-item">Item 6</div>
-        <div className="grid-item">Item 7</div>
-        <div className="grid-item">Item 8</div>
-        <div className="grid-item">Item 9</div>
-      </div>
-    </>
+    // This iterates over the items array and renders each item in a div
+    <div className="ToDoContainer">
+      {items.map((item, index) => (
+        <div key={index} className="grid-item">
+          {item}
+        </div>
+      ))}
+    </div>
   );
 }
 
