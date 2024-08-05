@@ -1,7 +1,14 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useContext } from "react";
+import { TaskContext } from "./TaskProvider";
 function Container() {
-  const [items, setItems] = useState(["Item 1", "Item 2", "Item 3", "Item 4"]);
+  const { taskData } = useContext(TaskContext);
+  const [items, setItems] = useState([
+    "Item 1",
+    "Item 2",
+    "Item 3",
+    "Item 4",
+    `${taskData.task}`,
+  ]);
 
   return (
     // This iterates over the items array and renders each item in a div

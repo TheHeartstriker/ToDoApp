@@ -1,8 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
+import { TaskContext } from "./TaskProvider";
 
 function ToDoCreater() {
+  //Seters for the task name and description
   const [TaskName, setTaskName] = useState("");
   const [TaskDescription, setTaskDescription] = useState("");
+
+  const { setTaskData } = useContext(TaskContext);
 
   const handleTaskNameChange = (event) => {
     setTaskName(event.target.value);
@@ -15,6 +19,7 @@ function ToDoCreater() {
   const log = () => {
     console.log(TaskName);
     console.log(TaskDescription);
+    setTaskData({ task: TaskName, description: TaskDescription });
   };
 
   const handleReset = () => {
