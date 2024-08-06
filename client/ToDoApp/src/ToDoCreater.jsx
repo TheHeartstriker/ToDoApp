@@ -17,9 +17,7 @@ function ToDoCreater() {
   };
 
   const log = () => {
-    console.log(TaskName);
-    console.log(TaskDescription);
-    setTaskData({ task: TaskName, description: TaskDescription });
+    setTaskData({ task: TaskName });
   };
 
   const handleReset = () => {

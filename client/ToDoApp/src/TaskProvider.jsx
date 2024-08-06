@@ -1,9 +1,33 @@
 import React, { createContext, useState } from "react";
+//Where data will be loaded and stored for use in the container
 //Creates a context
 export const TaskContext = createContext();
 //Creates a state to store the task data
 export const TaskProvider = ({ children }) => {
-  const [taskData, setTaskData] = useState({ task: "" });
+  const [taskData, setTaskData] = useState([
+    { task: "Sample Task", index: 0, description: "Sample Description" },
+  ]);
+
+  const addTask = (task, description) => {
+    setTaskData((prevTaskData) => [
+      ...prevTaskData,
+      { task, index: prevTaskData.length, description },
+    ]);
+  };
+
+  const updateTask = (index, task, description) => {
+    setTaskData((prevTaskData) =>
+      prevTaskData.map((t) =>
+        t.index === index ? { ...t, task, description } : t
+      )
+    );
+  };
+
+  const removeTask = (index) => {
+    setTaskData((prevTaskData) =>
+      prevTaskData.filter((t) => t.index !== index)
+    );
+  };
 
   return (
     <TaskContext.Provider value={{ taskData, setTaskData }}>
