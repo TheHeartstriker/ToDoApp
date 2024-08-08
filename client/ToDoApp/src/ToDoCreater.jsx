@@ -3,10 +3,10 @@ import { TaskContext } from "./TaskProvider";
 
 function ToDoCreater() {
   //Seters for the task name and description
+  const { setTaskData, taskData } = useContext(TaskContext);
+
   const [TaskName, setTaskName] = useState("");
   const [TaskDescription, setTaskDescription] = useState("");
-
-  const { setTaskData } = useContext(TaskContext);
 
   const handleTaskNameChange = (event) => {
     setTaskName(event.target.value);
@@ -15,9 +15,12 @@ function ToDoCreater() {
   const handleTaskDesChange = (event) => {
     setTaskDescription(event.target.value);
   };
-
-  const log = () => {
-    setTaskData({ task: TaskName });
+  //creating multiple objects
+  const addTask = (task, description) => {
+    setTaskData((prevTaskData) => [
+      ...prevTaskData,
+      { Task: task, index: prevTaskData.length, Description: description },
+    ]);
   };
 
   const handleReset = () => {
@@ -42,7 +45,7 @@ function ToDoCreater() {
           value={TaskDescription}
           onChange={handleTaskDesChange}
         />
-        <button id="Add" onClick={log}>
+        <button id="Add" onClick={() => addTask(TaskName, TaskDescription)}>
           Create
         </button>
         <button id="Reset" onClick={handleReset}>
