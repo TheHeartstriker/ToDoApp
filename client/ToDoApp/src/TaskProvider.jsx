@@ -13,11 +13,11 @@ export const TaskProvider = ({ children }) => {
     ]);
   };
 
-  // const removeTask = (index) => {
-  //   setTaskData((prevTaskData) =>
-  //     prevTaskData.filter((t) => t.index !== index)
-  //   );
-  // };
+  const removeTask = (index) => {
+    setTaskData((prevTaskData) =>
+      prevTaskData.filter((t) => t.index !== index)
+    );
+  };
 
   return (
     <TaskContext.Provider value={{ taskData, setTaskData }}>

@@ -31,12 +31,42 @@ body {
 }
 
 .grid-item {
+  position: relative;
   margin: 75px;
   aspect-ratio: 1 / 1;
   background-color: hsl(0, 5%, 15%);
   border-radius: 5px;
   color: #ffffff;
   padding: 10px;
+  height: 150px;
+  width: 150px;
+}
+.grid-item h1 {
+  margin: 0;
+  padding: 0;
+}
+
+/* Buttons for the indvidual tasks */
+.TaskLeft button {
+  position: absolute;
+  background-color: greenyellow;
+  border: none;
+  opacity: 0.5;
+  height: 100%;
+  width: 50%;
+  bottom: 0;
+  left: 0;
+}
+
+.TaskRight button {
+  position: absolute;
+  background-color: gray;
+  border: none;
+  opacity: 0.5;
+  height: 100%;
+  width: 50%;
+  bottom: 0;
+  right: 0;
 }
 
 /* Create todo styles */
