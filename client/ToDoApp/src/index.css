@@ -41,9 +41,16 @@ body {
   height: 150px;
   width: 150px;
 }
-.grid-item h1 {
+
+.grid-item.inspected {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   margin: 0;
-  padding: 0;
+  transform: translate(-50%, -50%);
+  background-color: hsl(0, 100%, 50%);
+  height: 800px;
+  width: 800px;
 }
 
 /* Buttons for the indvidual tasks */
