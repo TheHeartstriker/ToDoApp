@@ -16,7 +16,7 @@ body {
 #ContainerHeader button {
   margin: 10px;
   padding: 10px;
-  width: 1000px;
+  width: 500px;
 }
 /* Need to ajust fr for rows as more todos are added */
 .ToDoContainer {
@@ -24,19 +24,56 @@ body {
   height: 100%;
   width: 100vw;
   gap: 100px;
-  grid-template-columns: repeat(3, 1fr); /* Three equal columns */
-  grid-template-rows: repeat(3, 1fr); /* Three equal rows */
+  grid-template-columns: repeat(4, 1fr); /* Three equal columns */
+  grid-template-rows: repeat(2, 1fr); /* Three equal rows */
   background-color: hsl(0, 5%, 10%);
   border-color: #000000;
 }
 
 .grid-item {
+  position: relative;
   margin: 75px;
   aspect-ratio: 1 / 1;
   background-color: hsl(0, 5%, 15%);
   border-radius: 5px;
   color: #ffffff;
   padding: 10px;
+  height: 150px;
+  width: 150px;
+}
+
+.grid-item.inspected {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  background-color: hsl(0, 100%, 50%);
+  height: 800px;
+  width: 800px;
+}
+
+/* Buttons for the indvidual tasks */
+.TaskLeft button {
+  position: absolute;
+  background-color: greenyellow;
+  border: none;
+  opacity: 0.5;
+  height: 100%;
+  width: 50%;
+  bottom: 0;
+  left: 0;
+}
+
+.TaskRight button {
+  position: absolute;
+  background-color: gray;
+  border: none;
+  opacity: 0.5;
+  height: 100%;
+  width: 50%;
+  bottom: 0;
+  right: 0;
 }
 
 /* Create todo styles */
