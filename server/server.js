@@ -1,18 +1,22 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
 
-app.get("/api", (req, res) => {
-  res.json({ Users: ["User 1", "User 2", "User 3"] });
-});
+app.use(cors());
+app.use(express.json());
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
 });
 
 // POST route to handle incoming data
-app.post("/api/data", (req, res) => {
-  const data = req.body;
-  console.log("Received data:", data);
-  res.status(200).send("Data received");
+app.post("/api", (req, res) => {
+  console.log("Data received:", req.body);
+  res.status(200).send("Data receivede");
 });
+//Then get the data above?
+
+// app.get("/api", (req, res) => {
+//   res.json({ Users: ["User 1", "User 2", "User 3"] });
+// });
