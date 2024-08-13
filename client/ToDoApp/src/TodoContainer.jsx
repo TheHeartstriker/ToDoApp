@@ -6,7 +6,7 @@ function Container() {
   //Local used so we dont save certain changes like inspect
   const [LocalTaskData, setLocalTaskData] = useState(taskData);
 
-  //Organize data
+  //Put request
   function IndexOrganize() {
     //Local organize
     setLocalTaskData((prevLocalTaskData) =>
@@ -17,7 +17,8 @@ function Container() {
       prevTaskData.map((task, i) => ({ ...task, index: i }))
     );
   }
-  //Remove task
+
+  //Delete request
   const removeTask = (index) => {
     //Local remove task
     setLocalTaskData((prevLocalTaskData) =>
@@ -30,6 +31,7 @@ function Container() {
     //When task is removed, organize the index
     IndexOrganize();
   };
+
   //Add inspect to all local tasks
   function AddInspect() {
     setLocalTaskData((prevLocalTaskData) =>
@@ -52,7 +54,7 @@ function Container() {
   }, []);
 
   useEffect(() => {
-    console.log("Prime", taskData);
+    console.log("Primedata", taskData);
   }, [taskData]);
 
   return (

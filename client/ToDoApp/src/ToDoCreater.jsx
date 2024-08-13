@@ -17,10 +17,33 @@ function ToDoCreater() {
   };
   //creating multiple objects
   const addTask = (task, description) => {
-    setTaskData((prevTaskData) => [
-      ...prevTaskData,
-      { Task: task, index: prevTaskData.length, Description: description },
-    ]);
+    setTaskData((prevTaskData) => {
+      const newTask = {
+        Task: task,
+        index: prevTaskData.length,
+        Description: description,
+      };
+      const updatedTaskData = [...prevTaskData, newTask];
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      };
+
+      fetch("http://localhost:5000/api", options)
+        .then((response) => response.text())
+        .then((responseData) => {
+          console.log("Response from server:", responseData);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
+      return updatedTaskData;
+    });
   };
 
   const handleReset = () => {

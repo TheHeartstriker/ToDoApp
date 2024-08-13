@@ -13,10 +13,7 @@ app.listen(5000, () => {
 // POST route to handle incoming data
 app.post("/api", (req, res) => {
   console.log("Data received:", req.body);
-  res.status(200).send("Data receivede");
+  res.status(200).send("Data received");
 });
-//Then get the data above?
 
-// app.get("/api", (req, res) => {
-//   res.json({ Users: ["User 1", "User 2", "User 3"] });
-// });
+//Set up a get route and preloaded data for testing
