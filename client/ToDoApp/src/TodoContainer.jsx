@@ -6,18 +6,6 @@ function Container() {
   //Local used so we dont save certain changes like inspect
   const [LocalTaskData, setLocalTaskData] = useState(taskData);
 
-  //Put request
-  function IndexOrganize() {
-    //Local organize
-    setLocalTaskData((prevLocalTaskData) =>
-      prevLocalTaskData.map((task, i) => ({ ...task, index: i }))
-    );
-    //Organize main index data
-    setTaskData((prevTaskData) =>
-      prevTaskData.map((task, i) => ({ ...task, index: i }))
-    );
-  }
-
   //Delete request
   const removeTask = (index) => {
     //Local remove task
@@ -28,10 +16,55 @@ function Container() {
     setTaskData((prevTaskData) =>
       prevTaskData.filter((t) => t.index !== index)
     );
+
+    fetch("http://localhost:5000/api", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ index: index }),
+    })
+      //Response checks
+      .then((response) => response.text())
+      .then((responseData) => {
+        console.log("Response from server:", responseData);
+      })
+      //Error checks
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
     //When task is removed, organize the index
     IndexOrganize();
   };
 
+  function IndexOrganize() {
+    // Local organize
+    setLocalTaskData((prevLocalTaskData) =>
+      prevLocalTaskData.map((task, i) => ({ ...task, index: i }))
+    );
+    // Organize main index data
+    setTaskData((prevTaskData) =>
+      prevTaskData.map((task, i) => ({ ...task, index: i }))
+    );
+
+    // Send PUT request to notify the server to reorganize
+    fetch("http://localhost:5000/api", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      // Response checks
+      .then((response) => response.text())
+      .then((responseData) => {
+        console.log("Response from server:", responseData);
+      })
+      // Error checks
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
   //Add inspect to all local tasks
   function AddInspect() {
     setLocalTaskData((prevLocalTaskData) =>
@@ -54,7 +87,7 @@ function Container() {
   }, []);
 
   useEffect(() => {
-    console.log("Primedata", taskData);
+    //console.log("Primedata", taskData);
   }, [taskData]);
 
   return (

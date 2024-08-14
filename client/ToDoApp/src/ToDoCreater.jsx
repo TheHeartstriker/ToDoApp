@@ -18,11 +18,13 @@ function ToDoCreater() {
   //creating multiple objects
   const addTask = (task, description) => {
     setTaskData((prevTaskData) => {
+      //Given to the server
       const newTask = {
         Task: task,
         index: prevTaskData.length,
         Description: description,
       };
+      //Added to the local taskdata
       const updatedTaskData = [...prevTaskData, newTask];
 
       const options = {
@@ -34,10 +36,12 @@ function ToDoCreater() {
       };
 
       fetch("http://localhost:5000/api", options)
+        //Response checks
         .then((response) => response.text())
         .then((responseData) => {
           console.log("Response from server:", responseData);
         })
+        //Error checks
         .catch((error) => {
           console.error("Error:", error);
         });
