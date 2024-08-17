@@ -1,5 +1,9 @@
 import express from "express";
 import cors from "cors";
+import mysql from "mysql2";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
@@ -9,6 +13,15 @@ app.use(express.json());
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
 });
+
+const pool = mysql
+  .createPool({
+    host: process.env.MY_HOST,
+    user: process.env.MY_USER,
+    password: process.env.MY_PASS,
+    database: process.env.MY_DB,
+  })
+  .promise();
 
 let temptask = [];
 
@@ -30,5 +43,3 @@ app.put("/api", (req, res) => {
   console.log(temptask);
   res.status(200).send("Data organized"); // Send the updated temptask as the response
 });
-
-console.log(temptask); // Log the temptask to the console
