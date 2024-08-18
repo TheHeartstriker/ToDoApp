@@ -12,21 +12,20 @@
   width: 500px;
 }
 
-#username {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #ffffff;
-  font-size: 20px;
+#LoginContainer label,
+#LoginContainer input {
+  margin: 10px 0; /* Add vertical margin */
 }
 
-#password {
-  position: relative;
+#LoginContainer {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  height: 100vh; /* Full viewport height */
+  border: 2px dashed red; /* Debugging border */
+}
+
+.input-group {
   color: #ffffff;
-  font-size: 20px;
 }

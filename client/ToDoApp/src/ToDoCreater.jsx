@@ -18,14 +18,15 @@ function ToDoCreater() {
   //creating multiple objects
   const addTask = (task, description) => {
     setTaskData((prevTaskData) => {
+      //Added to the local taskdata
+      const updatedTaskData = [...prevTaskData, newTask];
+
       //Given to the server
       const newTask = {
         Task: task,
         index: prevTaskData.length,
         Description: description,
       };
-      //Added to the local taskdata
-      const updatedTaskData = [...prevTaskData, newTask];
 
       const options = {
         method: "POST",
@@ -35,7 +36,7 @@ function ToDoCreater() {
         body: JSON.stringify(newTask),
       };
 
-      fetch("http://localhost:5000/api", options)
+      fetch("http://localhost:5000/api/createToDo", options)
         //Response checks
         .then((response) => response.text())
         .then((responseData) => {

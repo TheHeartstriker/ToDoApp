@@ -14,8 +14,13 @@ app.listen(5000, () => {
 
 let temptask = [];
 
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+  console.log("Username:", username);
+});
+
 // POST route to handle incoming data
-app.post("/api", (req, res) => {
+app.post("/api/createToDo", (req, res) => {
   console.log("Data received:", req.body);
   temptask.push(req.body);
   res.status(200).send("Data received");
