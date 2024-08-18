@@ -1,0 +1,32 @@
+#ContainerHeader {
+  color: #ffffff;
+  background-color: hsl(0, 0%, 0%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#ContainerHeader button {
+  margin: 10px;
+  padding: 10px;
+  width: 500px;
+}
+
+#username {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+  font-size: 20px;
+}
+
+#password {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 20px;
+}
