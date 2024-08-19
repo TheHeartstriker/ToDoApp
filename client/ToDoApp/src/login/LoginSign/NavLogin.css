@@ -12,16 +12,7 @@
   width: 500px;
 }
 
-#LoginContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center items horizontally */
-  justify-content: center; /* Center items vertically */
-  height: 100vh; /* Full viewport height */
-  border: 2px dashed red; /* Debugging border */
-}
-
-#SignUpContainer {
+#LogSignContainer {
   display: flex;
   flex-direction: column;
   align-items: center; /* Center items horizontally */

@@ -19,14 +19,13 @@ function ToDoCreater() {
   const addTask = (task, description) => {
     setTaskData((prevTaskData) => {
       //Added to the local taskdata
-      const updatedTaskData = [...prevTaskData, newTask];
-
       //Given to the server
       const newTask = {
         Task: task,
-        index: prevTaskData.length,
         Description: description,
       };
+
+      const updatedTaskData = [...prevTaskData, newTask];
 
       const options = {
         method: "POST",

@@ -8,7 +8,6 @@ import ToDoCreater from "./ToDoCreater";
 import Container from "./TodoContainer.jsx";
 import Nav from "./Navigator";
 import Login from "./login/LoginSign/Login";
-import SignUp from "./login/LoginSign/SignUp";
 
 //CSS imports
 import "./index.css";
@@ -22,7 +21,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/" element={<Container />} />
           <Route path="/create" element={<ToDoCreater />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </TaskProvider>
