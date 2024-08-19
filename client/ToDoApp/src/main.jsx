@@ -7,10 +7,12 @@ import { TaskProvider } from "./TaskProvider";
 import ToDoCreater from "./ToDoCreater";
 import Container from "./TodoContainer.jsx";
 import Nav from "./Navigator";
-import Login from "./Login";
+import Login from "./login/LoginSign/Login";
+import SignUp from "./login/LoginSign/SignUp";
+
 //CSS imports
 import "./index.css";
-import "./NavLogin.css";
+import "./login/LoginSign/NavLogin.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <TaskProvider>
@@ -20,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/" element={<Container />} />
           <Route path="/create" element={<ToDoCreater />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </TaskProvider>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Login() {
+function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,7 +12,7 @@ function Login() {
     setPassword(event.target.value);
   };
 
-  const handleLogin = () => {
+  const handleSignup = () => {
     const options = {
       method: "POST",
       headers: {
@@ -21,7 +21,7 @@ function Login() {
       body: JSON.stringify({ username: username, password: password }),
     };
 
-    fetch("http://localhost:5000/api/login", options)
+    fetch("http://localhost:5000/api/signup", options)
       .then((response) => response.text())
       .then((responseData) => {
         console.log("Response from server:", responseData);
@@ -33,31 +33,31 @@ function Login() {
 
   return (
     <>
-      <div id="LoginContainer">
-        <div className="input-group">
-          <label htmlFor="username">Username:</label>
+      <div id="SignUpContainer">
+        <div className="input-group-signup">
+          <label htmlFor="SignupUsername">Username:</label>
           <input
             type="text"
-            id="username"
+            id="SignupUsername"
             value={username}
             onChange={handleUsernameChange}
           />
         </div>
-        <div className="input-group">
-          <label htmlFor="password">Password:</label>
+        <div className="input-group-signup">
+          <label htmlFor="SignupPassword">Password:</label>
           <input
             type="password"
-            id="password"
+            id="SignupPassword"
             value={password}
             onChange={handlePasswordChange}
           />
         </div>
-        <button id="login" onClick={handleLogin}>
-          Login
+        <button id="login" onClick={handleSignup}>
+          Signup
         </button>
       </div>
     </>
   );
 }
 
-export default Login;
+export default SignUp;

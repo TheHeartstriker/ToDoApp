@@ -17,7 +17,7 @@ function Container() {
       prevTaskData.filter((t) => t.index !== index)
     );
 
-    fetch("http://localhost:5000/api", {
+    fetch("http://localhost:5000/api/deleteToDo", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ function Container() {
     );
 
     // Send PUT request to notify the server to reorganize
-    fetch("http://localhost:5000/api", {
+    fetch("http://localhost:5000/api/organize", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

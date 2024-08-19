@@ -12,11 +12,6 @@
   width: 500px;
 }
 
-#LoginContainer label,
-#LoginContainer input {
-  margin: 10px 0; /* Add vertical margin */
-}
-
 #LoginContainer {
   display: flex;
   flex-direction: column;
@@ -26,6 +21,19 @@
   border: 2px dashed red; /* Debugging border */
 }
 
+#SignUpContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  height: 100vh; /* Full viewport height */
+  border: 2px dashed red; /* Debugging border */
+}
+
 .input-group {
+  color: #ffffff;
+}
+
+.input-group-signup {
   color: #ffffff;
 }
