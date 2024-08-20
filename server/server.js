@@ -5,7 +5,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: "http://localhost:5173", // Adjust this to your client's origin
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
@@ -13,7 +21,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-let temptask = [];
 // Reciving signup data
 app.post("/api/signup", (req, res) => {
   const { username, password } = req.body;
@@ -25,10 +32,13 @@ app.get("/api/login", (req, res) => {
 });
 
 // POST route to handle incoming data
+//You likely put limits on the useid thats why its not working
 app.post("/api/createToDo", (req, res) => {
   let Header = req.body.Task;
   let Description = req.body.Description;
-  CreateToDo(Header, Description, 3);
+  let userid = req.body.Id;
+  console.log("Sent to server" + Header);
+  CreateToDo(Header, Description, userid);
 });
 
 app.delete("/api/deleteToDo", (req, res) => {
@@ -73,9 +83,9 @@ function getToDoDataByUserId(userid) {
   return pool.query(`SELECT * FROM tododata WHERE UserId = ?`, [userid]);
 }
 
-function CreateToDo(Header, Description, userid) {
+function CreateToDo(Header, Description, taskid) {
   return pool.query(
-    `INSERT INTO tododata (ToDoHeader, De_scription, UserId) VALUES (?, ?, ?)`,
-    [Header, Description, userid]
+    `INSERT INTO tododata (ToDoHeader, De_scription, task_id) VALUES (?, ?, ?)`,
+    [Header, Description, taskid]
   );
 }

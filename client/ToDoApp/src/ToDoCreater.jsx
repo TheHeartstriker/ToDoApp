@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { TaskContext } from "./TaskProvider";
+import { v4 as uuidv4 } from "uuid";
 
 function ToDoCreater() {
   //Seters for the task name and description
@@ -17,38 +18,51 @@ function ToDoCreater() {
   };
   //creating multiple objects
   const addTask = (task, description) => {
+    const id = uuidv4();
+
+    //Given to the server and used to create a new task locally in TaskData
+    const newTask = {
+      Id: id,
+      Task: task,
+      Description: description,
+    };
+    //Data sent to the server
+    sendTaskData(newTask);
+
+    //Data added the main local task data
     setTaskData((prevTaskData) => {
-      //Added to the local taskdata
-      //Given to the server
-      const newTask = {
-        Task: task,
-        Description: description,
-      };
-
+      //Previous data and the new task
       const updatedTaskData = [...prevTaskData, newTask];
+      // Assign an index to each task this is for easy of navigation in the container
+      const indexedTaskData = updatedTaskData.map((task, index) => ({
+        ...task,
+        Index: index,
+      }));
 
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      };
-
-      fetch("http://localhost:5000/api/createToDo", options)
-        //Response checks
-        .then((response) => response.text())
-        .then((responseData) => {
-          console.log("Response from server:", responseData);
-        })
-        //Error checks
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-
-      return updatedTaskData;
+      return indexedTaskData;
     });
   };
+
+  function sendTaskData(datatosend) {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datatosend),
+    };
+
+    fetch("http://localhost:5000/api/createToDo", options)
+      //Response checks
+      .then((response) => response.text())
+      .then((responseData) => {
+        console.log("Response from server:", responseData);
+      })
+      //Error checks
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
   const handleReset = () => {
     setTaskName("");

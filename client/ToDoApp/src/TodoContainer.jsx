@@ -37,7 +37,7 @@ function Container() {
     //When task is removed, organize the index
     IndexOrganize();
   };
-
+  //Organize index
   function IndexOrganize() {
     // Local organize
     setLocalTaskData((prevLocalTaskData) =>
@@ -81,30 +81,25 @@ function Container() {
   };
 
   useEffect(() => {
-    // console.log("Local", LocalTaskData);
     AddInspect();
     setLocalTaskData(taskData);
   }, []);
-
-  useEffect(() => {
-    //console.log("Primedata", taskData);
-  }, [taskData]);
 
   return (
     // This iterates over the items array and renders each item in a div
     <div className="ToDoContainer">
       {LocalTaskData.map((item, index) => (
         <div
-          key={item.index}
+          key={item.Index}
           className={`grid-item ${item.inspect ? "inspected" : ""}`}
         >
           <h1>{item.Task}</h1>
           {item.inspect && <p>{item.Description}</p>}
           <div className="TaskLeft">
-            <button onClick={() => removeTask(item.index)}></button>
+            <button onClick={() => removeTask(item.Index)}></button>
           </div>
           <div className="TaskRight">
-            <button onClick={() => Inspect(item.index)}></button>
+            <button onClick={() => Inspect(item.Index)}></button>
           </div>
         </div>
       ))}
