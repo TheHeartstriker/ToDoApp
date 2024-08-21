@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import mysql from "mysql2";
+import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -23,20 +23,21 @@ app.listen(PORT, () => {
 
 // Reciving signup data
 app.post("/api/signup", (req, res) => {
-  const { username, password } = req.body;
-  console.log("Username:", username);
+  const { username, password, UserId } = req.body;
+  console.log(username, password, UserId);
+  signup(username, password, UserId);
 });
 
-app.get("/api/login", (req, res) => {
-  res.status(200).send(temptask);
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+  login(username, password);
 });
 
 // POST route to handle incoming data
 //You likely put limits on the useid thats why its not working
 app.post("/api/createToDo", (req, res) => {
-  let Header = req.body.Task;
-  let Description = req.body.Description;
-  let userid = req.body.Id;
+  const { Task: Header, Description: Description, Id: userid } = req.body;
+
   console.log("Sent to server" + Header);
   CreateToDo(Header, Description, userid);
 });
@@ -45,13 +46,6 @@ app.delete("/api/deleteToDo", (req, res) => {
   const { index } = req.body;
   temptask = temptask.filter((task) => task.index !== index);
   res.status(200).send("Data deleted"); // Send the updated temptask as the response
-});
-
-//This is used for when a delete request is made and a reorganization is needed
-app.put("/api/organize", (req, res) => {
-  temptask = temptask.map((task, i) => ({ ...task, index: i }));
-  console.log(temptask);
-  res.status(200).send("Data organized"); // Send the updated temptask as the response
 });
 
 const pool = mysql.createPool({
@@ -63,20 +57,30 @@ const pool = mysql.createPool({
 //Need to make sure a newly created id is not already in use
 function signup(username, password, id) {
   return pool.query(
-    `INSERT INTO userdata (UserName, Pass_word, UserId) VALUES (?, ?, ?)`,
+    `INSERT INTO login (UserName, Pass_word, UserId) VALUES (?, ?, ?)`,
     [username, password, id]
   );
 }
 
-function login(username, password) {
-  return pool.query(
-    `SELECT * FROM userdata WHERE UserName = ? AND Pass_word = ?`,
-    [username, password]
-  );
+async function login(username, password) {
+  try {
+    const [results] = await pool.query(
+      `SELECT * FROM login WHERE UserName = ? AND Pass_word = ?`,
+      [username, password]
+    );
+    console.log(username, password);
+    if (results.length > 0) {
+      console.log("Login successful");
+    } else {
+      console.log("Login failed");
+    }
+  } catch (error) {
+    console.error("Database query failed", error);
+  }
 }
 
-function deleteTask(index) {
-  return pool.query(`DELETE FROM tododata WHERE index_pos = ?`, [index]);
+function deleteTask(id) {
+  return pool.query(`DELETE FROM tododata WHERE task_id = ?`, [id]);
 }
 
 function getToDoDataByUserId(userid) {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -35,10 +36,11 @@ function Login() {
 
   const handleLogin = () => {
     const options = {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ username, password }),
     };
 
     fetch("http://localhost:5000/api/login", options)
@@ -52,12 +54,13 @@ function Login() {
   };
 
   const handleSignup = () => {
+    let UserId = uuidv4();
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify({ username, password, UserId }),
     };
 
     fetch("http://localhost:5000/api/signup", options)
