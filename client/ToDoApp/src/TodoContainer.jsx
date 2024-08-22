@@ -24,7 +24,7 @@ function Container() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ index: index }),
+      body: JSON.stringify({ Task: taskData[index].TaskId }),
     })
       //Response checks
       .then((response) => response.text())
@@ -49,23 +49,6 @@ function Container() {
     setTaskData((prevTaskData) =>
       prevTaskData.map((task, i) => ({ ...task, index: i }))
     );
-
-    // Send PUT request to notify the server to reorganize
-    fetch("http://localhost:5000/api/organize", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      // Response checks
-      .then((response) => response.text())
-      .then((responseData) => {
-        console.log("Response from server:", responseData);
-      })
-      // Error checks
-      .catch((error) => {
-        console.error("Error:", error);
-      });
   }
   //Add inspect to all local tasks
   function AddInspect() {

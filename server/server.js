@@ -59,8 +59,9 @@ app.post("/api/createToDo", (req, res) => {
 });
 
 app.delete("/api/deleteToDo", (req, res) => {
-  const { index } = req.body;
-  temptask = temptask.filter((task) => task.index !== index);
+  const { Task: Id } = req.body;
+  console.log("Delete request for task id: ", Id);
+  deleteTask(Id);
   res.status(200).send("Data deleted"); // Send the updated temptask as the response
 });
 
