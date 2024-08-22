@@ -6,6 +6,8 @@ function Container() {
   //Local used so we dont save certain changes like inspect
   const [LocalTaskData, setLocalTaskData] = useState(taskData);
 
+  function loadTaskfromServer() {}
+
   //Delete request
   const removeTask = (index) => {
     //Local remove task

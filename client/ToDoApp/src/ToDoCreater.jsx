@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 function ToDoCreater() {
   //Seters for the task name and description
   const { setTaskData, taskData } = useContext(TaskContext);
+  const { userId, setUserId } = useContext(TaskContext);
 
   const [TaskName, setTaskName] = useState("");
   const [TaskDescription, setTaskDescription] = useState("");
@@ -22,10 +23,12 @@ function ToDoCreater() {
 
     //Given to the server and used to create a new task locally in TaskData
     const newTask = {
-      Id: id,
+      TaskId: id,
       Task: task,
       Description: description,
+      UserId: userId,
     };
+    console.log(newTask);
     //Data sent to the server
     sendTaskData(newTask);
 

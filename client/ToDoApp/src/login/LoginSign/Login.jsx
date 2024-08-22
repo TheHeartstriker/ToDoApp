@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { TaskContext } from "../../TaskProvider";
 
 function Login() {
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  const { userId, setUserId } = useContext(TaskContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -44,9 +48,16 @@ function Login() {
     };
 
     fetch("http://localhost:5000/api/login", options)
-      .then((response) => response.text())
+      .then((response) => response.json())
       .then((responseData) => {
         console.log("Response from server:", responseData);
+        if (responseData.success) {
+          setIsSignedIn(true);
+          setUserId(responseData.Id);
+          console.log("User ID:", userId);
+        } else {
+          setIsSignedIn(false);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);

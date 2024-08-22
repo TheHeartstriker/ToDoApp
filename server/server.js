@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173", // Adjust this to your client's origin
+  origin: "http://localhost:5173",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
@@ -28,18 +28,34 @@ app.post("/api/signup", (req, res) => {
   signup(username, password, UserId);
 });
 
-app.post("/api/login", (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
-  login(username, password);
+  try {
+    const result = await login(username, password);
+    if (result) {
+      const userId = await GetUserId(username, password);
+      console.log(userId);
+      res.status(200).send({ success: true, Id: userId });
+    } else {
+      res.status(401).send(false);
+    }
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
 });
 
 // POST route to handle incoming data
 //You likely put limits on the useid thats why its not working
 app.post("/api/createToDo", (req, res) => {
-  const { Task: Header, Description: Description, Id: userid } = req.body;
+  const {
+    Task: Header,
+    Description: Description,
+    TaskId: TaskId,
+    UserId: UserId,
+  } = req.body;
 
   console.log("Sent to server" + Header);
-  CreateToDo(Header, Description, userid);
+  CreateToDo(Header, Description, TaskId, UserId);
 });
 
 app.delete("/api/deleteToDo", (req, res) => {
@@ -70,12 +86,29 @@ async function login(username, password) {
     );
     console.log(username, password);
     if (results.length > 0) {
-      console.log("Login successful");
+      return true;
     } else {
-      console.log("Login failed");
+      return false;
     }
   } catch (error) {
     console.error("Database query failed", error);
+  }
+}
+
+async function GetUserId(username, password) {
+  try {
+    const [results] = await pool.query(
+      `SELECT UserId FROM login WHERE UserName = ? AND Pass_word = ?`,
+      [username, password]
+    );
+    if (results.length > 0) {
+      return results[0].UserId;
+    } else {
+      throw new Error("Invalid credentials");
+    }
+  } catch (error) {
+    console.error("Database query failed", error);
+    throw error;
   }
 }
 
@@ -87,9 +120,9 @@ function getToDoDataByUserId(userid) {
   return pool.query(`SELECT * FROM tododata WHERE UserId = ?`, [userid]);
 }
 
-function CreateToDo(Header, Description, taskid) {
+function CreateToDo(Header, Description, taskid, UserId) {
   return pool.query(
-    `INSERT INTO tododata (ToDoHeader, De_scription, task_id) VALUES (?, ?, ?)`,
-    [Header, Description, taskid]
+    `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId) VALUES (?, ?, ?, ?)`,
+    [Header, Description, taskid, UserId]
   );
 }
