@@ -21,6 +21,18 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+let userIdGet = "";
+
+app.get("/api/getTododata", async (req, res) => {
+  try {
+    const data = await getToDoDataByUserId(userIdGet);
+    console.log("ToDo data held by user", data);
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
+});
+
 // Reciving signup data
 app.post("/api/signup", (req, res) => {
   const { username, password, UserId } = req.body;
@@ -34,7 +46,7 @@ app.post("/api/login", async (req, res) => {
     const result = await login(username, password);
     if (result) {
       const userId = await GetUserId(username, password);
-      console.log(userId);
+      userIdGet = userId;
       res.status(200).send({ success: true, Id: userId });
     } else {
       res.status(401).send(false);
@@ -117,8 +129,21 @@ function deleteTask(id) {
   return pool.query(`DELETE FROM tododata WHERE task_id = ?`, [id]);
 }
 
-function getToDoDataByUserId(userid) {
-  return pool.query(`SELECT * FROM tododata WHERE UserId = ?`, [userid]);
+async function getToDoDataByUserId(userid) {
+  try {
+    const [results] = await pool.query(
+      `SELECT * FROM tododata WHERE UserId = ?`,
+      [userid]
+    );
+    const data = results.map((row) => ({
+      Header: row.ToDoHeader,
+      Description: row.De_scription,
+      TaskId: row.task_id,
+    }));
+    return data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 function CreateToDo(Header, Description, taskid, UserId) {
