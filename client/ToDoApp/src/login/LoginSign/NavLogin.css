@@ -1,0 +1,30 @@
+#ContainerHeader {
+  color: #ffffff;
+  background-color: hsl(0, 0%, 0%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#ContainerHeader button {
+  margin: 10px;
+  padding: 10px;
+  width: 500px;
+}
+
+#LogSignContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  height: 100vh; /* Full viewport height */
+  border: 2px dashed red; /* Debugging border */
+}
+
+.input-group {
+  color: #ffffff;
+}
+
+.input-group-signup {
+  color: #ffffff;
+}
