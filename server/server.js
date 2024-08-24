@@ -12,6 +12,13 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 204,
 };
+//For the database connection
+const pool = mysql.createPool({
+  host: process.env.MY_HOST,
+  user: process.env.MY_USER,
+  password: process.env.MY_PASS,
+  database: process.env.MY_DB,
+});
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -21,25 +28,30 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-let userIdGet = "";
-
 app.get("/api/getTododata", async (req, res) => {
   try {
     const data = await getToDoDataByUserId(userIdGet);
-    console.log("ToDo data held by user", data);
     res.status(200).send(data);
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
   }
 });
 
-// Reciving signup data
-app.post("/api/signup", (req, res) => {
+// Simply sends a username and password to the database to be inserted
+app.post("/api/signup", async (req, res) => {
   const { username, password, UserId } = req.body;
-  console.log(username, password, UserId);
-  signup(username, password, UserId);
+  try {
+    await signup(username, password, UserId);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
 });
 
+//Relook at this later
+let userIdGet = "";
+
+// Sends username and login to the database sends if the login is successful 'true' and the user id if so
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -56,39 +68,43 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// POST route to handle incoming data
-//You likely put limits on the useid thats why its not working
-app.post("/api/createToDo", (req, res) => {
+// POST route sends information to be inserted into the database
+app.post("/api/createToDo", async (req, res) => {
   const {
     Task: Header,
     Description: Description,
     TaskId: TaskId,
     UserId: UserId,
   } = req.body;
-
-  console.log("Sent to server" + Header);
-  CreateToDo(Header, Description, TaskId, UserId);
+  try {
+    await CreateToDo(Header, Description, TaskId, UserId);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
 });
-
-app.delete("/api/deleteToDo", (req, res) => {
+// Delete route seeds the task id to be deleted
+app.delete("/api/deleteToDo", async (req, res) => {
   const { Task: Id } = req.body;
-  console.log("Delete request for task id: ", Id);
-  deleteTask(Id);
-  res.status(200).send("Data deleted"); // Send the updated temptask as the response
+  try {
+    await deleteTask(Id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
 });
 
-const pool = mysql.createPool({
-  host: process.env.MY_HOST,
-  user: process.env.MY_USER,
-  password: process.env.MY_PASS,
-  database: process.env.MY_DB,
-});
-//Need to make sure a newly created id is not already in use
-function signup(username, password, id) {
-  return pool.query(
-    `INSERT INTO login (UserName, Pass_word, UserId) VALUES (?, ?, ?)`,
-    [username, password, id]
-  );
+//Database functions
+async function signup(username, password, id) {
+  try {
+    const result = await pool.query(
+      `INSERT INTO login (UserName, Pass_word, UserId) VALUES (?, ?, ?)`,
+      [username, password, id]
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function login(username, password) {
@@ -125,10 +141,6 @@ async function GetUserId(username, password) {
   }
 }
 
-function deleteTask(id) {
-  return pool.query(`DELETE FROM tododata WHERE task_id = ?`, [id]);
-}
-
 async function getToDoDataByUserId(userid) {
   try {
     const [results] = await pool.query(
@@ -146,9 +158,24 @@ async function getToDoDataByUserId(userid) {
   }
 }
 
-function CreateToDo(Header, Description, taskid, UserId) {
-  return pool.query(
-    `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId) VALUES (?, ?, ?, ?)`,
-    [Header, Description, taskid, UserId]
-  );
+async function deleteTask(id) {
+  try {
+    const result = await pool.query(`DELETE FROM tododata WHERE task_id = ?`, [
+      id,
+    ]);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+async function CreateToDo(Header, Description, taskid, UserId) {
+  try {
+    const result = pool.query(
+      `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId) VALUES (?, ?, ?, ?)`,
+      [Header, Description, taskid, UserId]
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
 }
