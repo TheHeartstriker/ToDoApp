@@ -5,7 +5,7 @@ function Container() {
   const { taskData, setTaskData } = useContext(TaskContext);
   const { userId } = useContext(TaskContext);
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
-  //Local used so we dont save certain changes like inspect
+  //Local used so we dont save or send unnecessary data to the server
   const [LocalTaskData, setLocalTaskData] = useState(taskData);
 
   function loadTaskfromServer() {
@@ -32,41 +32,43 @@ function Container() {
   }
 
   //Delete request
-  function removeTask(index) {
+  function removeTask(index, id) {
     // Local remove task
     setLocalTaskData(function (prevLocalTaskData) {
       return prevLocalTaskData.filter(function (t) {
-        return t.index !== index;
+        return t.Index !== index;
       });
     });
 
     // Remove task from main data
     setTaskData(function (prevTaskData) {
       return prevTaskData.filter(function (t) {
-        return t.index !== index;
+        return t.TaskId !== id;
       });
     });
 
-    let options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ Task: LocalTaskData[index].TaskId }),
-    };
+    if (isSignedIn) {
+      let options = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ Task: LocalTaskData[index].TaskId }),
+      };
 
-    fetch("http://localhost:5000/api/deleteToDo", options)
-      // Response checks
-      .then(function (response) {
-        return response.text();
-      })
-      .then(function (responseData) {
-        console.log("Response from server:", responseData);
-      })
-      // Error checks
-      .catch(function (error) {
-        console.error("Error:", error);
-      });
+      fetch("http://localhost:5000/api/deleteToDo", options)
+        // Response checks
+        .then(function (response) {
+          return response.text();
+        })
+        .then(function (responseData) {
+          console.log("Response from server:", responseData);
+        })
+        // Error checks
+        .catch(function (error) {
+          console.error("Error:", error);
+        });
+    }
 
     // When task is removed, organize the index
     IndexOrganize();
@@ -97,17 +99,31 @@ function Container() {
     );
   };
 
+  function addIndexs() {
+    setLocalTaskData((prevLocalTaskData) =>
+      prevLocalTaskData.map((task, i) => ({ ...task, Index: i }))
+    );
+  }
+  //There is an issue where only when loaded are index and inspect values added
+  //But new data is left out
+  //Fixed?
   useEffect(() => {
-    console.log("LocalTaskData changed", LocalTaskData);
-  }, [LocalTaskData]);
+    setLocalTaskData(taskData);
+    addIndexs();
+    AddInspect();
+  }, [taskData]);
 
   useEffect(() => {
-    AddInspect();
-    setLocalTaskData(taskData);
     if (isSignedIn) {
       loadTaskfromServer();
     }
   }, []);
+
+  useEffect(() => {
+    console.log(LocalTaskData);
+  }, [taskData]);
+
+  //Set local task data to the main task data and then added indexes
 
   return (
     // This iterates over the items array and renders each item in a div
@@ -117,10 +133,12 @@ function Container() {
           key={item.Index}
           className={`grid-item ${item.inspect ? "inspected" : ""}`}
         >
-          <h1>{item.Header}</h1>
+          <h1>{item.Task}</h1>
           {item.inspect && <p>{item.Description}</p>}
           <div className="TaskLeft">
-            <button onClick={() => removeTask(item.Index)}></button>
+            <button
+              onClick={() => removeTask(item.Index, item.TaskId)}
+            ></button>
           </div>
           <div className="TaskRight">
             <button onClick={() => Inspect(item.Index)}></button>

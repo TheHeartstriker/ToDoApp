@@ -1,5 +1,5 @@
 body {
-  background-color: #3f3f3f;
+  background-color: hsl(0, 5%, 10%);
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
@@ -10,6 +10,7 @@ body {
   display: grid;
   height: 100%;
   width: 100vw;
+  /* min-height: 500px; */
   gap: 100px;
   grid-template-columns: repeat(4, 1fr); /* Three equal columns */
   grid-template-rows: repeat(2, 1fr); /* Three equal rows */
@@ -73,6 +74,7 @@ body {
   display: flex;
   flex-direction: column;
 
+  border: 5px lightblue;
   background-color: hsl(0, 5%, 15%);
   color: #ffffff;
   padding: 10px;

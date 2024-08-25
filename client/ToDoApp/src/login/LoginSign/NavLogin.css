@@ -1,15 +1,22 @@
 #ContainerHeader {
-  color: #ffffff;
-  background-color: hsl(0, 0%, 0%);
+  background-color: grey;
   display: flex;
   align-items: center;
-  justify-content: space-around;
 }
 
 #ContainerHeader button {
+  border: 5px solid #e11d48;
+  background-color: rgb(255, 159, 173);
+  border-radius: 5px;
   margin: 10px;
   padding: 10px;
-  width: 500px;
+  height: 100px;
+  width: 100px;
+  transition: background-color 0.5s ease;
+}
+
+#ContainerHeader button:hover {
+  background-color: #ff577e;
 }
 
 #LogSignContainer {

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 function ToDoCreater() {
   //Seters for the task name and description
-  const { setTaskData, taskData } = useContext(TaskContext);
+  const { taskData, setTaskData } = useContext(TaskContext);
   const { userId, setUserId } = useContext(TaskContext);
 
   const [TaskName, setTaskName] = useState("");
@@ -17,33 +17,25 @@ function ToDoCreater() {
   const handleTaskDesChange = (event) => {
     setTaskDescription(event.target.value);
   };
+
   //creating multiple objects
   const addTask = (task, description) => {
     const id = uuidv4();
 
-    //Given to the server and used to create a new task locally in TaskData
+    // Given to the server and used to create a new task locally in TaskData
     const newTask = {
       TaskId: id,
       Task: task,
       Description: description,
       UserId: userId,
     };
-    console.log(newTask);
-    //Data sent to the server
+    // Data sent to the server
     sendTaskData(newTask);
+    // Data added to the main local task data
+    // Previous data and the new task
+    const updatedTaskData = [...taskData, newTask];
 
-    //Data added the main local task data
-    setTaskData((prevTaskData) => {
-      //Previous data and the new task
-      const updatedTaskData = [...prevTaskData, newTask];
-      // Assign an index to each task this is for easy of navigation in the container
-      const indexedTaskData = updatedTaskData.map((task, index) => ({
-        ...task,
-        Index: index,
-      }));
-
-      return indexedTaskData;
-    });
+    return updatedTaskData;
   };
 
   function sendTaskData(datatosend) {
@@ -89,7 +81,10 @@ function ToDoCreater() {
           value={TaskDescription}
           onChange={handleTaskDesChange}
         />
-        <button id="Add" onClick={() => addTask(TaskName, TaskDescription)}>
+        <button
+          id="Add"
+          onClick={() => setTaskData(addTask(TaskName, TaskDescription))}
+        >
           Create
         </button>
         <button id="Reset" onClick={handleReset}>
