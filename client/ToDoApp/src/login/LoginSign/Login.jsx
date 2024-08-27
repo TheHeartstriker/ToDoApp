@@ -38,7 +38,7 @@ function Login() {
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const options = {
       method: "POST",
       headers: {
@@ -47,24 +47,23 @@ function Login() {
       body: JSON.stringify({ username, password }),
     };
 
-    fetch("http://localhost:5000/api/login", options)
-      .then((response) => response.json())
-      .then((responseData) => {
-        console.log("Response from server:", responseData);
-        if (responseData.success) {
-          setIsSignedIn(true);
-          setUserId(responseData.Id);
-          console.log("User ID:", userId);
-        } else {
-          setIsSignedIn(false);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    try {
+      const response = await fetch("http://localhost:5000/api/login", options);
+      const responseData = await response.json();
+      console.log("Response from server:", responseData);
+      if (responseData.success) {
+        setIsSignedIn(true);
+        setUserId(responseData.Id);
+        console.log("User ID:", userId);
+      } else {
+        setIsSignedIn(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     let UserId = uuidv4();
     const options = {
       method: "POST",
@@ -73,42 +72,43 @@ function Login() {
       },
       body: JSON.stringify({ username, password, UserId }),
     };
-
-    fetch("http://localhost:5000/api/signup", options)
-      .then((response) => response.text())
-      .then((responseData) => {
-        console.log("Response from server:", responseData);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    try {
+      const response = await fetch("http://localhost:5000/api/signup", options);
+      const responseData = await response.text();
+      setUserId(UserId);
+      console.log("Response from server:", responseData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
     <>
       <div id="LogSignContainer">
-        <div className="input-group">
-          <label htmlFor="LoginUsername">Username:</label>
-          <input
-            type="text"
-            id="LoginUsername"
-            value={username}
-            onChange={handleUsernameChange}
-          />
+        <div id="LogSignPage">
+          <div className="input-group">
+            <input
+              type="text"
+              id="LoginUsername"
+              value={username}
+              onChange={handleUsernameChange}
+              placeholder="Username"
+            />
+          </div>
+          <div className="input-group">
+            <input
+              type="password"
+              id="LoginPassword"
+              value={password}
+              onChange={handlePasswordChange}
+              placeholder="Password"
+            />
+          </div>
+          <button id="login" onClick={handleSignOrLog}>
+            {login ? "Login" : "Signup"}
+          </button>
+          <button id="switch" onClick={handleSwitch}></button>
         </div>
-        <div className="input-group">
-          <label htmlFor="LoginPassword">Password:</label>
-          <input
-            type="password"
-            id="LoginPassword"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <button id="login" onClick={handleSignOrLog}>
-          {login ? "Login" : "Signup"}
-        </button>
-        <button id="switch" onClick={handleSwitch}></button>
       </div>
     </>
   );

@@ -1,30 +1,80 @@
+/* The naviagtion bar realted css */
 #ContainerHeader {
-  color: #ffffff;
-  background-color: hsl(0, 0%, 0%);
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  border-radius: 5px;
+  height: 12vh;
+  background: linear-gradient(
+    to right,
+    hsl(355, 100%, 81%),
+    hsl(340, 76%, 50%)
+  ); /* Ensure this is defined after background-color */
 }
 
 #ContainerHeader button {
+  border: 5px solid hsl(340, 76%, 50%);
+  background-color: hsl(355, 100%, 81%);
+  border-radius: 5px;
   margin: 10px;
   padding: 10px;
-  width: 500px;
+  height: 100px;
+  width: 100px;
+  transition: background-color 0.5s ease;
 }
+
+#ContainerHeader button:hover {
+  background-color: #ff577e;
+}
+/* Login related css */
 
 #LogSignContainer {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+}
+
+#LogSignPage {
+  position: relative;
+  display: flex;
   flex-direction: column;
-  align-items: center; /* Center items horizontally */
-  justify-content: center; /* Center items vertically */
-  height: 100vh; /* Full viewport height */
-  border: 2px dashed red; /* Debugging border */
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  width: 50vw;
+
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(10px);
 }
 
-.input-group {
-  color: #ffffff;
+/* Get the id of the elements in the container */
+
+.input-group input {
+  width: 250px;
+  height: 30px;
+  background-color: #ff577e;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 1);
 }
 
-.input-group-signup {
-  color: #ffffff;
+#switch {
+  background-color: #ff577e;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  height: 50px;
+  width: 50px;
+}
+
+#login {
+  width: 75px;
+  background-color: blueviolet;
+  border: 2.5px solid #ff577e;
+  border-radius: 5px;
+  margin: 10px;
 }
