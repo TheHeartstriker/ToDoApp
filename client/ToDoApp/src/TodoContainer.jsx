@@ -21,6 +21,7 @@ function Container() {
         options
       );
       const data = await response.json();
+      console.log("Response from server:", data);
       setTaskData(data);
     } catch (error) {
       console.error("Error:", error);
