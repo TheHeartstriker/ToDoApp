@@ -96,17 +96,31 @@ app.delete("/api/deleteToDo", async (req, res) => {
 
 //Database functions
 async function signup(username, password, id) {
+  console.log(username, password, id);
   try {
+    // Check if the username already exists
+    const [rows] = await pool.query(`SELECT * FROM login WHERE UserName = ?`, [
+      username,
+    ]);
+    console.log("Check User:", rows);
+
+    if (rows.length > 0) {
+      // Username already taken
+      console.log("Username already taken");
+      return false;
+    }
+
+    // Insert the new user
     const result = await pool.query(
       `INSERT INTO login (UserName, Pass_word, UserId) VALUES (?, ?, ?)`,
       [username, password, id]
     );
+
     return result;
   } catch (error) {
     throw error;
   }
 }
-
 async function login(username, password) {
   try {
     const [results] = await pool.query(
@@ -152,6 +166,7 @@ async function getToDoDataByUserId(userid) {
       Description: row.De_scription,
       TaskId: row.task_id,
     }));
+    console.log(data);
     return data;
   } catch (error) {
     throw error;

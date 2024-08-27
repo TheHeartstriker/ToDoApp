@@ -8,27 +8,43 @@ function Container() {
   //Local used so we dont save or send unnecessary data to the server
   const [LocalTaskData, setLocalTaskData] = useState(taskData);
 
-  function loadTaskfromServer() {
+  async function loadTaskfromServer() {
     let options = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     };
-    fetch("http://localhost:5000/api/getTododata", options)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        let indexedData = data.map((task, index) => ({
-          ...task,
-          Index: index,
-        }));
-        setLocalTaskData(indexedData);
-      })
-      .catch(function (error) {
-        console.error("Error:", error);
-      });
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/getTododata",
+        options
+      );
+      const data = await response.json();
+      setTaskData(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function IfSignDelete(index) {
+    let options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ Task: LocalTaskData[index].TaskId }),
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/deleteToDo",
+        options
+      );
+      const data = await response.text();
+      console.log("Response from server:", data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   //Delete request
@@ -48,42 +64,21 @@ function Container() {
     });
 
     if (isSignedIn) {
-      let options = {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Task: LocalTaskData[index].TaskId }),
-      };
-
-      fetch("http://localhost:5000/api/deleteToDo", options)
-        // Response checks
-        .then(function (response) {
-          return response.text();
-        })
-        .then(function (responseData) {
-          console.log("Response from server:", responseData);
-        })
-        // Error checks
-        .catch(function (error) {
-          console.error("Error:", error);
-        });
+      IfSignDelete(index);
     }
 
     // When task is removed, organize the index
     IndexOrganize();
   }
+
   //Organize index
   function IndexOrganize() {
     // Local organize
     setLocalTaskData((prevLocalTaskData) =>
       prevLocalTaskData.map((task, i) => ({ ...task, index: i }))
     );
-    // Organize main index data
-    setTaskData((prevTaskData) =>
-      prevTaskData.map((task, i) => ({ ...task, index: i }))
-    );
   }
+
   //Add inspect to all local tasks
   function AddInspect() {
     setLocalTaskData((prevLocalTaskData) =>
@@ -91,13 +86,13 @@ function Container() {
     );
   }
   //Inspect task value becomes true
-  const Inspect = (index) => {
-    setLocalTaskData((prevLocalTaskData) =>
-      prevLocalTaskData.map((task, i) =>
-        i === index ? { ...task, inspect: !task.inspect } : task
-      )
-    );
-  };
+  function Inspect(index) {
+    setLocalTaskData(function (prevLocalTaskData) {
+      return prevLocalTaskData.map(function (task, i) {
+        return i === index ? { ...task, inspect: !task.inspect } : task;
+      });
+    });
+  }
 
   function addIndexs() {
     setLocalTaskData((prevLocalTaskData) =>
@@ -122,8 +117,6 @@ function Container() {
   useEffect(() => {
     console.log(LocalTaskData);
   }, [taskData]);
-
-  //Set local task data to the main task data and then added indexes
 
   return (
     // This iterates over the items array and renders each item in a div

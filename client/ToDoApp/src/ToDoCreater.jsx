@@ -32,13 +32,12 @@ function ToDoCreater() {
     // Data sent to the server
     sendTaskData(newTask);
     // Data added to the main local task data
-    // Previous data and the new task
     const updatedTaskData = [...taskData, newTask];
 
     return updatedTaskData;
   };
 
-  function sendTaskData(datatosend) {
+  async function sendTaskData(datatosend) {
     const options = {
       method: "POST",
       headers: {
@@ -46,17 +45,16 @@ function ToDoCreater() {
       },
       body: JSON.stringify(datatosend),
     };
-
-    fetch("http://localhost:5000/api/createToDo", options)
-      //Response checks
-      .then((response) => response.text())
-      .then((responseData) => {
-        console.log("Response from server:", responseData);
-      })
-      //Error checks
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/createToDo",
+        options
+      );
+      const responseData = await response.text();
+      console.log("Response from server:", responseData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   const handleReset = () => {
@@ -74,7 +72,7 @@ function ToDoCreater() {
           value={TaskName}
           onChange={handleTaskNameChange}
         />
-        <input
+        <textarea
           type="text"
           id="DescriptTask"
           placeholder="Task Description"

@@ -18,11 +18,16 @@ body {
   border-color: #000000;
 }
 
+/* The grid items(the visable tasks that are created) */
+
 .grid-item {
   position: relative;
+  text-align: center;
+  border: 5px solid darkred;
+  background-color: hsl(340, 76%, 50%);
+
   margin: 75px;
   aspect-ratio: 1 / 1;
-  background-color: hsl(0, 5%, 15%);
   border-radius: 5px;
   color: #ffffff;
   padding: 10px;
@@ -31,22 +36,40 @@ body {
 }
 
 .grid-item.inspected {
+  z-index: 2;
   position: absolute;
+  text-align: center;
+  border: 5px solid darkred;
+  background-color: hsl(340, 76%, 50%);
+
   left: 50%;
   top: 50%;
   margin: 0;
   transform: translate(-50%, -50%);
-  background-color: hsl(0, 100%, 50%);
   height: 800px;
   width: 800px;
+  opacity: 1;
+}
+
+.grid-item.inspected h1 {
+  color: #ffffff;
+  z-index: 2;
+  position: relative;
+}
+
+.grid-item.inspected p {
+  color: #ffffff;
+  z-index: 2;
+  position: relative;
 }
 
 /* Buttons for the indvidual tasks */
 .TaskLeft button {
+  z-index: 1;
   position: absolute;
-  background-color: greenyellow;
   border: none;
-  opacity: 0.5;
+  background-color: hsl(0, 5%, 15%);
+  opacity: 0.3;
   height: 100%;
   width: 50%;
   bottom: 0;
@@ -54,10 +77,11 @@ body {
 }
 
 .TaskRight button {
+  z-index: 1;
   position: absolute;
-  background-color: gray;
   border: none;
-  opacity: 0.5;
+  background-color: hsl(0, 5%, 15%);
+  opacity: 0.1;
   height: 100%;
   width: 50%;
   bottom: 0;
@@ -68,13 +92,14 @@ body {
 
 .Creator {
   position: absolute;
-  width: 90vw;
-  height: 90vh;
+  /* Need to adjust */
+  width: 95vw;
+  height: 70vh;
 
   display: flex;
   flex-direction: column;
-
-  border: 5px lightblue;
+  border: 5px solid lightpink;
+  border-radius: 10px;
   background-color: hsl(0, 5%, 15%);
   color: #ffffff;
   padding: 10px;
@@ -89,6 +114,8 @@ body {
   position: absolute;
   bottom: 10px;
   left: 10px;
+  border: none;
+  background: radial-gradient(circle, hsl(355, 100%, 81%), hsl(340, 76%, 50%));
 }
 
 #Reset {
@@ -97,10 +124,25 @@ body {
   position: absolute;
   bottom: 10px;
   right: 10px;
+  border: none;
+  background: radial-gradient(circle, hsl(355, 100%, 81%), hsl(340, 76%, 50%));
 }
 
-/* Left and right nav */
+/* Typing boxes */
 
 #HeaderTask {
-  height: 100px;
+  margin: 20px;
+  border: none;
+  background-color: hsla(340, 76%, 50%, 0.5);
+  border-radius: 5px;
+  height: 10%;
+  text-align: center;
+}
+
+#DescriptTask {
+  border: none;
+  background-color: hsla(355, 100%, 81%, 0.5);
+  border-radius: 5px;
+  height: 75%;
+  text-align: center;
 }
