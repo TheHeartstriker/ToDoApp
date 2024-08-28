@@ -1,14 +1,11 @@
 import React, { createContext, useEffect, useState } from "react";
-//Where data will be loaded and stored for use in the container
-//Creates a context
 export const TaskContext = createContext();
-//Creates a state to store the task data
 export const TaskProvider = ({ children }) => {
-  //Overhead taskdata that transfers data from the creator to the container
+  //Main client local task data contains data thats sent to the server
   const [taskData, setTaskData] = useState([]);
   //State to check if the user is logged in usefull across the app
   const [isSignedIn, setIsSignedIn] = useState(false);
-  //State to store the user id for sending the data to the server
+  //State to store the user id so we dont have to keep calling the server
   const [userId, setUserId] = useState("");
 
   return (

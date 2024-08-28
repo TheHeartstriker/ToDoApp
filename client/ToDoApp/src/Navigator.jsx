@@ -16,10 +16,11 @@ function Nav() {
   }
 
   useEffect(() => {
-    if (isSignedIn() === false || isSignedIn() === undefined) {
+    isSignedInTrue();
+    if (isSignedIn === false || isSignedIn === undefined) {
       navigate("/login");
     }
-  }, []);
+  }, [isSignedIn]);
 
   return (
     <>
