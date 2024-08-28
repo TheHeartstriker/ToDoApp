@@ -8,7 +8,6 @@ import ToDoCreater from "./ToDoCreater";
 import Container from "./TodoContainer.jsx";
 import Nav from "./Navigator";
 import Login from "./login/LoginSign/Login";
-
 //CSS imports
 import "./index.css";
 import "./login/LoginSign/NavLogin.css";

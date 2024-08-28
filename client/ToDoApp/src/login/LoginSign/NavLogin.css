@@ -1,4 +1,10 @@
-/* The naviagtion bar realted css */
+:root {
+  --Dark-pink: hsl(340, 76%, 50%);
+  --Light-pink: hsl(355, 100%, 81%);
+  --Middle-Pink: #ff577e;
+}
+
+/* The naviagtion bar realted at the top of the page */
 #ContainerHeader {
   position: relative;
   z-index: 1;
@@ -6,16 +12,12 @@
   align-items: center;
   border-radius: 5px;
   height: 12vh;
-  background: linear-gradient(
-    to right,
-    hsl(355, 100%, 81%),
-    hsl(340, 76%, 50%)
-  ); /* Ensure this is defined after background-color */
+  background: linear-gradient(to right, var(--Light-pink), var(--Dark-pink));
 }
-
+/* Buttons contained at the top of the page */
 #ContainerHeader button {
-  border: 5px solid hsl(340, 76%, 50%);
-  background-color: hsl(355, 100%, 81%);
+  border: 5px solid var(--Dark-pink);
+  background-color: var(--Light-pink);
   border-radius: 5px;
   margin: 10px;
   padding: 10px;
@@ -25,18 +27,19 @@
 }
 
 #ContainerHeader button:hover {
-  background-color: #ff577e;
+  background-color: var(--Middle-Pink);
 }
-/* Login related css */
 
+/* Container that holds the LogSingin box */
 #LogSignContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 88vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
+  height: 88vh; /* 100% - 12vh */
+  width: 100vw;
 }
 
+/* The visable box that contains the text boxes */
 #LogSignPage {
   position: relative;
   display: flex;
@@ -45,25 +48,22 @@
   justify-content: center;
   height: 50vh;
   width: 50vw;
-
-  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-  backdrop-filter: blur(10px);
 }
 
-/* Get the id of the elements in the container */
+/* The input group is the text boxes the are used to send the username and password */
 
 .input-group input {
   width: 250px;
   height: 30px;
-  background-color: #ff577e;
+  background-color: var(--Middle-Pink);
   border: none;
   border-radius: 5px;
   margin: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 1);
+  box-shadow: 0 8px 16px var(--Dark-pink);
 }
 
 #switch {
-  background-color: #ff577e;
+  background-color: var(--Middle-Pink);
   margin: 10px;
   border: none;
   border-radius: 5px;
@@ -71,10 +71,10 @@
   width: 50px;
 }
 
-#login {
+#loginOrSign {
   width: 75px;
   background-color: blueviolet;
-  border: 2.5px solid #ff577e;
+  border: 2.5px solid var(--Middle-Pink);
   border-radius: 5px;
   margin: 10px;
 }

@@ -5,13 +5,13 @@ import { TaskContext } from "../../TaskProvider";
 function Login() {
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
   const { userId, setUserId } = useContext(TaskContext);
-
+  //Stores the username and password
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  //Used to see which button name and function to use
   const [login, setLogin] = useState(false);
   const [signup, setSignup] = useState(false);
-
+  //Handling the event changes
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -37,7 +37,8 @@ function Login() {
       handleSignup();
     }
   };
-
+  //Sends the sign up data to be checked by the server and returns a response
+  //The response returns the user id and a true value if the sign up was successful that is used in creating tasks
   const handleLogin = async () => {
     const options = {
       method: "POST",
@@ -54,7 +55,6 @@ function Login() {
       if (responseData.success) {
         setIsSignedIn(true);
         setUserId(responseData.Id);
-        console.log("User ID:", userId);
       } else {
         setIsSignedIn(false);
       }
@@ -62,7 +62,7 @@ function Login() {
       console.error("Error:", error);
     }
   };
-
+  //Sends the data to the server to be inserted into the database
   const handleSignup = async () => {
     let UserId = uuidv4();
     const options = {
@@ -73,10 +73,9 @@ function Login() {
       body: JSON.stringify({ username, password, UserId }),
     };
     try {
-      const response = await fetch("http://localhost:5000/api/signup", options);
-      const responseData = await response.text();
+      await fetch("http://localhost:5000/api/signup", options);
+      setIsSignedIn(true);
       setUserId(UserId);
-      console.log("Response from server:", responseData);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -84,7 +83,9 @@ function Login() {
 
   return (
     <>
+      {/* Outside container */}
       <div id="LogSignContainer">
+        {/* The inside container that holds the text boxes */}
         <div id="LogSignPage">
           <div className="input-group">
             <input
@@ -104,7 +105,7 @@ function Login() {
               placeholder="Password"
             />
           </div>
-          <button id="login" onClick={handleSignOrLog}>
+          <button id="loginOrSign" onClick={handleSignOrLog}>
             {login ? "Login" : "Signup"}
           </button>
           <button id="switch" onClick={handleSwitch}></button>

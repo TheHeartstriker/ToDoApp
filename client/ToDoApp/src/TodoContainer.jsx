@@ -21,7 +21,7 @@ function Container() {
         options
       );
       const data = await response.json();
-      console.log("Response from server:", data);
+      console.log("Response from server here:", data);
       setTaskData(data);
     } catch (error) {
       console.error("Error:", error);
@@ -110,6 +110,7 @@ function Container() {
   }, [taskData]);
 
   useEffect(() => {
+    console.log("Is signed in:", isSignedIn);
     if (isSignedIn) {
       loadTaskfromServer();
     }
