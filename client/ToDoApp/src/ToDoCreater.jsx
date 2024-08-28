@@ -14,7 +14,12 @@ function ToDoCreater() {
 
   //Handles the task name and description changes
   const handleTaskNameChange = (event) => {
-    setTaskName(event.target.value);
+    if (event.target.value.length > 149) {
+      alert("Task name is too long");
+      return;
+    } else {
+      setTaskName(event.target.value);
+    }
   };
 
   const handleTaskDesChange = (event) => {

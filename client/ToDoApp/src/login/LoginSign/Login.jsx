@@ -13,11 +13,21 @@ function Login() {
   const [signup, setSignup] = useState(false);
   //Handling the event changes
   const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+    if (event.target.value.length > 49) {
+      alert("Username is too long");
+      return;
+    } else {
+      setUsername(event.target.value);
+    }
   };
 
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+    if (event.target.value.length > 49) {
+      alert("Password is too long");
+      return;
+    } else {
+      setPassword(event.target.value);
+    }
   };
   //Switch between login and signup
   const handleSwitch = () => {
