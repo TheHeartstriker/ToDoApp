@@ -1,8 +1,10 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { TaskContext } from "./TaskProvider";
 
 function Nav() {
+  //This mostly returns naviagtion html and is used to see if the user is signed in
+  //And if not it will redirect to the login page
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
   const navigate = useNavigate();
 
@@ -14,10 +16,11 @@ function Nav() {
   }
 
   useEffect(() => {
-    if (isSignedIn === false) {
+    isSignedInTrue();
+    if (isSignedIn === false || isSignedIn === undefined) {
       navigate("/login");
     }
-  }, []);
+  }, [isSignedIn]);
 
   return (
     <>

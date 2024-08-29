@@ -3,23 +3,33 @@ import { TaskContext } from "./TaskProvider";
 import { v4 as uuidv4 } from "uuid";
 
 function ToDoCreater() {
-  //Seters for the task name and description
+  //Main task data thats given to the server
   const { taskData, setTaskData } = useContext(TaskContext);
+  //User Id thats saved in Login.jsx and sent to the server when creating new tasks
   const { userId, setUserId } = useContext(TaskContext);
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
 
+  //Seters for the task name and description
   const [TaskName, setTaskName] = useState("");
   const [TaskDescription, setTaskDescription] = useState("");
 
+  //Handles the task name and description changes
   const handleTaskNameChange = (event) => {
-    setTaskName(event.target.value);
+    if (event.target.value.length > 149) {
+      alert("Task name is too long");
+      return;
+    } else {
+      setTaskName(event.target.value);
+    }
   };
 
   const handleTaskDesChange = (event) => {
     setTaskDescription(event.target.value);
   };
 
-  //creating multiple objects
+  //Adds a task to the main data and sends it to the server
   const addTask = (task, description) => {
+    // Unique id for each task
     const id = uuidv4();
 
     // Given to the server and used to create a new task locally in TaskData
@@ -30,13 +40,14 @@ function ToDoCreater() {
       UserId: userId,
     };
     // Data sent to the server
-    sendTaskData(newTask);
+    if (isSignedIn) {
+      sendTaskData(newTask);
+    }
     // Data added to the main local task data
     const updatedTaskData = [...taskData, newTask];
-
     return updatedTaskData;
   };
-
+  //Sends the individual task data to the server
   async function sendTaskData(datatosend) {
     const options = {
       method: "POST",
@@ -50,13 +61,11 @@ function ToDoCreater() {
         "http://localhost:5000/api/createToDo",
         options
       );
-      const responseData = await response.text();
-      console.log("Response from server:", responseData);
     } catch (error) {
       console.error("Error:", error);
     }
   }
-
+  //Reset button on click
   const handleReset = () => {
     setTaskName("");
     setTaskDescription("");

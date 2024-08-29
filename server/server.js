@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const app = express();
-
+//Cors pool/options
 const corsOptions = {
   origin: "http://localhost:5173",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -19,15 +19,18 @@ const pool = mysql.createPool({
   password: process.env.MY_PASS,
   database: process.env.MY_DB,
 });
-
+//Configuring the cors and json
 app.use(cors(corsOptions));
 app.use(express.json());
-
+//Server intialization
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+let userIdGet = "";
+
+//Gets task data based on user id and sends it to the front as a response
 app.get("/api/getTododata", async (req, res) => {
   try {
     const data = await getToDoDataByUserId(userIdGet);
@@ -48,10 +51,7 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-//Relook at this later
-let userIdGet = "";
-
-// Sends username and login to the database sends if the login is successful 'true' and the user id if so
+// Sends username and login to the database and if successful sends the user id back to the front
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -68,7 +68,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// POST route sends information to be inserted into the database
+// POST route sends ToDo information to the database
 app.post("/api/createToDo", async (req, res) => {
   const {
     Task: Header,
@@ -102,14 +102,10 @@ async function signup(username, password, id) {
     const [rows] = await pool.query(`SELECT * FROM login WHERE UserName = ?`, [
       username,
     ]);
-    console.log("Check User:", rows);
-
+    //Username has to be unique
     if (rows.length > 0) {
-      // Username already taken
-      console.log("Username already taken");
       return false;
     }
-
     // Insert the new user
     const result = await pool.query(
       `INSERT INTO login (UserName, Pass_word, UserId) VALUES (?, ?, ?)`,
@@ -121,13 +117,14 @@ async function signup(username, password, id) {
     throw error;
   }
 }
+//Login function
 async function login(username, password) {
   try {
     const [results] = await pool.query(
       `SELECT * FROM login WHERE UserName = ? AND Pass_word = ?`,
       [username, password]
     );
-    console.log(username, password);
+    //If the username and password match
     if (results.length > 0) {
       return true;
     } else {
@@ -137,7 +134,7 @@ async function login(username, password) {
     console.error("Database query failed", error);
   }
 }
-
+//Get user id function
 async function GetUserId(username, password) {
   try {
     const [results] = await pool.query(
@@ -154,7 +151,7 @@ async function GetUserId(username, password) {
     throw error;
   }
 }
-
+//Sends back data that has the user id
 async function getToDoDataByUserId(userid) {
   try {
     const [results] = await pool.query(
@@ -166,13 +163,12 @@ async function getToDoDataByUserId(userid) {
       Description: row.De_scription,
       TaskId: row.task_id,
     }));
-    console.log(data);
     return data;
   } catch (error) {
     throw error;
   }
 }
-
+//Deletes a task based on the given task id
 async function deleteTask(id) {
   try {
     const result = await pool.query(`DELETE FROM tododata WHERE task_id = ?`, [
@@ -183,6 +179,7 @@ async function deleteTask(id) {
     throw error;
   }
 }
+//Creates a new task
 async function CreateToDo(Header, Description, taskid, UserId) {
   try {
     const result = pool.query(

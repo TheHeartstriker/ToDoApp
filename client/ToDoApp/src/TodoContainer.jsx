@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { TaskContext } from "./TaskProvider";
 function Container() {
-  //Main task data
+  //Main task data thats given to the server
   const { taskData, setTaskData } = useContext(TaskContext);
-  const { userId } = useContext(TaskContext);
+  //Check if we need to request things of the server
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
   //Local used so we dont save or send unnecessary data to the server
   const [LocalTaskData, setLocalTaskData] = useState(taskData);
-
+  //Load task info from server
   async function loadTaskfromServer() {
     let options = {
       method: "GET",
@@ -21,13 +21,12 @@ function Container() {
         options
       );
       const data = await response.json();
-      console.log("Response from server:", data);
       setTaskData(data);
     } catch (error) {
       console.error("Error:", error);
     }
   }
-
+  //Delete request to server
   async function IfSignDelete(index) {
     let options = {
       method: "DELETE",
@@ -41,14 +40,13 @@ function Container() {
         "http://localhost:5000/api/deleteToDo",
         options
       );
-      const data = await response.text();
-      console.log("Response from server:", data);
     } catch (error) {
       console.error("Error:", error);
     }
   }
 
-  //Delete request
+  //Removes a task filters out the task that needs to be removed
+  //By id from the main data and index from the local data
   function removeTask(index, id) {
     // Local remove task
     setLocalTaskData(function (prevLocalTaskData) {
@@ -72,9 +70,8 @@ function Container() {
     IndexOrganize();
   }
 
-  //Organize index
+  //Organize index so we can easily locate tasks
   function IndexOrganize() {
-    // Local organize
     setLocalTaskData((prevLocalTaskData) =>
       prevLocalTaskData.map((task, i) => ({ ...task, index: i }))
     );
@@ -86,7 +83,7 @@ function Container() {
       prevLocalTaskData.map((task, i) => ({ ...task, inspect: false }))
     );
   }
-  //Inspect task value becomes true
+  //Inspect task value becomes true or false if true
   function Inspect(index) {
     setLocalTaskData(function (prevLocalTaskData) {
       return prevLocalTaskData.map(function (task, i) {
@@ -94,37 +91,30 @@ function Container() {
       });
     });
   }
-
+  //Add index to all to local tasks
   function addIndexs() {
     setLocalTaskData((prevLocalTaskData) =>
       prevLocalTaskData.map((task, i) => ({ ...task, Index: i }))
     );
   }
-  //There is an issue where only when loaded are index and inspect values added
-  //But new data is left out
-  //Fixed?
+  //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
-    setLocalTaskData(taskData);
     addIndexs();
     AddInspect();
   }, [taskData]);
-
+  //If we are signed in we load the data from the server
   useEffect(() => {
     if (isSignedIn) {
       loadTaskfromServer();
     }
   }, []);
 
-  useEffect(() => {
-    console.log(LocalTaskData);
-  }, [taskData]);
-
   return (
     // This iterates over the items array and renders each item in a div
     <div className="ToDoContainer">
       {LocalTaskData.map((item, index) => (
         <div
-          key={item.Index}
+          key={item.TaskId}
           className={`grid-item ${item.inspect ? "inspected" : ""}`}
         >
           <h1>{item.Task}</h1>
