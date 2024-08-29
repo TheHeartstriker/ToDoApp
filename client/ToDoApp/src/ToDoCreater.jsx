@@ -7,6 +7,7 @@ function ToDoCreater() {
   const { taskData, setTaskData } = useContext(TaskContext);
   //User Id thats saved in Login.jsx and sent to the server when creating new tasks
   const { userId, setUserId } = useContext(TaskContext);
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
 
   //Seters for the task name and description
   const [TaskName, setTaskName] = useState("");
@@ -39,7 +40,9 @@ function ToDoCreater() {
       UserId: userId,
     };
     // Data sent to the server
-    sendTaskData(newTask);
+    if (isSignedIn) {
+      sendTaskData(newTask);
+    }
     // Data added to the main local task data
     const updatedTaskData = [...taskData, newTask];
     return updatedTaskData;

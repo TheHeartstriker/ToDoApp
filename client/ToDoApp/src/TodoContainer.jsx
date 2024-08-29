@@ -97,9 +97,8 @@ function Container() {
       prevLocalTaskData.map((task, i) => ({ ...task, Index: i }))
     );
   }
-  //A little in efficient but it works
+  //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
-    setLocalTaskData(taskData);
     addIndexs();
     AddInspect();
   }, [taskData]);
@@ -115,7 +114,7 @@ function Container() {
     <div className="ToDoContainer">
       {LocalTaskData.map((item, index) => (
         <div
-          key={item.Index}
+          key={item.TaskId}
           className={`grid-item ${item.inspect ? "inspected" : ""}`}
         >
           <h1>{item.Task}</h1>

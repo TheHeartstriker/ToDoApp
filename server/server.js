@@ -27,6 +27,9 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+let userIdGet = "";
+
 //Gets task data based on user id and sends it to the front as a response
 app.get("/api/getTododata", async (req, res) => {
   try {
@@ -55,6 +58,7 @@ app.post("/api/login", async (req, res) => {
     const result = await login(username, password);
     if (result) {
       const userId = await GetUserId(username, password);
+      userIdGet = userId;
       res.status(200).send({ success: true, Id: userId });
     } else {
       res.status(401).send(false);
