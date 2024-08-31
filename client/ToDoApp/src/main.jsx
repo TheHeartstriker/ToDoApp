@@ -12,6 +12,7 @@ import Groups from "./groups.jsx";
 //CSS imports
 import "./index.css";
 import "./login/LoginSign/NavLogin.css";
+import "./Check-Folder.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <TaskProvider>

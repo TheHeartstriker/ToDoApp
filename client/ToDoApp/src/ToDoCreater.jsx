@@ -28,7 +28,7 @@ function ToDoCreater() {
   };
 
   //Adds a task to the main data and sends it to the server
-  const addTask = (task, description, Folder) => {
+  const addTask = (task, description) => {
     // Unique id for each task
     const id = uuidv4();
 

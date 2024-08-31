@@ -69,7 +69,7 @@ function Container() {
     // When task is removed, organize the index
     IndexOrganize();
   }
-
+  //The same as add
   //Organize index so we can easily locate tasks
   function IndexOrganize() {
     setLocalTaskData((prevLocalTaskData) =>
@@ -101,7 +101,6 @@ function Container() {
   useEffect(() => {
     addIndexs();
     AddInspect();
-    console.log("Taskdata", taskData);
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
