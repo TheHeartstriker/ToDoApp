@@ -8,6 +8,8 @@ export const TaskProvider = ({ children }) => {
   //State to store the user id so we dont have to keep calling the server
   const [userId, setUserId] = useState("");
 
+  const [Folder, setFolder] = useState("");
+
   return (
     <TaskContext.Provider
       value={{
@@ -17,6 +19,8 @@ export const TaskProvider = ({ children }) => {
         setIsSignedIn,
         userId,
         setUserId,
+        Folder,
+        setFolder,
       }}
     >
       {children}

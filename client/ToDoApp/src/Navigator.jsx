@@ -31,6 +31,12 @@ function Nav() {
         <Link to="/create">
           <button id="About">Create</button>
         </Link>
+        <Link to="/login">
+          <button id="Login">Login</button>
+        </Link>
+        <Link to="/groups">
+          <button id="Groups">Groups</button>
+        </Link>
       </div>
     </>
   );

@@ -101,6 +101,7 @@ function Container() {
   useEffect(() => {
     addIndexs();
     AddInspect();
+    console.log("Taskdata", taskData);
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
