@@ -11,7 +11,7 @@ function Groups() {
   const handleFolderNameChange = (event) => {
     setFolderMainName(event.target.value);
   };
-
+  //Add a folder to the object with realted mete data
   function addFolder(folderName) {
     const newFolder = {
       folderName: folderName,
@@ -49,7 +49,7 @@ function Groups() {
     });
     setFolders(newFolders);
   }
-
+  //Get the folder acosiated with the user
   async function GetFolders() {
     const options = {
       method: "GET",
@@ -60,7 +60,7 @@ function Groups() {
     try {
       const response = await fetch("/api/getFolders", options);
       const data = await response.json();
-
+      //Adds the metedata to the folder object
       const folderData = data.map((folder, index) => {
         return { folderName: folder.Folder, folderOn: false, index: index };
       });
@@ -69,7 +69,7 @@ function Groups() {
       console.error("Error:", error);
     }
   }
-
+  //Give the server the current folder so it can be used in the container to load the data
   async function sendCurrentFolder(folderName) {
     const options = {
       method: "POST",
@@ -86,19 +86,18 @@ function Groups() {
   }
 
   useEffect(() => {
-    console.log(folders);
     if (isSignedIn) {
       GetFolders();
     }
   }, []);
-
+  //Check what folder is currently on
   useEffect(() => {
     CurrentFolder();
-    if (isSignedIn) {
-      console.log(foldername);
-      sendCurrentFolder(foldername);
-    }
   }, [folders]);
+  //Send the current folder to the server
+  useEffect(() => {
+    sendCurrentFolder(foldername);
+  }, [foldername]);
 
   return (
     <>

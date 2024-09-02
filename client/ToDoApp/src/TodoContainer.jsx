@@ -1,10 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { TaskContext } from "./TaskProvider";
 function Container() {
+  //Something is wrong in here that causes data that is loaded from the server to need another render to show up
   //Main task data thats given to the server
   const { taskData, setTaskData } = useContext(TaskContext);
   //Check if we need to request things of the server
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  //Folder name that we are currently in
+  const { foldername, setFoldername } = useContext(TaskContext);
   //Local used so we dont save or send unnecessary data to the server
   const [LocalTaskData, setLocalTaskData] = useState(taskData);
   //Load task info from server
@@ -22,6 +25,7 @@ function Container() {
       );
       const data = await response.json();
       setTaskData(data);
+      console.log(data, "Data loaded from server");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -101,13 +105,14 @@ function Container() {
   useEffect(() => {
     addIndexs();
     AddInspect();
+    setLocalTaskData(taskData);
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
     if (isSignedIn) {
       loadTaskfromServer();
     }
-  }, []);
+  }, [isSignedIn]);
 
   return (
     // This iterates over the items array and renders each item in a div

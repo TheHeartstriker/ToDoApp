@@ -184,6 +184,7 @@ async function GetToDoData(userid, folder) {
       Task: row.ToDoHeader,
       Description: row.De_scription,
       TaskId: row.task_id,
+      Folder: row.Folder,
     }));
     return data;
   } catch (error) {
