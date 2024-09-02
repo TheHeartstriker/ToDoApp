@@ -29,11 +29,32 @@ app.listen(PORT, () => {
 });
 
 let userIdGet = "";
+let foldername = "";
+
+app.post("/api/setFolder", async (req, res) => {
+  try {
+    const folderNaming = req.body.folder;
+    console.log(folderNaming);
+    foldername = folderNaming;
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
+});
 
 //Gets task data based on user id and sends it to the front as a response
 app.get("/api/getTododata", async (req, res) => {
   try {
-    const data = await getToDoDataByUserId(userIdGet);
+    const data = await GetToDoData(userIdGet, foldername);
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
+});
+//Loads the folder already created by the user via the user id
+app.get("/api/getFolders", async (req, res) => {
+  try {
+    const data = await GetFoldersById(userIdGet);
     res.status(200).send(data);
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
@@ -75,9 +96,10 @@ app.post("/api/createToDo", async (req, res) => {
     Description: Description,
     TaskId: TaskId,
     UserId: UserId,
+    Folder: Folder,
   } = req.body;
   try {
-    await CreateToDo(Header, Description, TaskId, UserId);
+    await CreateToDo(Header, Description, TaskId, UserId, Folder);
     res.status(201).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
@@ -152,11 +174,11 @@ async function GetUserId(username, password) {
   }
 }
 //Sends back data that has the user id
-async function getToDoDataByUserId(userid) {
+async function GetToDoData(userid, folder) {
   try {
     const [results] = await pool.query(
-      `SELECT * FROM tododata WHERE UserId = ?`,
-      [userid]
+      `SELECT * FROM tododata WHERE UserId = ? AND Folder = ?`,
+      [userid, folder]
     );
     const data = results.map((row) => ({
       Task: row.ToDoHeader,
@@ -180,13 +202,28 @@ async function deleteTask(id) {
   }
 }
 //Creates a new task
-async function CreateToDo(Header, Description, taskid, UserId) {
+async function CreateToDo(Header, Description, taskid, UserId, Folder) {
   try {
     const result = pool.query(
-      `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId) VALUES (?, ?, ?, ?)`,
-      [Header, Description, taskid, UserId]
+      `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId, Folder) VALUES (?, ?, ?, ?, ?)`,
+      [Header, Description, taskid, UserId, Folder]
     );
     return result;
+  } catch (error) {
+    throw error;
+  }
+}
+//Used so we can load the created folders
+async function GetFoldersById(Userid) {
+  try {
+    const [results] = await pool.query(
+      `SELECT * FROM tododata WHERE UserId = ?`,
+      [Userid]
+    );
+    const data = results.map((row) => ({
+      Folder: row.Folder,
+    }));
+    return data;
   } catch (error) {
     throw error;
   }
