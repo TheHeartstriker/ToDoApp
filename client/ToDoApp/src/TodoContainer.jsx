@@ -25,7 +25,6 @@ function Container() {
       );
       const data = await response.json();
       setTaskData(data);
-      console.log(data, "Data loaded from server");
     } catch (error) {
       console.error("Error:", error);
     }

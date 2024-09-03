@@ -65,6 +65,7 @@ app.get("/api/getFolders", async (req, res) => {
 app.post("/api/signup", async (req, res) => {
   const { username, password, UserId } = req.body;
   try {
+    userIdGet = UserId;
     await signup(username, password, UserId);
     res.status(201).send();
   } catch (error) {
@@ -214,18 +215,16 @@ async function CreateToDo(Header, Description, taskid, UserId, Folder) {
     throw error;
   }
 }
-//Used so we can load the created folders
-async function GetFoldersById(Userid) {
+// Used so we can load the created folders
+async function GetFoldersById(userId) {
   try {
     const [results] = await pool.query(
-      `SELECT * FROM tododata WHERE UserId = ?`,
-      [Userid]
+      `SELECT DISTINCT Folder FROM tododata WHERE UserId = ?`,
+      [userId]
     );
-    const data = results.map((row) => ({
-      Folder: row.Folder,
-    }));
-    return data;
+    return results.map((row) => ({ Folder: row.Folder }));
   } catch (error) {
+    console.error(`Error fetching folders for user ${userId}:`, error);
     throw error;
   }
 }

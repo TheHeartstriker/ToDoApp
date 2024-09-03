@@ -4,13 +4,15 @@ import { TaskContext } from "./TaskProvider";
 function Groups() {
   const [ShowFolderCreate, setShowFolderCreate] = useState(true);
   const [folderMainName, setFolderMainName] = useState("");
-  const [folders, setFolders] = useState([]);
+  const { folders, setFolders } = useContext(TaskContext);
   const { foldername, setFoldername } = useContext(TaskContext);
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  //Highlight and loading issues
 
   const handleFolderNameChange = (event) => {
     setFolderMainName(event.target.value);
   };
+
   //Add a folder to the object with realted mete data
   function addFolder(folderName) {
     const newFolder = {
@@ -20,6 +22,7 @@ function Groups() {
     };
     setFolders((prevFolders) => [...prevFolders, newFolder]);
   }
+
   //On of to show the folder creator
   function ShowFolder() {
     setShowFolderCreate(!ShowFolderCreate);
@@ -28,13 +31,18 @@ function Groups() {
   function deleteFolder(index) {
     setFolders(folders.filter((folder) => folder.index !== index));
   }
-  //Set the current folder name
+  //If we have been clicked then name of the folder to the overhead
   function CurrentFolder() {
-    folders.map((folder) => {
+    let folderFound = false;
+    folders.forEach((folder) => {
       if (folder.folderOn) {
         setFoldername(folder.folderName);
+        folderFound = true;
       }
     });
+    if (!folderFound) {
+      setFoldername("");
+    }
   }
   //Used to change the folderOn value
   function TrueFalseFolder(index) {
@@ -42,10 +50,14 @@ function Groups() {
       if (folder.index === index) {
         return {
           ...folder,
-          folderOn: !folder.folderOn,
+          folderOn: !folder.folderOn, // Toggle the clicked folder
+        };
+      } else {
+        return {
+          ...folder,
+          folderOn: false, // Set all other folders to false
         };
       }
-      return folder;
     });
     setFolders(newFolders);
   }
@@ -60,9 +72,16 @@ function Groups() {
     try {
       const response = await fetch("/api/getFolders", options);
       const data = await response.json();
-      //Adds the metedata to the folder object
+      // Merge the fetched data with the existing folders state
       const folderData = data.map((folder, index) => {
-        return { folderName: folder.Folder, folderOn: false, index: index };
+        const existingFolder = folders.find(
+          (f) => f.folderName === folder.Folder
+        );
+        return {
+          folderName: folder.Folder,
+          folderOn: existingFolder ? existingFolder.folderOn : false,
+          index: index,
+        };
       });
       setFolders(folderData);
     } catch (error) {
@@ -86,11 +105,13 @@ function Groups() {
   }
 
   useEffect(() => {
+    console.log(folders);
+    console.log(foldername);
     if (isSignedIn) {
       GetFolders();
     }
-  }, []);
-  //Check what folder is currently on
+  }, [isSignedIn]);
+  //Re checks the folder values and sets the foldername
   useEffect(() => {
     CurrentFolder();
   }, [folders]);
