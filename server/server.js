@@ -52,9 +52,11 @@ app.get("/api/getTododata", async (req, res) => {
   }
 });
 //Loads the folder already created by the user via the user id
+//The excluded folder is the 'default' aka the state where a user has no folder in which we dont need to get said folder
 app.get("/api/getFolders", async (req, res) => {
   try {
-    const data = await GetFoldersById(userIdGet);
+    const toExclude = "";
+    const data = await GetFoldersById(userIdGet, toExclude);
     res.status(200).send(data);
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
@@ -111,6 +113,16 @@ app.delete("/api/deleteToDo", async (req, res) => {
   const { Task: Id } = req.body;
   try {
     await deleteTask(Id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
+});
+//Deletes all tasks related to a folder therefore deleting the folder and contents
+app.delete("/api/deleteFolder", async (req, res) => {
+  const { folder: FolderName } = req.body;
+  try {
+    await deleteFolder(FolderName);
     res.status(204).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
@@ -203,6 +215,18 @@ async function deleteTask(id) {
     throw error;
   }
 }
+
+//async function to delete the folder
+async function deleteFolder(folder) {
+  try {
+    const result = await pool.query(`DELETE FROM tododata WHERE Folder = ?`, [
+      folder,
+    ]);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 //Creates a new task
 async function CreateToDo(Header, Description, taskid, UserId, Folder) {
   try {
@@ -216,11 +240,11 @@ async function CreateToDo(Header, Description, taskid, UserId, Folder) {
   }
 }
 // Used so we can load the created folders
-async function GetFoldersById(userId) {
+async function GetFoldersById(userId, excluded) {
   try {
     const [results] = await pool.query(
-      `SELECT DISTINCT Folder FROM tododata WHERE UserId = ?`,
-      [userId]
+      `SELECT DISTINCT Folder FROM tododata WHERE UserId = ? AND Folder != ?`,
+      [userId, excluded]
     );
     return results.map((row) => ({ Folder: row.Folder }));
   } catch (error) {

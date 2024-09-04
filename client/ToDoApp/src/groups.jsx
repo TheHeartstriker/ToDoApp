@@ -7,7 +7,6 @@ function Groups() {
   const { folders, setFolders } = useContext(TaskContext);
   const { foldername, setFoldername } = useContext(TaskContext);
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
-  //Highlight and loading issues
 
   const handleFolderNameChange = (event) => {
     setFolderMainName(event.target.value);
@@ -30,6 +29,8 @@ function Groups() {
   //Delete a folder based on index
   function deleteFolder(index) {
     setFolders(folders.filter((folder) => folder.index !== index));
+    console.log(index);
+    console.log(folders);
   }
   //If we have been clicked then name of the folder to the overhead
   function CurrentFolder() {
@@ -50,18 +51,19 @@ function Groups() {
       if (folder.index === index) {
         return {
           ...folder,
-          folderOn: !folder.folderOn, // Toggle the clicked folder
+          folderOn: !folder.folderOn,
         };
       } else {
         return {
           ...folder,
-          folderOn: false, // Set all other folders to false
+          folderOn: false,
         };
       }
     });
     setFolders(newFolders);
   }
   //Get the folder acosiated with the user
+  //Something to note this does not get the default "" folder
   async function GetFolders() {
     const options = {
       method: "GET",
@@ -104,10 +106,24 @@ function Groups() {
     }
   }
 
+  async function deleteFolderFromDB(FolderName) {
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ folder: FolderName }),
+    };
+    try {
+      const response = await fetch("/api/deleteFolder", options);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   useEffect(() => {
-    console.log(folders);
-    console.log(foldername);
     if (isSignedIn) {
+      //This get excludes the default "" folder
       GetFolders();
     }
   }, [isSignedIn]);
@@ -133,7 +149,10 @@ function Groups() {
             </button>
             <button
               className="FolderDelete"
-              onClick={() => deleteFolder(folder.index)}
+              onClick={() => {
+                deleteFolder(folder.index);
+                deleteFolderFromDB(folder.folderName);
+              }}
             >
               Delete
             </button>
