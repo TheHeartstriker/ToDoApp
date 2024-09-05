@@ -48,6 +48,24 @@ function Container() {
     }
   }
 
+  async function UpdataTaskComplete(TaskId) {
+    let options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ Task: TaskId }),
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/updateToDo",
+        options
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   //Removes a task filters out the task that needs to be removed
   //By id from the main data and index from the local data
   function removeTask(index, id) {
@@ -68,16 +86,22 @@ function Container() {
     if (isSignedIn) {
       IfSignDelete(index);
     }
-
-    // When task is removed, organize the index
-    IndexOrganize();
   }
-  //The same as add
-  //Organize index so we can easily locate tasks
-  function IndexOrganize() {
-    setLocalTaskData((prevLocalTaskData) =>
-      prevLocalTaskData.map((task, i) => ({ ...task, index: i }))
-    );
+
+  function Completed(index) {
+    setTaskData(function (prevTaskData) {
+      return prevTaskData.map(function (task, i) {
+        return i === index ? { ...task, Completed: !task.Completed } : task;
+      });
+    });
+    setLocalTaskData(function (prevLocalTaskData) {
+      return prevLocalTaskData.map(function (task, i) {
+        return i === index ? { ...task, Completed: !task.Completed } : task;
+      });
+    });
+    if (isSignedIn) {
+      UpdataTaskComplete(LocalTaskData[index].TaskId);
+    }
   }
 
   //Add inspect to all local tasks
@@ -100,11 +124,14 @@ function Container() {
       prevLocalTaskData.map((task, i) => ({ ...task, Index: i }))
     );
   }
+
+  useEffect(() => {
+    console.log(LocalTaskData);
+  }, []);
   //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
     addIndexs();
     AddInspect();
-    setLocalTaskData(taskData);
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
@@ -121,14 +148,25 @@ function Container() {
           key={item.TaskId}
           className={`grid-item ${item.inspect ? "inspected" : ""}`}
         >
-          <h1>{item.Task}</h1>
-          {item.inspect && <p>{item.Description}</p>}
-          <div className="TaskLeft">
+          <h3>{item.Task}</h3>
+          {!item.inspect && (
+            <input
+              type="checkbox"
+              className="CheckBtn"
+              checked={item.Completed}
+              onChange={() => Completed(item.Index)}
+            />
+          )}
+          {item.inspect && (
             <button
+              className="DeleteBtn"
               onClick={() => removeTask(item.Index, item.TaskId)}
-            ></button>
-          </div>
-          <div className="TaskRight">
+            >
+              Delete
+            </button>
+          )}
+          {item.inspect && <p>{item.Description}</p>}
+          <div className="Inspect">
             <button onClick={() => Inspect(item.Index)}></button>
           </div>
         </div>

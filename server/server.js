@@ -100,9 +100,10 @@ app.post("/api/createToDo", async (req, res) => {
     TaskId: TaskId,
     UserId: UserId,
     Folder: Folder,
+    completed: Completed,
   } = req.body;
   try {
-    await CreateToDo(Header, Description, TaskId, UserId, Folder);
+    await CreateToDo(Header, Description, TaskId, UserId, Folder, Completed);
     res.status(201).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
@@ -123,6 +124,16 @@ app.delete("/api/deleteFolder", async (req, res) => {
   const { folder: FolderName } = req.body;
   try {
     await deleteFolder(FolderName);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
+});
+//Updates the true or false value of the task aka if it is completed or not
+app.put("/api/updateToDo", async (req, res) => {
+  const { Task: TaskId } = req.body;
+  try {
+    await UpdateTaskComplete(TaskId);
     res.status(204).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
@@ -198,6 +209,7 @@ async function GetToDoData(userid, folder) {
       Description: row.De_scription,
       TaskId: row.task_id,
       Folder: row.Folder,
+      Completed: row.Completed,
     }));
     return data;
   } catch (error) {
@@ -228,11 +240,18 @@ async function deleteFolder(folder) {
   }
 }
 //Creates a new task
-async function CreateToDo(Header, Description, taskid, UserId, Folder) {
+async function CreateToDo(
+  Header,
+  Description,
+  taskid,
+  UserId,
+  Folder,
+  Completed
+) {
   try {
     const result = pool.query(
-      `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId, Folder) VALUES (?, ?, ?, ?, ?)`,
-      [Header, Description, taskid, UserId, Folder]
+      `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId, Folder, Completed) VALUES (?, ?, ?, ?, ?, ?)`,
+      [Header, Description, taskid, UserId, Folder, Completed]
     );
     return result;
   } catch (error) {
@@ -249,6 +268,18 @@ async function GetFoldersById(userId, excluded) {
     return results.map((row) => ({ Folder: row.Folder }));
   } catch (error) {
     console.error(`Error fetching folders for user ${userId}:`, error);
+    throw error;
+  }
+}
+
+async function UpdateTaskComplete(TaskId) {
+  try {
+    const result = await pool.query(
+      `UPDATE tododata SET Completed = NOT Completed WHERE task_id = ?`,
+      [TaskId]
+    );
+    return result;
+  } catch (error) {
     throw error;
   }
 }

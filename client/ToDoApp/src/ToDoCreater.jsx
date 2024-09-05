@@ -40,6 +40,7 @@ function ToDoCreater() {
       Description: description,
       UserId: userId,
       Folder: foldername,
+      completed: false,
     };
     // Data sent to the server
     if (isSignedIn) {
