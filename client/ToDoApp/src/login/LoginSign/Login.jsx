@@ -72,6 +72,31 @@ function Login() {
       console.error("Error:", error);
     }
   };
+  async function CheckIfInUse() {
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/checkUsername",
+        options
+      );
+      const responseData = await response.json();
+      console.log("Response from server:", responseData);
+      if (responseData.success) {
+        setIsSignedIn(true);
+        setUserId(responseData.Id);
+      } else {
+        setIsSignedIn(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
   //Sends the data to the server to be inserted into the database
   const handleSignup = async () => {
     let UserId = uuidv4();

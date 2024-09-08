@@ -72,17 +72,16 @@ body {
   z-index: 2;
   position: relative;
 }
-
+/* The checkbox inside the grid-item aka the task */
 .CheckBtn {
   position: absolute;
-  border: none;
   z-index: 5;
   top: 50%;
   left: 50%;
-  background-color: hsl(0, 5%, 15%, 0.5);
   height: 20%;
   width: 20%;
   transform: translate(-50%, -50%);
+  cursor: pointer;
 }
 
 .DeleteBtn {
@@ -125,6 +124,28 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.animate-border {
+  animation: borderColorCycle 1.5s linear;
+}
+
+@keyframes borderColorCycle {
+  0% {
+    border-color: lightpink;
+  }
+  25% {
+    border-color: lightblue;
+  }
+  50% {
+    border-color: lightgreen;
+  }
+  75% {
+    border-color: lightyellow;
+  }
+  100% {
+    border-color: lightpink;
+  }
+}
 /* The add button in the bottom left */
 #Add {
   height: 50px;
@@ -133,8 +154,13 @@ body {
   bottom: 10px;
   left: 10px;
   border: none;
-  background: radial-gradient(circle, hsl(355, 100%, 81%), hsl(340, 76%, 50%));
+  background-image: radial-gradient(
+    circle,
+    hsl(355, 100%, 81%),
+    hsl(340, 76%, 50%)
+  );
 }
+
 /* The button in the bottom right */
 #Reset {
   height: 50px;
