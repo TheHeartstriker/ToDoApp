@@ -67,38 +67,18 @@ function Login() {
         setUserId(responseData.Id);
       } else {
         setIsSignedIn(false);
+        alert("Incorrect username or password");
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  async function CheckIfInUse() {
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/checkUsername",
-        options
-      );
-      const responseData = await response.json();
-      console.log("Response from server:", responseData);
-      if (responseData.success) {
-        setIsSignedIn(true);
-        setUserId(responseData.Id);
-      } else {
-        setIsSignedIn(false);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
   //Sends the data to the server to be inserted into the database
   const handleSignup = async () => {
+    if ((await CheckIfInUse(username)) === true) {
+      alert("Username is already in use");
+      return;
+    }
     let UserId = uuidv4();
     const options = {
       method: "POST",
@@ -115,6 +95,31 @@ function Login() {
       console.error("Error:", error);
     }
   };
+
+  async function CheckIfInUse(usernamedata) {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ usernamedata }),
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/checkUsername",
+        options
+      );
+      const responseData = await response.json();
+      console.log("Name in use", responseData);
+      if (responseData) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   return (
     <>

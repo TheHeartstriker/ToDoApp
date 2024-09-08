@@ -31,17 +31,6 @@ app.listen(PORT, () => {
 let userIdGet = "";
 let foldername = "";
 
-app.post("/api/setFolder", async (req, res) => {
-  try {
-    const folderNaming = req.body.folder;
-    console.log(folderNaming);
-    foldername = folderNaming;
-    res.status(200).send();
-  } catch (error) {
-    res.status(500).send({ message: "Internal server error", error });
-  }
-});
-
 //Gets task data based on user id and sends it to the front as a response
 app.get("/api/getTododata", async (req, res) => {
   try {
@@ -58,6 +47,31 @@ app.get("/api/getFolders", async (req, res) => {
     const toExclude = "";
     const data = await GetFoldersById(userIdGet, toExclude);
     res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
+});
+
+app.post("/api/checkUsername", async (req, res) => {
+  const { username } = req.body;
+  try {
+    const result = await checkUsername(username);
+    if (result) {
+      res.status(200).send(true);
+    } else {
+      res.status(401).send(false);
+    }
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
+});
+
+app.post("/api/setFolder", async (req, res) => {
+  try {
+    const folderNaming = req.body.folder;
+    console.log(folderNaming);
+    foldername = folderNaming;
+    res.status(200).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
   }
@@ -279,6 +293,22 @@ async function UpdateTaskComplete(TaskId) {
       [TaskId]
     );
     return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function checkUsername(username) {
+  try {
+    const [results] = await pool.query(
+      `SELECT * FROM login WHERE UserName = ?`,
+      [username]
+    );
+    if (results.length > 0) {
+      return false;
+    } else {
+      return true;
+    }
   } catch (error) {
     throw error;
   }
