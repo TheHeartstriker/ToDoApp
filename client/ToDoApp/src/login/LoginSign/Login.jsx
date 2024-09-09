@@ -102,7 +102,7 @@ function Login() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ usernamedata }),
+      body: JSON.stringify({ username }),
     };
     try {
       const response = await fetch(

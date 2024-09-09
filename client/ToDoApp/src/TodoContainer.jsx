@@ -126,11 +126,13 @@ function Container() {
   }
 
   useEffect(() => {
+    setLocalTaskData(taskData);
     console.log(LocalTaskData);
     console.log(foldername);
   }, []);
   //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
+    setLocalTaskData(taskData);
     addIndexs();
     AddInspect();
   }, [taskData]);
@@ -139,7 +141,7 @@ function Container() {
     if (isSignedIn) {
       loadTaskfromServer();
     }
-  }, []);
+  }, [isSignedIn]);
 
   return (
     // This iterates over the items array and renders each item in a div

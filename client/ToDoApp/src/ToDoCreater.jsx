@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { TaskContext } from "./TaskProvider";
 import { v4 as uuidv4 } from "uuid";
 
@@ -15,7 +15,8 @@ function ToDoCreater() {
   const [TaskDescription, setTaskDescription] = useState("");
   //Ref for the border ani
   const borderRef = useRef(null);
-
+  // For visualzation and to subtly show the user that the task was added
+  // Plus is stoping the user from spamming the create button
   function AnimateBorder() {
     const border = borderRef.current;
     border.classList.add("animate-border");
@@ -40,7 +41,6 @@ function ToDoCreater() {
 
   //Adds a task to the main data and sends it to the server
   const addTask = (task, description) => {
-    AnimateBorder();
     // Unique id for each task
     const id = uuidv4();
 
@@ -85,6 +85,10 @@ function ToDoCreater() {
     setTaskDescription("");
   };
 
+  useEffect(() => {
+    console.log("TaskData:", taskData);
+  }, [taskData]);
+
   return (
     <>
       <div className="Creator" ref={borderRef}>
@@ -105,6 +109,7 @@ function ToDoCreater() {
         <button
           id="Add"
           onClick={() => {
+            AnimateBorder();
             setTaskData(addTask(TaskName, TaskDescription));
           }}
         >

@@ -305,9 +305,9 @@ async function checkUsername(username) {
       [username]
     );
     if (results.length > 0) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   } catch (error) {
     throw error;
