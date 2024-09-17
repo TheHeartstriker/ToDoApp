@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { TaskContext } from "../../TaskProvider";
 
@@ -11,11 +11,38 @@ function Login() {
   //Used to see which button name and function to use
   const [login, setLogin] = useState(false);
   const [signup, setSignup] = useState(false);
+  const [CanClick, setCanClick] = useState(true);
+
+  const borderRef = useRef(null);
+
+  function AnimateBorderRed() {
+    const border = borderRef.current;
+    border.classList.add("AnimatePulseRed");
+    setCanClick(false);
+    setTimeout(() => {
+      border.classList.remove("AnimatePulseRed");
+      setCanClick(true);
+    }, 1500);
+  }
+
+  function AnimateBorderGreen() {
+    const border = borderRef.current;
+    border.classList.add("AnimatePulseGreen");
+    setCanClick(false);
+    setTimeout(() => {
+      setCanClick(true);
+      border.classList.remove("AnimatePulseGreen");
+    }, 1500);
+  }
+
   //Handling the event changes
   const handleUsernameChange = (event) => {
     if (event.target.value.length > 49) {
       alert("Username is too long");
       return;
+    }
+    if (event.target.value.includes(" ")) {
+      alert("Username cannot contain spaces");
     } else {
       setUsername(event.target.value);
     }
@@ -25,6 +52,9 @@ function Login() {
     if (event.target.value.length > 49) {
       alert("Password is too long");
       return;
+    }
+    if (event.target.value.includes(" ")) {
+      alert("Password cannot contain spaces");
     } else {
       setPassword(event.target.value);
     }
@@ -41,6 +71,9 @@ function Login() {
   };
   //Handle the server realted to login or signup
   const handleSignOrLog = () => {
+    if (!CanClick) {
+      return;
+    }
     if (login) {
       handleLogin();
     } else {
@@ -63,9 +96,11 @@ function Login() {
       const responseData = await response.json();
       console.log("Response from server:", responseData);
       if (responseData.success) {
+        AnimateBorderGreen();
         setIsSignedIn(true);
         setUserId(responseData.Id);
       } else {
+        AnimateBorderRed();
         setIsSignedIn(false);
         alert("Incorrect username or password");
       }
@@ -77,6 +112,7 @@ function Login() {
   const handleSignup = async () => {
     if ((await CheckIfInUse(username)) === true) {
       alert("Username is already in use");
+      AnimateBorderRed();
       return;
     }
     let UserId = uuidv4();
@@ -91,7 +127,9 @@ function Login() {
       await fetch("http://localhost:5000/api/signup", options);
       setIsSignedIn(true);
       setUserId(UserId);
+      AnimateBorderGreen();
     } catch (error) {
+      AnimateBorderRed();
       console.error("Error:", error);
     }
   };
@@ -129,6 +167,7 @@ function Login() {
         <div id="LogSignPage">
           <div className="input-group">
             <input
+              ref={borderRef}
               type="text"
               id="LoginUsername"
               value={username}
@@ -148,7 +187,9 @@ function Login() {
           <button id="loginOrSign" onClick={handleSignOrLog}>
             {login ? "Login" : "Signup"}
           </button>
-          <button id="switch" onClick={handleSwitch}></button>
+          <button id="switch" onClick={handleSwitch}>
+            {login ? "Switch to Signup" : "Switch to Login"}
+          </button>
         </div>
       </div>
     </>

@@ -17,9 +17,12 @@
   position: absolute;
   background-color: var(--Light-pink);
   height: 50px;
-  width: 50px;
-  bottom: 0;
-  left: 0;
+  width: 500px;
+  border: none;
+  border-radius: 5px;
+  bottom: -20px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .FolderName {

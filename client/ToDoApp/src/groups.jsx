@@ -174,9 +174,11 @@ function Groups() {
           <button id="Clear" onClick={() => ShowFolder()}>
             Clear
           </button>
+          <button id="ShowFolder" onClick={() => ShowFolder()}>
+            View Folders
+          </button>
         </div>
       )}
-      <button id="ShowFolder" onClick={() => ShowFolder()}></button>
     </>
   );
 }
