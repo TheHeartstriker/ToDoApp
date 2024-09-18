@@ -179,6 +179,11 @@ function Groups() {
           </button>
         </div>
       )}
+      {!ShowFolderCreate && (
+        <button id="ShowFolder" onClick={() => ShowFolder()}>
+          View Creator
+        </button>
+      )}
     </>
   );
 }

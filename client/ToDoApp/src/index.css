@@ -2,6 +2,8 @@
   --Dark-pink: hsl(340, 76%, 50%);
   --Light-pink: hsl(355, 100%, 81%);
   --Middle-Pink: #ff577e;
+  --Cyan: rgb(43, 195, 226);
+  --Light-Cyan: rgb(150, 195, 226);
 }
 
 body {
@@ -27,7 +29,7 @@ body {
 .grid-item {
   position: relative;
   text-align: center;
-  border: 5px solid darkred;
+  border: 5px solid var(--Light-Cyan);
   background-color: var(--Dark-pink);
 
   margin: 75px;
@@ -115,7 +117,6 @@ body {
 
   display: flex;
   flex-direction: column;
-  border: 5px solid lightpink;
   border-radius: 10px;
   background-color: hsl(0, 5%, 15%);
   color: #ffffff;
@@ -154,11 +155,7 @@ body {
   bottom: 10px;
   left: 10px;
   border: none;
-  background-image: radial-gradient(
-    circle,
-    hsl(355, 100%, 81%),
-    hsl(340, 76%, 50%)
-  );
+  background-image: radial-gradient(circle, var(--Cyan), hsl(340, 76%, 50%));
 }
 
 /* The button in the bottom right */
@@ -169,7 +166,7 @@ body {
   bottom: 10px;
   right: 10px;
   border: none;
-  background: radial-gradient(circle, hsl(355, 100%, 81%), hsl(340, 76%, 50%));
+  background: radial-gradient(circle, var(--Cyan), hsl(340, 76%, 50%));
 }
 
 /* Typing boxes */

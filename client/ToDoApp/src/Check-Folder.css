@@ -2,6 +2,8 @@
   --Dark-pink: hsl(340, 76%, 50%);
   --Light-pink: hsl(355, 100%, 81%);
   --Middle-Pink: #ff577e;
+  --Cyan: rgb(43, 195, 226);
+  --Light-Cyan: rgb(150, 195, 226);
 }
 /* Contains the folder buttons and contents */
 .FolderContainer {
@@ -60,7 +62,6 @@
 
   display: flex;
   flex-direction: column;
-  border: 5px solid lightpink;
   border-radius: 10px;
   background-color: hsl(0, 5%, 15%);
   color: #ffffff;

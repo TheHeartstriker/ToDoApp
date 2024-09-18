@@ -2,6 +2,8 @@
   --Dark-pink: hsl(340, 76%, 50%);
   --Light-pink: hsl(355, 100%, 81%);
   --Middle-Pink: #ff577e;
+  --Cyan: rgb(43, 195, 226);
+  --Light-Cyan: rgb(150, 195, 226);
 }
 
 /* The naviagtion bar realted at the top of the page */
@@ -12,7 +14,7 @@
   align-items: center;
   border-radius: 5px;
   height: 12vh;
-  background: linear-gradient(to right, var(--Light-pink), var(--Dark-pink));
+  background: linear-gradient(to right, var(--Light-Cyan), var(--Dark-pink));
 }
 /* Buttons contained at the top of the page */
 #ContainerHeader button {
@@ -49,10 +51,10 @@
   justify-content: center;
   height: 50vh;
   width: 50vw;
-  background: linear-gradient(to bottom, hsl(0, 5%, 10%), blueviolet);
+  background: linear-gradient(to bottom, var(--Dark-pink), var(--Cyan));
 
   border: 5px solid transparent;
-  border-image: linear-gradient(to right, var(--Dark-pink), blueviolet) 1;
+  border-image: linear-gradient(to right, var(--Dark-pink), var(--Cyan)) 1;
   border-radius: 5px;
 }
 
@@ -78,7 +80,7 @@
 
 #loginOrSign {
   width: 75px;
-  background-color: blueviolet;
+  background-color: var(--Cyan);
   border: 2.5px solid var(--Middle-Pink);
   border-radius: 5px;
   margin: 10px;
