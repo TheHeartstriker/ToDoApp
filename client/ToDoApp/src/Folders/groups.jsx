@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { TaskContext } from "./TaskProvider";
+import { TaskContext } from "../TaskProvider";
 
 function Groups() {
   const [ShowFolderCreate, setShowFolderCreate] = useState(true);

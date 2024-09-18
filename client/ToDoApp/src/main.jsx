@@ -8,11 +8,13 @@ import ToDoCreater from "./ToDoCreater";
 import Container from "./TodoContainer.jsx";
 import Nav from "./Navigator";
 import Login from "./login/LoginSign/Login";
-import Groups from "./groups.jsx";
+import Groups from "./Folders/groups.jsx";
 //CSS imports
-import "./index.css";
+import "./Task.css";
 import "./login/LoginSign/NavLogin.css";
-import "./Check-Folder.css";
+import "./Folders/Check-Folder.css";
+import "./Task.css";
+import "./Creator.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <TaskProvider>
