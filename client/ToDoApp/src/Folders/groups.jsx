@@ -2,8 +2,10 @@ import { useState, useContext, useEffect } from "react";
 import { TaskContext } from "../TaskProvider";
 
 function Groups() {
+  //Local state for the folder creator screen and the folders indvidual name
   const [ShowFolderCreate, setShowFolderCreate] = useState(true);
   const [folderMainName, setFolderMainName] = useState("");
+  //Context values
   const { folders, setFolders } = useContext(TaskContext);
   const { foldername, setFoldername } = useContext(TaskContext);
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
@@ -29,8 +31,6 @@ function Groups() {
   //Delete a folder based on index
   function deleteFolder(index) {
     setFolders(folders.filter((folder) => folder.index !== index));
-    console.log(index);
-    console.log(folders);
   }
   //If we have been clicked then name of the folder to the overhead
   function CurrentFolder() {
@@ -41,11 +41,12 @@ function Groups() {
         folderFound = true;
       }
     });
+    //If we have not found a folder then set the foldername to nothing
     if (!folderFound) {
       setFoldername("");
     }
   }
-  //Used to change the folderOn value
+  //Used to change the folderOn value using the index
   function TrueFalseFolder(index) {
     const newFolders = folders.map((folder) => {
       if (folder.index === index) {
@@ -62,7 +63,7 @@ function Groups() {
     });
     setFolders(newFolders);
   }
-  //Get the folder acosiated with the user
+  //Gets the folders related to the user and converts them to the correct format
   //Something to note this does not get the default "" folder
   async function GetFolders() {
     const options = {
@@ -90,7 +91,7 @@ function Groups() {
       console.error("Error:", error);
     }
   }
-  //Give the server the current folder so it can be used in the container to load the data
+  //Give the server the current folder so it knows what data to grab from the database
   async function sendCurrentFolder(folderName) {
     const options = {
       method: "POST",
@@ -105,7 +106,7 @@ function Groups() {
       console.error("Error:", error);
     }
   }
-
+  //Delete a folder from the database
   async function deleteFolderFromDB(FolderName) {
     const options = {
       method: "DELETE",
@@ -127,7 +128,7 @@ function Groups() {
       GetFolders();
     }
   }, [isSignedIn]);
-  //Re checks the folder values and sets the foldername
+  //Re checks the folder values and sees if the foldername needs to be updated
   useEffect(() => {
     CurrentFolder();
   }, [folders]);
@@ -138,27 +139,25 @@ function Groups() {
 
   return (
     <>
-      <div className="FolderContainer">
-        {folders.map((folder, index) => (
-          <div className="Folder" key={folder.folderName}>
-            <button
-              className={`FolderName ${folder.folderOn ? "FolderNameOn" : ""}`}
-              onClick={() => TrueFalseFolder(folder.index)}
-            >
-              {folder.folderName}
-            </button>
-            <button
-              className="FolderDelete"
-              onClick={() => {
-                deleteFolder(folder.index);
-                deleteFolderFromDB(folder.folderName);
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
+      {folders.map((folder, index) => (
+        <div className="Folder" key={folder.folderName}>
+          <button
+            className={`FolderName ${folder.folderOn ? "FolderNameOn" : ""}`}
+            onClick={() => TrueFalseFolder(folder.index)}
+          >
+            {folder.folderName}
+          </button>
+          <button
+            className="FolderDelete"
+            onClick={() => {
+              deleteFolder(folder.index);
+              deleteFolderFromDB(folder.folderName);
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      ))}
       {ShowFolderCreate && (
         <div className="FolderCreate">
           <input
@@ -174,13 +173,10 @@ function Groups() {
           <button id="Clear" onClick={() => ShowFolder()}>
             Clear
           </button>
-          <button id="ShowFolder" onClick={() => ShowFolder()}>
-            View Folders
-          </button>
         </div>
       )}
       {!ShowFolderCreate && (
-        <button id="ShowFolder" onClick={() => ShowFolder()}>
+        <button id="ShowFolderCreate" onClick={() => ShowFolder()}>
           View Creator
         </button>
       )}

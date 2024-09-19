@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { TaskContext } from "../../TaskProvider";
 
 function Login() {
+  //Important context values used across the app
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
   const { userId, setUserId } = useContext(TaskContext);
   //Stores the username and password
@@ -11,10 +12,11 @@ function Login() {
   //Used to see which button name and function to use
   const [login, setLogin] = useState(false);
   const [signup, setSignup] = useState(false);
+  //Used in junction with the animation to stop the user from clicking multiple times
   const [CanClick, setCanClick] = useState(true);
 
   const borderRef = useRef(null);
-
+  //Indicates faliure
   function AnimateBorderRed() {
     const border = borderRef.current;
     border.classList.add("AnimatePulseRed");
@@ -24,7 +26,7 @@ function Login() {
       setCanClick(true);
     }, 1500);
   }
-
+  //Indicates success
   function AnimateBorderGreen() {
     const border = borderRef.current;
     border.classList.add("AnimatePulseGreen");
@@ -100,6 +102,7 @@ function Login() {
         setIsSignedIn(true);
         setUserId(responseData.Id);
       } else {
+        //If the login fails
         AnimateBorderRed();
         setIsSignedIn(false);
         alert("Incorrect username or password");
@@ -133,8 +136,8 @@ function Login() {
       console.error("Error:", error);
     }
   };
-
-  async function CheckIfInUse(usernamedata) {
+  //Checks if the username is in use by sending the username to the server and returning a response
+  async function CheckIfInUse() {
     const options = {
       method: "POST",
       headers: {

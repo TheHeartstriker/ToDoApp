@@ -2,10 +2,11 @@
   --Dark-pink: hsl(340, 76%, 50%);
   --Light-pink: hsl(355, 100%, 81%);
   --Middle-Pink: #ff577e;
+  /* Pink and blue are opposite on the color wheel */
+  --Dark-Blue: rgb(0, 0, 128);
   --Cyan: rgb(43, 195, 226);
   --Light-Cyan: rgb(150, 195, 226);
 }
-
 /* The naviagtion bar realted at the top of the page */
 #ContainerHeader {
   position: relative;
@@ -39,7 +40,6 @@
   justify-content: center;
   height: 88vh; /* 100% - 12vh */
   width: 100vw;
-  /* background: linear-gradient(to right, var(--Light-pink), var(--Dark-pink)); */
 }
 
 /* The visable box that contains the text boxes */
@@ -68,7 +68,7 @@
   margin: 10px;
   box-shadow: 0 8px 16px var(--Dark-pink);
 }
-
+/* The switch button */
 #switch {
   background-color: var(--Middle-Pink);
   margin: 10px;
@@ -77,7 +77,7 @@
   height: 50px;
   width: 100px;
 }
-
+/* The button that either logs the user in or signs them up */
 #loginOrSign {
   width: 75px;
   background-color: var(--Cyan);
@@ -85,7 +85,7 @@
   border-radius: 5px;
   margin: 10px;
 }
-
+/* Animations to notifiy the user if something was successful */
 .AnimatePulseRed {
   animation: PulseRed 3s ease-in-out;
 }
