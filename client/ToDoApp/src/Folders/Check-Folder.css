@@ -26,7 +26,7 @@
 }
 
 /* Typing boxes for the creator */
-#HeaderTask {
+.HeaderTask {
   margin: 20px;
   border: none;
   background-color: hsla(340, 76%, 50%, 0.5);
@@ -36,7 +36,7 @@
 }
 
 /* For the button that reveals the folder creator at the bottom */
-#ShowFolderCreate {
+.ShowFolderCreate {
   position: absolute;
   background-color: var(--Light-pink);
   height: 50px;

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { TaskContext } from "./TaskProvider";
+import { TaskContext } from "../TaskProvider";
 
 function Nav() {
   //This mostly returns naviagtion html and is used to see if the user is signed in
@@ -24,7 +24,7 @@ function Nav() {
 
   return (
     <>
-      <div id="ContainerHeader">
+      <div className="ContainerHeader">
         <Link to="/">
           <button id="Home">ToDo's</button>
         </Link>

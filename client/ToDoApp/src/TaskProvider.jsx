@@ -9,7 +9,7 @@ export const TaskProvider = ({ children }) => {
   const [userId, setUserId] = useState("");
   //Used to store folderdata so it persists when navigating elsewhere
   const [folders, setFolders] = useState([]);
-
+  //Foldername save so when the user access the container component it will show the correct folder tasks
   const [foldername, setFoldername] = useState("");
 
   return (

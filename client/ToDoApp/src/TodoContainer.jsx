@@ -87,7 +87,8 @@ function Container() {
       IfSignDelete(index);
     }
   }
-
+  //Change the true or false value of the task completed for local and main data
+  //Send data to the server if we are signed in
   function Completed(index) {
     setTaskData(function (prevTaskData) {
       return prevTaskData.map(function (task, i) {
@@ -125,11 +126,6 @@ function Container() {
     );
   }
 
-  useEffect(() => {
-    setLocalTaskData(taskData);
-    console.log(LocalTaskData);
-    console.log(foldername);
-  }, []);
   //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
     setLocalTaskData(taskData);

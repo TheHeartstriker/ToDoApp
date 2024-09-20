@@ -40,13 +40,14 @@ body {
   height: 150px;
   width: 150px;
 }
+/* The taskname */
 .grid-item h3 {
   color: #ffffff;
   z-index: 2;
   position: relative;
   top: -20%;
 }
-/* The element that is applyed when a task is to be inspected */
+/* The elements that are applyed when a task is to be inspected */
 .grid-item.inspected {
   z-index: 2;
   position: absolute;

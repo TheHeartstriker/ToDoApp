@@ -7,34 +7,9 @@
   --Cyan: rgb(43, 195, 226);
   --Light-Cyan: rgb(150, 195, 226);
 }
-/* The naviagtion bar realted at the top of the page */
-#ContainerHeader {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-  height: 12vh;
-  background: linear-gradient(to right, var(--Light-Cyan), var(--Dark-pink));
-}
-/* Buttons contained at the top of the page */
-#ContainerHeader button {
-  border: 5px solid var(--Dark-pink);
-  background-color: var(--Light-pink);
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
-  height: 100px;
-  width: 100px;
-  transition: background-color 0.5s ease;
-}
-
-#ContainerHeader button:hover {
-  background-color: var(--Middle-Pink);
-}
 
 /* Container that holds the LogSingin box */
-#LogSignContainer {
+.LogSignContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,7 +18,7 @@
 }
 
 /* The visable box that contains the text boxes */
-#LogSignPage {
+.LogSignPage {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -69,7 +44,7 @@
   box-shadow: 0 8px 16px var(--Dark-pink);
 }
 /* The switch button */
-#switch {
+.Switch {
   background-color: var(--Middle-Pink);
   margin: 10px;
   border: none;
@@ -78,7 +53,7 @@
   width: 100px;
 }
 /* The button that either logs the user in or signs them up */
-#loginOrSign {
+.loginOrSign {
   width: 75px;
   background-color: var(--Cyan);
   border: 2.5px solid var(--Middle-Pink);

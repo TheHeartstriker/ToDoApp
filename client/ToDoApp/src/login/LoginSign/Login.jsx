@@ -165,14 +165,13 @@ function Login() {
   return (
     <>
       {/* Outside container */}
-      <div id="LogSignContainer">
+      <div className="LogSignContainer">
         {/* The inside container that holds the text boxes */}
-        <div id="LogSignPage">
+        <div className="LogSignPage">
           <div className="input-group">
             <input
               ref={borderRef}
               type="text"
-              id="LoginUsername"
               value={username}
               onChange={handleUsernameChange}
               placeholder="Username"
@@ -181,16 +180,15 @@ function Login() {
           <div className="input-group">
             <input
               type="password"
-              id="LoginPassword"
               value={password}
               onChange={handlePasswordChange}
               placeholder="Password"
             />
           </div>
-          <button id="loginOrSign" onClick={handleSignOrLog}>
+          <button className="loginOrSign" onClick={handleSignOrLog}>
             {login ? "Login" : "Signup"}
           </button>
-          <button id="switch" onClick={handleSwitch}>
+          <button className="Switch" onClick={handleSwitch}>
             {login ? "Switch to Signup" : "Switch to Login"}
           </button>
         </div>

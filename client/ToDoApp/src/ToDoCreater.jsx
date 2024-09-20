@@ -94,20 +94,20 @@ function ToDoCreater() {
       <div className="Creator" ref={borderRef}>
         <input
           type="text"
-          id="HeaderTask"
+          className="HeaderTask"
           placeholder="Task Name"
           value={TaskName}
           onChange={handleTaskNameChange}
         />
         <textarea
           type="text"
-          id="DescriptTask"
+          className="DescriptTask"
           placeholder="Task Description"
           value={TaskDescription}
           onChange={handleTaskDesChange}
         />
         <button
-          id="Add"
+          className="Add"
           onClick={() => {
             AnimateBorder();
             setTaskData(addTask(TaskName, TaskDescription));
@@ -115,7 +115,7 @@ function ToDoCreater() {
         >
           Create
         </button>
-        <button id="Reset" onClick={handleReset}>
+        <button className="Reset" onClick={handleReset}>
           Reset
         </button>
       </div>

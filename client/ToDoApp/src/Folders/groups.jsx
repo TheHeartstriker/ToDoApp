@@ -134,7 +134,9 @@ function Groups() {
   }, [folders]);
   //Send the current folder to the server
   useEffect(() => {
-    sendCurrentFolder(foldername);
+    if (isSignedIn) {
+      sendCurrentFolder(foldername);
+    }
   }, [foldername]);
 
   return (
@@ -162,7 +164,7 @@ function Groups() {
         <div className="FolderCreate">
           <input
             type="text"
-            id="HeaderTask"
+            className="HeaderTask"
             placeholder="FolderName"
             value={folderMainName}
             onChange={handleFolderNameChange}
@@ -176,7 +178,7 @@ function Groups() {
         </div>
       )}
       {!ShowFolderCreate && (
-        <button id="ShowFolderCreate" onClick={() => ShowFolder()}>
+        <button className="ShowFolderCreate" onClick={() => ShowFolder()}>
           View Creator
         </button>
       )}
