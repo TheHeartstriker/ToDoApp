@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-
+import morgan from "morgan";
+//Intilizing the .env file and the express app
 dotenv.config();
 const app = express();
 //Cors pool/options
@@ -19,15 +20,16 @@ const pool = mysql.createPool({
   password: process.env.MY_PASS,
   database: process.env.MY_DB,
 });
-//Configuring the cors and json
+//Configuring the cors and json and morgan
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(morgan("combined"));
 //Server intialization
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
+//The usersId and foldername are used to get the data from the database
 let userIdGet = "";
 let foldername = "";
 
@@ -51,7 +53,7 @@ app.get("/api/getFolders", async (req, res) => {
     res.status(500).send({ message: "Internal server error", error });
   }
 });
-
+//Checks if the username is already in use
 app.post("/api/checkUsername", async (req, res) => {
   const { username } = req.body;
   try {
@@ -65,7 +67,7 @@ app.post("/api/checkUsername", async (req, res) => {
     res.status(500).send({ message: "Internal server error", error });
   }
 });
-
+//Sets the folder name to be used in the database
 app.post("/api/setFolder", async (req, res) => {
   try {
     const folderNaming = req.body.folder;
@@ -285,7 +287,7 @@ async function GetFoldersById(userId, excluded) {
     throw error;
   }
 }
-
+//Updates the task state of either being completed or not
 async function UpdateTaskComplete(TaskId) {
   try {
     const result = await pool.query(
@@ -297,7 +299,7 @@ async function UpdateTaskComplete(TaskId) {
     throw error;
   }
 }
-
+//Sees if the username is already in use
 async function checkUsername(username) {
   try {
     const [results] = await pool.query(

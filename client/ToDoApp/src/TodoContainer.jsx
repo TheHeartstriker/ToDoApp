@@ -152,7 +152,7 @@ function Container() {
             <input
               type="checkbox"
               className="CheckBtn"
-              checked={item.Completed}
+              checked={item.Completed ?? false}
               onChange={() => Completed(item.Index)}
             />
           )}
