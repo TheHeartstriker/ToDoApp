@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-import morgan from "morgan";
+import morgan from "morgan"; // For logging if needed
 //Intilizing the .env file and the express app
 dotenv.config();
 const app = express();
@@ -23,7 +23,6 @@ const pool = mysql.createPool({
 //Configuring the cors and json and morgan
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(morgan("combined"));
 //Server intialization
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
