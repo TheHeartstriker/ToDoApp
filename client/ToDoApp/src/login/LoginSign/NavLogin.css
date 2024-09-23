@@ -2,36 +2,14 @@
   --Dark-pink: hsl(340, 76%, 50%);
   --Light-pink: hsl(355, 100%, 81%);
   --Middle-Pink: #ff577e;
-}
-
-/* The naviagtion bar realted at the top of the page */
-#ContainerHeader {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-  height: 12vh;
-  background: linear-gradient(to right, var(--Light-pink), var(--Dark-pink));
-}
-/* Buttons contained at the top of the page */
-#ContainerHeader button {
-  border: 5px solid var(--Dark-pink);
-  background-color: var(--Light-pink);
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
-  height: 100px;
-  width: 100px;
-  transition: background-color 0.5s ease;
-}
-
-#ContainerHeader button:hover {
-  background-color: var(--Middle-Pink);
+  /* Pink and blue are opposite on the color wheel */
+  --Dark-Blue: rgb(0, 0, 128);
+  --Cyan: rgb(43, 195, 226);
+  --Light-Cyan: rgb(150, 195, 226);
 }
 
 /* Container that holds the LogSingin box */
-#LogSignContainer {
+.LogSignContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,7 +18,7 @@
 }
 
 /* The visable box that contains the text boxes */
-#LogSignPage {
+.LogSignPage {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -48,33 +26,81 @@
   justify-content: center;
   height: 50vh;
   width: 50vw;
+  background: linear-gradient(to bottom, var(--Dark-pink), var(--Cyan));
+
+  border: 5px solid transparent;
+  border-image: linear-gradient(to right, var(--Dark-pink), var(--Cyan)) 1;
+  border-radius: 5px;
 }
 
 /* The input group is the text boxes the are used to send the username and password */
 
 .input-group input {
-  width: 250px;
-  height: 30px;
+  width: 500px;
+  height: 40px;
+  border: 5px solid transparent;
   background-color: var(--Middle-Pink);
-  border: none;
-  border-radius: 5px;
   margin: 10px;
   box-shadow: 0 8px 16px var(--Dark-pink);
 }
-
-#switch {
+/* The switch button */
+.Switch {
   background-color: var(--Middle-Pink);
   margin: 10px;
   border: none;
   border-radius: 5px;
   height: 50px;
-  width: 50px;
+  width: 100px;
 }
-
-#loginOrSign {
+/* The button that either logs the user in or signs them up */
+.loginOrSign {
   width: 75px;
-  background-color: blueviolet;
+  background-color: var(--Cyan);
   border: 2.5px solid var(--Middle-Pink);
   border-radius: 5px;
   margin: 10px;
+}
+/* Animations to notifiy the user if something was successful */
+.AnimatePulseRed {
+  animation: PulseRed 3s ease-in-out;
+}
+
+.AnimatePulseGreen {
+  animation: PulseGreen 3s ease-in-out;
+}
+
+@keyframes PulseRed {
+  0% {
+    border-color: hsl(0, 100%, 80%);
+  }
+  25% {
+    border-color: hsl(0, 100%, 75%);
+  }
+  50% {
+    border-color: hsl(0, 100%, 70%);
+  }
+  75% {
+    border-color: hsl(0, 100%, 65%);
+  }
+  100% {
+    border-color: hsl(0, 100%, 60%);
+  }
+}
+
+@keyframes PulseGreen {
+  0% {
+    border-color: hsl(120, 100%, 85%);
+  }
+  25% {
+    border-color: hsl(120, 100%, 80%);
+  }
+  50% {
+    border-color: hsl(120, 100%, 75%);
+  }
+  75% {
+    border-color: hsl(120, 100%, 70%);
+  }
+  100% {
+    border-color: hsl(120, 100%, 60%);
+  }
 }

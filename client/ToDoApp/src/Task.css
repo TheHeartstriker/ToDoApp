@@ -1,0 +1,110 @@
+:root {
+  --Dark-pink: hsl(340, 76%, 50%);
+  --Light-pink: hsl(355, 100%, 81%);
+  --Middle-Pink: #ff577e;
+  --Cyan: rgb(43, 195, 226);
+  --Light-Cyan: rgb(150, 195, 226);
+}
+
+body {
+  background-color: hsl(0, 5%, 10%);
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Invisable todo container  */
+.ToDoContainer {
+  display: grid;
+  height: 100%;
+  width: 100vw;
+  gap: 100px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  background-color: hsl(0, 5%, 10%);
+  border-color: #000000;
+}
+
+/* The grid items(the visable tasks that are created) */
+.grid-item {
+  position: relative;
+  text-align: center;
+  border: 5px solid var(--Light-Cyan);
+  background-color: var(--Dark-pink);
+
+  margin: 75px;
+  aspect-ratio: 1 / 1;
+  border-radius: 5px;
+  color: #ffffff;
+  padding: 10px;
+  height: 150px;
+  width: 150px;
+}
+/* The taskname */
+.grid-item h3 {
+  color: #ffffff;
+  z-index: 1;
+  position: relative;
+  top: -20%;
+}
+/* The elements that are applyed when a task is to be inspected */
+.grid-item.inspected {
+  z-index: 3;
+  position: absolute;
+  text-align: center;
+  border: 5px solid darkred;
+  background-color: hsl(340, 76%, 50%);
+
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  height: 800px;
+  width: 800px;
+  opacity: 1;
+}
+
+.grid-item.inspected h1 {
+  color: #ffffff;
+  z-index: 2;
+  position: relative;
+}
+
+.grid-item.inspected p {
+  color: #ffffff;
+  z-index: 2;
+  position: relative;
+}
+/* The checkbox inside the grid-item aka the task */
+.CheckBtn {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  height: 20%;
+  width: 20%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.DeleteBtn {
+  position: absolute;
+  background-color: var(--Middle-Pink);
+  right: 0%;
+  bottom: 0%;
+  border: none;
+  height: 10%;
+  width: 100%;
+  z-index: 2;
+}
+/* The button that applys inspect to an element */
+.Inspect button {
+  z-index: 1;
+  position: absolute;
+  border: none;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  right: 0;
+}

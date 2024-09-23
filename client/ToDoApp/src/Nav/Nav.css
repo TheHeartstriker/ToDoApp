@@ -1,0 +1,34 @@
+:root {
+  --Dark-pink: hsl(340, 76%, 50%);
+  --Light-pink: hsl(355, 100%, 81%);
+  --Middle-Pink: #ff577e;
+  /* Pink and blue are opposite on the color wheel */
+  --Dark-Blue: rgb(0, 0, 128);
+  --Cyan: rgb(43, 195, 226);
+  --Light-Cyan: rgb(150, 195, 226);
+}
+/* The naviagtion bar realted at the top of the page */
+.ContainerHeader {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  height: 12vh;
+  background: linear-gradient(to right, var(--Light-Cyan), var(--Dark-pink));
+}
+/* Buttons contained at the top of the page */
+.ContainerHeader button {
+  border: 5px solid var(--Dark-pink);
+  background-color: var(--Light-pink);
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  height: 100px;
+  width: 100px;
+  transition: background-color 0.5s ease;
+}
+
+.ContainerHeader button:hover {
+  background-color: var(--Middle-Pink);
+}

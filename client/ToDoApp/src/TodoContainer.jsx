@@ -1,12 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import { TaskContext } from "./TaskProvider";
 function Container() {
+  //Something is wrong in here that causes data that is loaded from the server to need another render to show up
   //Main task data thats given to the server
   const { taskData, setTaskData } = useContext(TaskContext);
   //Check if we need to request things of the server
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  //Folder name that we are currently in
+  const { foldername, setFoldername } = useContext(TaskContext);
   //Local used so we dont save or send unnecessary data to the server
-  const [LocalTaskData, setLocalTaskData] = useState(taskData);
+  const [LocalTaskData, setLocalTaskData] = useState([]);
   //Load task info from server
   async function loadTaskfromServer() {
     let options = {
@@ -45,6 +48,30 @@ function Container() {
     }
   }
 
+  async function UpdataTaskComplete(TaskId) {
+    let options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ Task: TaskId }),
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/updateToDo",
+        options
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  function LoadTaskData(Folder) {
+    setLocalTaskData((prevLocalTaskData) =>
+      prevLocalTaskData.filter((task) => task.Folder === Folder)
+    );
+  }
+
   //Removes a task filters out the task that needs to be removed
   //By id from the main data and index from the local data
   function removeTask(index, id) {
@@ -65,16 +92,23 @@ function Container() {
     if (isSignedIn) {
       IfSignDelete(index);
     }
-
-    // When task is removed, organize the index
-    IndexOrganize();
   }
-
-  //Organize index so we can easily locate tasks
-  function IndexOrganize() {
-    setLocalTaskData((prevLocalTaskData) =>
-      prevLocalTaskData.map((task, i) => ({ ...task, index: i }))
-    );
+  //Change the true or false value of the task completed for local and main data
+  //Send data to the server if we are signed in
+  function Completed(index) {
+    setTaskData(function (prevTaskData) {
+      return prevTaskData.map(function (task, i) {
+        return i === index ? { ...task, Completed: !task.Completed } : task;
+      });
+    });
+    setLocalTaskData(function (prevLocalTaskData) {
+      return prevLocalTaskData.map(function (task, i) {
+        return i === index ? { ...task, Completed: !task.Completed } : task;
+      });
+    });
+    if (isSignedIn) {
+      UpdataTaskComplete(LocalTaskData[index].TaskId);
+    }
   }
 
   //Add inspect to all local tasks
@@ -97,8 +131,10 @@ function Container() {
       prevLocalTaskData.map((task, i) => ({ ...task, Index: i }))
     );
   }
+
   //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
+    setLocalTaskData(taskData);
     addIndexs();
     AddInspect();
   }, [taskData]);
@@ -106,8 +142,10 @@ function Container() {
   useEffect(() => {
     if (isSignedIn) {
       loadTaskfromServer();
+    } else {
+      LoadTaskData(foldername);
     }
-  }, []);
+  }, [isSignedIn]);
 
   return (
     // This iterates over the items array and renders each item in a div
@@ -117,14 +155,25 @@ function Container() {
           key={item.TaskId}
           className={`grid-item ${item.inspect ? "inspected" : ""}`}
         >
-          <h1>{item.Task}</h1>
-          {item.inspect && <p>{item.Description}</p>}
-          <div className="TaskLeft">
+          <h3>{item.Task}</h3>
+          {!item.inspect && (
+            <input
+              type="checkbox"
+              className="CheckBtn"
+              checked={item.Completed ?? false}
+              onChange={() => Completed(item.Index)}
+            />
+          )}
+          {item.inspect && (
             <button
+              className="DeleteBtn"
               onClick={() => removeTask(item.Index, item.TaskId)}
-            ></button>
-          </div>
-          <div className="TaskRight">
+            >
+              Delete
+            </button>
+          )}
+          {item.inspect && <p>{item.Description}</p>}
+          <div className="Inspect">
             <button onClick={() => Inspect(item.Index)}></button>
           </div>
         </div>

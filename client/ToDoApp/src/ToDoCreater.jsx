@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { TaskContext } from "./TaskProvider";
 import { v4 as uuidv4 } from "uuid";
 
@@ -8,10 +8,22 @@ function ToDoCreater() {
   //User Id thats saved in Login.jsx and sent to the server when creating new tasks
   const { userId, setUserId } = useContext(TaskContext);
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  const { foldername, setFoldername } = useContext(TaskContext);
 
   //Seters for the task name and description
   const [TaskName, setTaskName] = useState("");
   const [TaskDescription, setTaskDescription] = useState("");
+  //Ref for the border ani
+  const borderRef = useRef(null);
+  // For visualzation and to subtly show the user that the task was added
+  // Plus is stoping the user from spamming the create button
+  function AnimateBorder() {
+    const border = borderRef.current;
+    border.classList.add("animate-border");
+    setTimeout(() => {
+      border.classList.remove("animate-border");
+    }, 1500);
+  }
 
   //Handles the task name and description changes
   const handleTaskNameChange = (event) => {
@@ -38,6 +50,8 @@ function ToDoCreater() {
       Task: task,
       Description: description,
       UserId: userId,
+      Folder: foldername,
+      completed: false,
     };
     // Data sent to the server
     if (isSignedIn) {
@@ -73,28 +87,31 @@ function ToDoCreater() {
 
   return (
     <>
-      <div className="Creator">
+      <div className="Creator" ref={borderRef}>
         <input
           type="text"
-          id="HeaderTask"
+          className="HeaderTask"
           placeholder="Task Name"
           value={TaskName}
           onChange={handleTaskNameChange}
         />
         <textarea
           type="text"
-          id="DescriptTask"
+          className="DescriptTask"
           placeholder="Task Description"
           value={TaskDescription}
           onChange={handleTaskDesChange}
         />
         <button
-          id="Add"
-          onClick={() => setTaskData(addTask(TaskName, TaskDescription))}
+          className="Add"
+          onClick={() => {
+            AnimateBorder();
+            setTaskData(addTask(TaskName, TaskDescription));
+          }}
         >
           Create
         </button>
-        <button id="Reset" onClick={handleReset}>
+        <button className="Reset" onClick={handleReset}>
           Reset
         </button>
       </div>
