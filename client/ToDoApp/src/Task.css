@@ -43,13 +43,13 @@ body {
 /* The taskname */
 .grid-item h3 {
   color: #ffffff;
-  z-index: 2;
+  z-index: 1;
   position: relative;
   top: -20%;
 }
 /* The elements that are applyed when a task is to be inspected */
 .grid-item.inspected {
-  z-index: 2;
+  z-index: 3;
   position: absolute;
   text-align: center;
   border: 5px solid darkred;
@@ -78,7 +78,7 @@ body {
 /* The checkbox inside the grid-item aka the task */
 .CheckBtn {
   position: absolute;
-  z-index: 5;
+  z-index: 2;
   top: 50%;
   left: 50%;
   height: 20%;
@@ -95,6 +95,7 @@ body {
   border: none;
   height: 10%;
   width: 100%;
+  z-index: 2;
 }
 /* The button that applys inspect to an element */
 .Inspect button {

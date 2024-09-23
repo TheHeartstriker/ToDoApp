@@ -85,10 +85,6 @@ function ToDoCreater() {
     setTaskDescription("");
   };
 
-  useEffect(() => {
-    console.log("TaskData:", taskData);
-  }, [taskData]);
-
   return (
     <>
       <div className="Creator" ref={borderRef}>

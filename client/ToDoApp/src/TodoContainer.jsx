@@ -9,7 +9,7 @@ function Container() {
   //Folder name that we are currently in
   const { foldername, setFoldername } = useContext(TaskContext);
   //Local used so we dont save or send unnecessary data to the server
-  const [LocalTaskData, setLocalTaskData] = useState(taskData);
+  const [LocalTaskData, setLocalTaskData] = useState([]);
   //Load task info from server
   async function loadTaskfromServer() {
     let options = {
@@ -64,6 +64,12 @@ function Container() {
     } catch (error) {
       console.error("Error:", error);
     }
+  }
+
+  function LoadTaskData(Folder) {
+    setLocalTaskData((prevLocalTaskData) =>
+      prevLocalTaskData.filter((task) => task.Folder === Folder)
+    );
   }
 
   //Removes a task filters out the task that needs to be removed
@@ -136,6 +142,8 @@ function Container() {
   useEffect(() => {
     if (isSignedIn) {
       loadTaskfromServer();
+    } else {
+      LoadTaskData(foldername);
     }
   }, [isSignedIn]);
 
