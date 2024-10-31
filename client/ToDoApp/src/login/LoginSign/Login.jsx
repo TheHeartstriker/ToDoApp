@@ -5,7 +5,6 @@ import { TaskContext } from "../../TaskProvider";
 function Login() {
   //Important context values used across the app
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
-  const { userId, setUserId } = useContext(TaskContext);
   //Stores the username and password
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -100,7 +99,6 @@ function Login() {
       if (responseData.success) {
         AnimateBorderGreen();
         setIsSignedIn(true);
-        setUserId(responseData.Id);
       } else {
         //If the login fails
         AnimateBorderRed();
@@ -129,7 +127,6 @@ function Login() {
     try {
       await fetch("http://localhost:5000/api/signup", options);
       setIsSignedIn(true);
-      setUserId(UserId);
       AnimateBorderGreen();
     } catch (error) {
       AnimateBorderRed();

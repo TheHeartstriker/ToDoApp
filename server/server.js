@@ -98,7 +98,7 @@ app.post("/api/login", async (req, res) => {
     if (result) {
       const userId = await GetUserId(username, password);
       userIdGet = userId;
-      res.status(200).send({ success: true, Id: userId });
+      res.status(200).send({ success: true });
     } else {
       res.status(401).send(false);
     }
@@ -113,12 +113,11 @@ app.post("/api/createToDo", async (req, res) => {
     Task: Header,
     Description: Description,
     TaskId: TaskId,
-    UserId: UserId,
     Folder: Folder,
     completed: Completed,
   } = req.body;
   try {
-    await CreateToDo(Header, Description, TaskId, UserId, Folder, Completed);
+    await CreateToDo(Header, Description, TaskId, userIdGet, Folder, Completed);
     res.status(201).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
