@@ -17,6 +17,7 @@ function Container() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
     };
     try {
       const response = await fetch(
@@ -36,6 +37,7 @@ function Container() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ Task: LocalTaskData[index].TaskId }),
     };
     try {
@@ -54,6 +56,7 @@ function Container() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ Task: TaskId }),
     };
     try {

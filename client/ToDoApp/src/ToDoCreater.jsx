@@ -6,7 +6,6 @@ function ToDoCreater() {
   //Main task data thats given to the server
   const { taskData, setTaskData } = useContext(TaskContext);
   //User Id thats saved in Login.jsx and sent to the server when creating new tasks
-  const { userId, setUserId } = useContext(TaskContext);
   const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
   const { foldername, setFoldername } = useContext(TaskContext);
 
@@ -49,7 +48,6 @@ function ToDoCreater() {
       TaskId: id,
       Task: task,
       Description: description,
-      UserId: userId,
       Folder: foldername,
       completed: false,
     };
@@ -68,6 +66,7 @@ function ToDoCreater() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(datatosend),
     };
     try {

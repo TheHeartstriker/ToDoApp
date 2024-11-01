@@ -71,9 +71,13 @@ function Groups() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
     };
     try {
       const response = await fetch("/api/getFolders", options);
+      if (!response.ok) {
+        throw new Error("Network response was not ok" + response.status);
+      }
       const data = await response.json();
       // Merge the fetched data with the existing folders state
       const folderData = data.map((folder, index) => {
@@ -98,6 +102,7 @@ function Groups() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ folder: folderName }),
     };
     try {
@@ -113,6 +118,7 @@ function Groups() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ folder: FolderName }),
     };
     try {
