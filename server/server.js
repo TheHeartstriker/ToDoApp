@@ -3,6 +3,9 @@ import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 import morgan from "morgan"; // For logging if needed
+import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
+
 //Intilizing the .env file and the express app
 dotenv.config();
 const app = express();
@@ -23,6 +26,7 @@ const pool = mysql.createPool({
 //Configuring the cors and json and morgan
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 //Server intialization
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
@@ -33,7 +37,7 @@ let userIdGet = "";
 let foldername = "";
 
 //Gets task data based on user id and sends it to the front as a response
-app.get("/api/getTododata", async (req, res) => {
+app.get("/api/getTododata", authenticateJWT, async (req, res) => {
   try {
     const data = await GetToDoData(userIdGet, foldername);
     res.status(200).send(data);
@@ -43,7 +47,7 @@ app.get("/api/getTododata", async (req, res) => {
 });
 //Loads the folder already created by the user via the user id
 //The excluded folder is the 'default' aka the state where a user has no folder in which we dont need to get said folder
-app.get("/api/getFolders", async (req, res) => {
+app.get("/api/getFolders", authenticateJWT, async (req, res) => {
   try {
     const toExclude = "";
     const data = await GetFoldersById(userIdGet, toExclude);
@@ -60,14 +64,14 @@ app.post("/api/checkUsername", async (req, res) => {
     if (result) {
       res.status(200).send(true);
     } else {
-      res.status(401).send(false);
+      res.status(200).send(false);
     }
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
   }
 });
 //Sets the folder name to be used in the database
-app.post("/api/setFolder", async (req, res) => {
+app.post("/api/setFolder", authenticateJWT, async (req, res) => {
   try {
     const folderNaming = req.body.folder;
     console.log(folderNaming);
@@ -84,6 +88,14 @@ app.post("/api/signup", async (req, res) => {
   try {
     userIdGet = UserId;
     await signup(username, password, UserId);
+    const token = jwt.sign({ UserId }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "1h",
+    });
+    res.cookie("jwtToken", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+    });
     res.status(201).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
@@ -98,6 +110,14 @@ app.post("/api/login", async (req, res) => {
     if (result) {
       const userId = await GetUserId(username, password);
       userIdGet = userId;
+      const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "1h",
+      });
+      res.cookie("jwtToken", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+      });
       res.status(200).send({ success: true });
     } else {
       res.status(401).send(false);
@@ -108,7 +128,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // POST route sends ToDo information to the database
-app.post("/api/createToDo", async (req, res) => {
+app.post("/api/createToDo", authenticateJWT, async (req, res) => {
   const {
     Task: Header,
     Description: Description,
@@ -124,7 +144,7 @@ app.post("/api/createToDo", async (req, res) => {
   }
 });
 // Delete route seeds the task id to be deleted
-app.delete("/api/deleteToDo", async (req, res) => {
+app.delete("/api/deleteToDo", authenticateJWT, async (req, res) => {
   const { Task: Id } = req.body;
   try {
     await deleteTask(Id);
@@ -134,7 +154,7 @@ app.delete("/api/deleteToDo", async (req, res) => {
   }
 });
 //Deletes all tasks related to a folder therefore deleting the folder and contents
-app.delete("/api/deleteFolder", async (req, res) => {
+app.delete("/api/deleteFolder", authenticateJWT, async (req, res) => {
   const { folder: FolderName } = req.body;
   try {
     await deleteFolder(FolderName);
@@ -144,7 +164,7 @@ app.delete("/api/deleteFolder", async (req, res) => {
   }
 });
 //Updates the true or false value of the task aka if it is completed or not
-app.put("/api/updateToDo", async (req, res) => {
+app.put("/api/updateToDo", authenticateJWT, async (req, res) => {
   const { Task: TaskId } = req.body;
   try {
     await UpdateTaskComplete(TaskId);
@@ -312,4 +332,15 @@ async function checkUsername(username) {
   } catch (error) {
     throw error;
   }
+}
+
+async function authenticateJWT(req, res, next) {
+  const token = req.cookies.jwtToken;
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
 }
