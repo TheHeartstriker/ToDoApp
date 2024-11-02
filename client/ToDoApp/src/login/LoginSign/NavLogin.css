@@ -24,8 +24,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 50vh;
-  width: 50vw;
+  height: 65vh;
+  width: 65vh;
   background: linear-gradient(to bottom, var(--Dark-pink), var(--Cyan));
 
   border: 5px solid transparent;
@@ -35,12 +35,18 @@
 
 /* The input group is the text boxes the are used to send the username and password */
 
+.input-group {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  height: 13%; /
+}
+
 .input-group input {
-  width: 500px;
-  height: 40px;
+  flex: 1;
   border: 5px solid transparent;
   background-color: var(--Middle-Pink);
-  margin: 10px;
+  margin: 10px 0;
   box-shadow: 0 8px 16px var(--Dark-pink);
 }
 /* The switch button */
@@ -49,12 +55,13 @@
   margin: 10px;
   border: none;
   border-radius: 5px;
-  height: 50px;
-  width: 100px;
+  height: 10%;
+  width: 10%;
 }
 /* The button that either logs the user in or signs them up */
 .loginOrSign {
-  width: 75px;
+  height: 10%;
+  width: 20%;
   background-color: var(--Cyan);
   border: 2.5px solid var(--Middle-Pink);
   border-radius: 5px;
@@ -95,7 +102,6 @@
 }
 
 .AniWrap span:nth-child(4) {
-  /* Changed to nth-child(4) to avoid duplicate */
   left: 80%;
   animation-delay: 0.5s;
   width: 50px;
@@ -103,7 +109,6 @@
 }
 
 .AniWrap span:nth-child(5) {
-  /* Changed to nth-child(4) to avoid duplicate */
   left: 100%;
   animation-delay: 1.5s;
   width: 100px;
