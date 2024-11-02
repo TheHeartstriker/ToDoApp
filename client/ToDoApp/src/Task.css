@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: hsl(0, 5%, 10%);
+  background-color: hsl(0, 5%, 5%);
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
@@ -21,7 +21,7 @@ body {
   gap: 100px;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  background-color: hsl(0, 5%, 10%);
+  background-color: hsl(0, 5%, 5%);
   border-color: #000000;
 }
 
@@ -37,15 +37,15 @@ body {
   border-radius: 5px;
   color: #ffffff;
   padding: 10px;
-  height: 150px;
-  width: 150px;
+  height: 50%;
+  width: 50%;
 }
 /* The taskname */
 .grid-item h3 {
   color: #ffffff;
   z-index: 1;
   position: relative;
-  top: -20%;
+  top: -15%;
 }
 /* The elements that are applyed when a task is to be inspected */
 .grid-item.inspected {
@@ -68,6 +68,10 @@ body {
   color: #ffffff;
   z-index: 2;
   position: relative;
+}
+/* Hide any overflow */
+.grid-item.inspected h3 {
+  visibility: hidden;
 }
 
 .grid-item.inspected p {

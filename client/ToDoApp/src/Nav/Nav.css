@@ -15,18 +15,24 @@
   align-items: center;
   border-radius: 5px;
   height: 12vh;
+  width: 100vw;
   background: linear-gradient(to right, var(--Light-Cyan), var(--Dark-pink));
+  font-size: 1rem;
 }
 /* Buttons contained at the top of the page */
 .ContainerHeader button {
+  font-size: 0.8em;
   border: 5px solid var(--Dark-pink);
   background-color: var(--Light-pink);
   border-radius: 5px;
   margin: 10px;
   padding: 10px;
-  height: 100px;
-  width: 100px;
+  height: 10vh;
+  width: 10vh;
   transition: background-color 0.5s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .ContainerHeader button:hover {

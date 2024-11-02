@@ -191,6 +191,13 @@ function Login() {
             {login ? "Switch to Signup" : "Switch to Login"}
           </button>
         </div>
+        <div className="AniWrap">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </>
   );

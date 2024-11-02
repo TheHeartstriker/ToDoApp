@@ -17,11 +17,14 @@ function ToDoCreater() {
   // For visualzation and to subtly show the user that the task was added
   // Plus is stoping the user from spamming the create button
   function AnimateBorder() {
-    const border = borderRef.current;
-    border.classList.add("animate-border");
-    setTimeout(() => {
-      border.classList.remove("animate-border");
-    }, 1500);
+    return new Promise((resolve) => {
+      const border = borderRef.current;
+      border.classList.add("animate-border");
+      setTimeout(() => {
+        border.classList.remove("animate-border");
+        resolve();
+      }, 1500);
+    });
   }
 
   //Handles the task name and description changes
@@ -39,7 +42,7 @@ function ToDoCreater() {
   };
 
   //Adds a task to the main data and sends it to the server
-  const addTask = (task, description) => {
+  const addTask = async (task, description) => {
     // Unique id for each task
     const id = uuidv4();
 
@@ -51,6 +54,9 @@ function ToDoCreater() {
       Folder: foldername,
       completed: false,
     };
+
+    await AnimateBorder();
+
     // Data sent to the server
     if (isSignedIn) {
       sendTaskData(newTask);
@@ -84,6 +90,11 @@ function ToDoCreater() {
     setTaskDescription("");
   };
 
+  const handleCreate = async () => {
+    const updatedTaskData = await addTask(TaskName, TaskDescription);
+    setTaskData(updatedTaskData);
+  };
+
   return (
     <>
       <div className="Creator" ref={borderRef}>
@@ -101,13 +112,7 @@ function ToDoCreater() {
           value={TaskDescription}
           onChange={handleTaskDesChange}
         />
-        <button
-          className="Add"
-          onClick={() => {
-            AnimateBorder();
-            setTaskData(addTask(TaskName, TaskDescription));
-          }}
-        >
+        <button className="Add" onClick={handleCreate}>
           Create
         </button>
         <button className="Reset" onClick={handleReset}>

@@ -9,7 +9,6 @@
 /* The box that containers the container related elements */
 .Creator {
   position: absolute;
-  /* Need to adjust */
   width: 95vw;
   height: 70vh;
 
