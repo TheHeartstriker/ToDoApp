@@ -21,7 +21,7 @@ function Container() {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/getTododata",
+        `${import.meta.env.VITE_API_BASE_URL}/api/getTododata`,
         options
       );
       const data = await response.json();
@@ -42,7 +42,7 @@ function Container() {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/deleteToDo",
+        `${import.meta.env.VITE_API_BASE_URL}/api/deleteToDo`,
         options
       );
     } catch (error) {
@@ -61,7 +61,7 @@ function Container() {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/updateToDo",
+        `${import.meta.env.VITE_API_BASE_URL}/api/updateToDo`,
         options
       );
     } catch (error) {

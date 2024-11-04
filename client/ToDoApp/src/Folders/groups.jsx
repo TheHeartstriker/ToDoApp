@@ -74,7 +74,10 @@ function Groups() {
       credentials: "include",
     };
     try {
-      const response = await fetch("/api/getFolders", options);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/getFolders`,
+        options
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok" + response.status);
       }
@@ -106,7 +109,10 @@ function Groups() {
       body: JSON.stringify({ folder: folderName }),
     };
     try {
-      const response = await fetch("/api/setFolder", options);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/setFolder`,
+        options
+      );
     } catch (error) {
       console.error("Error:", error);
     }
@@ -122,7 +128,10 @@ function Groups() {
       body: JSON.stringify({ folder: FolderName }),
     };
     try {
-      const response = await fetch("/api/deleteFolder", options);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/deleteFolder`,
+        options
+      );
     } catch (error) {
       console.error("Error:", error);
     }

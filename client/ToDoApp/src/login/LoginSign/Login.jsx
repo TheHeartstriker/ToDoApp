@@ -94,7 +94,10 @@ function Login() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", options);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/login`,
+        options
+      );
       const responseData = await response.json();
       console.log("Response from server:", responseData);
       if (responseData.success) {
@@ -127,7 +130,7 @@ function Login() {
       body: JSON.stringify({ username, password, UserId }),
     };
     try {
-      await fetch("http://localhost:5000/api/signup", options);
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/signup`, options);
       setIsSignedIn(true);
       AnimateBorderGreen();
     } catch (error) {
@@ -146,7 +149,7 @@ function Login() {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/checkUsername",
+        `${import.meta.env.VITE_API_BASE_URL}/api/checkusername`,
         options
       );
       const responseData = await response.json();
