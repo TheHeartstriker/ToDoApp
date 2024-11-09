@@ -27,22 +27,35 @@
   height: 65vh;
   width: 65vh;
   background: linear-gradient(to bottom, var(--Dark-pink), var(--Cyan));
-
-  border: 5px solid transparent;
-  border-image: linear-gradient(to right, var(--Dark-pink), var(--Cyan)) 1;
-  border-radius: 5px;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
-/* The input group is the text boxes the are used to send the username and password */
+.LogSignPage::before {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 5px solid transparent;
+  border-image: linear-gradient(to right, var(--Dark-pink), var(--Cyan)) 1;
+  border-radius: 15px;
+  pointer-events: none;
+}
 
-.input-group {
+/* The Input is the text boxes the are used to send the username and password */
+
+.Input {
   display: flex;
   flex-direction: column;
   width: 75%;
-  height: 13%; /
+  height: 13%;
 }
 
-.input-group input {
+.Input input {
+  border-radius: 2.5px;
   flex: 1;
   border: 5px solid transparent;
   background-color: var(--Middle-Pink);

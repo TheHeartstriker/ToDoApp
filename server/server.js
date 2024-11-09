@@ -93,7 +93,7 @@ app.post("/api/signup", async (req, res) => {
     });
     res.cookie("jwtToken", token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.COOKIE_SECURE === "true",
       sameSite: "Strict",
     });
     res.status(201).send();
@@ -115,7 +115,7 @@ app.post("/api/login", async (req, res) => {
       });
       res.cookie("jwtToken", token, {
         httpOnly: true,
-        secure: true,
+        secure: process.env.COOKIE_SECURE === "true",
         sameSite: "Strict",
       });
       res.status(200).send({ success: true });

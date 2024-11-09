@@ -156,7 +156,7 @@ function Container() {
       {LocalTaskData.map((item, index) => (
         <div
           key={item.TaskId}
-          className={`grid-item ${item.inspect ? "inspected" : ""}`}
+          className={`Task ${item.inspect ? "inspected" : ""}`}
         >
           <h3>{item.Task}</h3>
           {!item.inspect && (

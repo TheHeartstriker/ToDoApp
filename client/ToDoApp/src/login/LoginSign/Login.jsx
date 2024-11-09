@@ -170,7 +170,7 @@ function Login() {
       <div className="LogSignContainer">
         {/* The inside container that holds the text boxes */}
         <div className="LogSignPage">
-          <div className="input-group">
+          <div className="Input">
             <input
               ref={borderRef}
               type="text"
@@ -179,7 +179,7 @@ function Login() {
               placeholder="Username"
             />
           </div>
-          <div className="input-group">
+          <div className="Input">
             <input
               type="password"
               value={password}

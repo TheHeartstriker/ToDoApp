@@ -26,10 +26,12 @@ body {
 }
 
 /* The grid items(the visable tasks that are created) */
-.grid-item {
+.Task {
   position: relative;
   text-align: center;
   border: 5px solid var(--Light-Cyan);
+  box-shadow: 0 0 10px var(--Light-Cyan);
+
   background-color: var(--Dark-pink);
 
   margin: 75px;
@@ -41,18 +43,18 @@ body {
   width: 50%;
 }
 /* The taskname */
-.grid-item h3 {
+.Task h3 {
   color: #ffffff;
   z-index: 1;
   position: relative;
   top: -15%;
 }
 /* The elements that are applyed when a task is to be inspected */
-.grid-item.inspected {
+.Task.inspected {
   z-index: 3;
   position: absolute;
   text-align: center;
-  border: 5px solid darkred;
+  border: 5px solid var(--Middle-Pink);
   background-color: hsl(340, 76%, 50%);
 
   left: 50%;
@@ -64,22 +66,22 @@ body {
   opacity: 1;
 }
 
-.grid-item.inspected h1 {
+.Task.inspected h1 {
   color: #ffffff;
   z-index: 2;
   position: relative;
 }
 /* Hide any overflow */
-.grid-item.inspected h3 {
+.Task.inspected h3 {
   visibility: hidden;
 }
 
-.grid-item.inspected p {
+.Task.inspected p {
   color: #ffffff;
   z-index: 2;
   position: relative;
 }
-/* The checkbox inside the grid-item aka the task */
+/* The checkbox inside the Task aka the task */
 .CheckBtn {
   position: absolute;
   z-index: 2;
