@@ -6,6 +6,8 @@
   --Dark-Blue: rgb(0, 0, 128);
   --Cyan: rgb(43, 195, 226);
   --Light-Cyan: rgb(150, 195, 226);
+  /* Netural silver blue */
+  --Silver-Blue: rgb(200, 255, 250);
 }
 
 /* Container that holds the LogSingin box */
@@ -61,22 +63,23 @@
   background-color: var(--Middle-Pink);
   margin: 10px 0;
   box-shadow: 0 8px 16px var(--Dark-pink);
+  text-shadow: 2px 2px 4px rgba(17, 154, 196, 0.3);
 }
 /* The switch button */
 .Switch {
   background-color: var(--Middle-Pink);
   margin: 10px;
-  border: none;
   border-radius: 5px;
   height: 10%;
   width: 10%;
+  border: 3.5px var(--Silver-Blue) solid;
 }
 /* The button that either logs the user in or signs them up */
 .loginOrSign {
   height: 10%;
   width: 20%;
   background-color: var(--Cyan);
-  border: 2.5px solid var(--Middle-Pink);
+  border: 3.5px solid var(--Silver-Blue);
   border-radius: 5px;
   margin: 10px;
 }
