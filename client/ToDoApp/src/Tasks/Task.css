@@ -91,6 +91,25 @@ body {
   width: 20%;
   transform: translate(-50%, -50%);
   cursor: pointer;
+  border-radius: 50%;
+  appearance: none;
+  background-color: rgb(95, 95, 95);
+  border: 2px solid black;
+}
+
+.CheckBtn:checked {
+  background-color: var(--Cyan);
+  border-color: lime;
+}
+
+.CheckBtn:checked::before {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 50%;
+  background-color: lime;
+  border-radius: 50%;
+  margin: 25% auto;
 }
 
 .DeleteBtn {
