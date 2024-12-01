@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 //Routing imports
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { TaskProvider } from "./TaskProvider.jsx";
+import { TaskProvider } from "./TaskProvider";
 //Component imports
-import ToDoCreater from "./Tasks/ToDoCreater.jsx";
-import Container from "./Tasks/TodoContainer.jsx";
-import Nav from "./Nav/Navigator.jsx";
+import ToDoCreater from "./Tasks/ToDoCreater";
+import Container from "./Tasks/TodoContainer";
+import Nav from "./Nav/Navigator";
 import Login from "./login/LoginSign/Login";
-import Groups from "./Folders/groups.jsx";
+import Groups from "./Folders/groups";
 //CSS imports
 import "./login/LoginSign/NavLogin.css";
 import "./Folders/Check-Folder.css";
