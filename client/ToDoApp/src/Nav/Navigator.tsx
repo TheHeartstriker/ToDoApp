@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { TaskContext } from "../TaskProvider";
+import { TaskContext, Contexts } from "../TaskProvider";
 
 function Nav() {
   //This mostly returns naviagtion html and is used to see if the user is signed in
   //And if not it will redirect to the login page
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
   const navigate = useNavigate();
 
   function isSignedInTrue() {

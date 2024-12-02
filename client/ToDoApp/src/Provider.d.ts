@@ -10,6 +10,6 @@ export interface taskStuct {
 
 export interface folderStruct {
   folderName: folderName;
-  folderOn: false;
+  folderOn: boolean;
   index: folders;
 }

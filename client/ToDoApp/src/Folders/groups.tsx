@@ -1,22 +1,25 @@
 import { useState, useContext, useEffect } from "react";
-import { TaskContext } from "../TaskProvider";
+import { TaskContext, Contexts } from "../TaskProvider";
+import { folderStruct } from "../Provider";
 
 function Groups() {
   //Local state for the folder creator screen and the folders indvidual name
-  const [ShowFolderCreate, setShowFolderCreate] = useState(true);
-  const [folderMainName, setFolderMainName] = useState("");
+  const [ShowFolderCreate, setShowFolderCreate] = useState<boolean>(true);
+  const [folderMainName, setFolderMainName] = useState<string>("");
   //Context values
-  const { folders, setFolders } = useContext(TaskContext);
-  const { foldername, setFoldername } = useContext(TaskContext);
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  const { folders, setFolders } = useContext(TaskContext) as Contexts;
+  const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
 
-  const handleFolderNameChange = (event) => {
+  const handleFolderNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setFolderMainName(event.target.value);
   };
 
-  //Add a folder to the object with realted mete data
-  function addFolder(folderName) {
-    const newFolder = {
+  //Add a folder to the local object with realted mete data
+  function addFolder(folderName: string) {
+    const newFolder: folderStruct = {
       folderName: folderName,
       folderOn: false,
       index: folders.length,
@@ -29,7 +32,7 @@ function Groups() {
     setShowFolderCreate(!ShowFolderCreate);
   }
   //Delete a folder based on index
-  function deleteFolder(index) {
+  function deleteFolder(index: number) {
     setFolders(folders.filter((folder) => folder.index !== index));
   }
   //If we have been clicked then name of the folder to the overhead
@@ -47,7 +50,7 @@ function Groups() {
     }
   }
   //Used to change the folderOn value using the index
-  function TrueFalseFolder(index) {
+  function TrueFalseFolder(index: number) {
     const newFolders = folders.map((folder) => {
       if (folder.index === index) {
         return {
@@ -65,13 +68,13 @@ function Groups() {
   }
   //Gets the folders related to the user and converts them to the correct format
   //Something to note this does not get the default "" folder
-  async function GetFolders() {
+  async function GetFolders(): Promise<void> {
     const options = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
     };
     try {
       const response = await fetch(
@@ -81,9 +84,9 @@ function Groups() {
       if (!response.ok) {
         throw new Error("Network response was not ok" + response.status);
       }
-      const data = await response.json();
+      const data: { Folder: string }[] = await response.json();
       // Merge the fetched data with the existing folders state
-      const folderData = data.map((folder, index) => {
+      const folderData: folderStruct[] = data.map((folder, index: number) => {
         const existingFolder = folders.find(
           (f) => f.folderName === folder.Folder
         );
@@ -99,13 +102,13 @@ function Groups() {
     }
   }
   //Give the server the current folder so it knows what data to grab from the database
-  async function sendCurrentFolder(folderName) {
+  async function sendCurrentFolder(folderName: string) {
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ folder: folderName }),
     };
     try {
@@ -118,13 +121,13 @@ function Groups() {
     }
   }
   //Delete a folder from the database
-  async function deleteFolderFromDB(FolderName) {
+  async function deleteFolderFromDB(FolderName: string) {
     const options = {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ folder: FolderName }),
     };
     try {

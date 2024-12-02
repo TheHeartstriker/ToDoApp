@@ -94,7 +94,7 @@ function Login() {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ username, password }),
     };
 
