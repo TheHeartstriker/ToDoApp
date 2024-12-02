@@ -1,17 +1,11 @@
 import { useState, useContext, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { TaskContext } from "../../TaskProvider";
+import { TaskContext, Contexts } from "../../TaskProvider";
 import React from "react";
-
-interface TaskContextType {
-  isSignedIn: boolean;
-  setIsSignedIn: (value: boolean) => void;
-}
 
 function Login() {
   //Important context values used across the app
-  const { isSignedIn, setIsSignedIn } =
-    useContext<TaskContextType>(TaskContext);
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
   //Stores the username and password
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
