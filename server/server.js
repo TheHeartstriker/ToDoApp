@@ -2,9 +2,22 @@ import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-import morgan from "morgan"; // For logging if needed
+import morgan from "morgan";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+//Importing the functions from the database file
+import {
+  GetUserId,
+  GetToDoData,
+  deleteTask,
+  CreateToDo,
+  GetFoldersById,
+  UpdateTaskComplete,
+  checkUsername,
+  deleteFolder,
+} from "./dbfunc.js";
+//Import the authentication functions
+import { authenticateJWT, login, signup } from "./auth.js";
 
 //Intilizing the .env file and the express app
 dotenv.config();
@@ -174,173 +187,4 @@ app.put("/api/updateToDo", authenticateJWT, async (req, res) => {
   }
 });
 
-//Database functions
-async function signup(username, password, id) {
-  console.log(username, password, id);
-  try {
-    // Check if the username already exists
-    const [rows] = await pool.query(`SELECT * FROM login WHERE UserName = ?`, [
-      username,
-    ]);
-    //Username has to be unique
-    if (rows.length > 0) {
-      return false;
-    }
-    // Insert the new user
-    const result = await pool.query(
-      `INSERT INTO login (UserName, Pass_word, UserId) VALUES (?, ?, ?)`,
-      [username, password, id]
-    );
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-//Login function
-async function login(username, password) {
-  try {
-    const [results] = await pool.query(
-      `SELECT * FROM login WHERE UserName = ? AND Pass_word = ?`,
-      [username, password]
-    );
-    //If the username and password match
-    if (results.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    console.error("Database query failed", error);
-  }
-}
-//Get user id function
-async function GetUserId(username, password) {
-  try {
-    const [results] = await pool.query(
-      `SELECT UserId FROM login WHERE UserName = ? AND Pass_word = ?`,
-      [username, password]
-    );
-    if (results.length > 0) {
-      return results[0].UserId;
-    } else {
-      throw new Error("Invalid credentials");
-    }
-  } catch (error) {
-    console.error("Database query failed", error);
-    throw error;
-  }
-}
-//Sends back data that has the user id
-async function GetToDoData(userid, folder) {
-  try {
-    const [results] = await pool.query(
-      `SELECT * FROM tododata WHERE UserId = ? AND Folder = ?`,
-      [userid, folder]
-    );
-    const data = results.map((row) => ({
-      Task: row.ToDoHeader,
-      Description: row.De_scription,
-      TaskId: row.task_id,
-      Folder: row.Folder,
-      Completed: row.Completed,
-    }));
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}
-//Deletes a task based on the given task id
-async function deleteTask(id) {
-  try {
-    const result = await pool.query(`DELETE FROM tododata WHERE task_id = ?`, [
-      id,
-    ]);
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-
-//async function to delete the folder
-async function deleteFolder(folder) {
-  try {
-    const result = await pool.query(`DELETE FROM tododata WHERE Folder = ?`, [
-      folder,
-    ]);
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-//Creates a new task
-async function CreateToDo(
-  Header,
-  Description,
-  taskid,
-  UserId,
-  Folder,
-  Completed
-) {
-  try {
-    const result = pool.query(
-      `INSERT INTO tododata (ToDoHeader, De_scription, task_id, UserId, Folder, Completed) VALUES (?, ?, ?, ?, ?, ?)`,
-      [Header, Description, taskid, UserId, Folder, Completed]
-    );
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-// Used so we can load the created folders
-async function GetFoldersById(userId, excluded) {
-  try {
-    const [results] = await pool.query(
-      `SELECT DISTINCT Folder FROM tododata WHERE UserId = ? AND Folder != ?`,
-      [userId, excluded]
-    );
-    return results.map((row) => ({ Folder: row.Folder }));
-  } catch (error) {
-    console.error(`Error fetching folders for user ${userId}:`, error);
-    throw error;
-  }
-}
-//Updates the task state of either being completed or not
-async function UpdateTaskComplete(TaskId) {
-  try {
-    const result = await pool.query(
-      `UPDATE tododata SET Completed = NOT Completed WHERE task_id = ?`,
-      [TaskId]
-    );
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-//Sees if the username is already in use
-async function checkUsername(username) {
-  try {
-    const [results] = await pool.query(
-      `SELECT * FROM login WHERE UserName = ?`,
-      [username]
-    );
-    if (results.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function authenticateJWT(req, res, next) {
-  const token = req.cookies.jwtToken;
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-}
+export { pool, userIdGet, foldername };
