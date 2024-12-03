@@ -1,23 +1,30 @@
 import { useState, useEffect, useContext } from "react";
-import { TaskContext } from "../TaskProvider";
+import { TaskContext, Contexts } from "../TaskProvider";
+import { taskStuct } from "../Provider";
+
+interface ExtendedTask extends taskStuct {
+  inspect?: boolean;
+  Index: number;
+}
+
 function Container() {
   //Something is wrong in here that causes data that is loaded from the server to need another render to show up
   //Main task data thats given to the server
-  const { taskData, setTaskData } = useContext(TaskContext);
+  const { taskData, setTaskData } = useContext(TaskContext) as Contexts;
   //Check if we need to request things of the server
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
   //Folder name that we are currently in
-  const { foldername, setFoldername } = useContext(TaskContext);
+  const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
   //Local used so we dont save or send unnecessary data to the server
-  const [LocalTaskData, setLocalTaskData] = useState([]);
+  const [LocalTaskData, setLocalTaskData] = useState<ExtendedTask[]>([]);
   //Load task info from server
-  async function loadTaskfromServer() {
+  async function loadTaskfromServer(): Promise<void> {
     let options = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
     };
     try {
       const response = await fetch(
@@ -31,13 +38,13 @@ function Container() {
     }
   }
   //Delete request to server
-  async function IfSignDelete(index) {
+  async function IfSignDelete(index: number): Promise<void> {
     let options = {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ Task: LocalTaskData[index].TaskId }),
     };
     try {
@@ -50,13 +57,13 @@ function Container() {
     }
   }
 
-  async function UpdataTaskComplete(TaskId) {
+  async function UpdataTaskComplete(TaskId: string): Promise<void> {
     let options = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ Task: TaskId }),
     };
     try {
@@ -69,7 +76,7 @@ function Container() {
     }
   }
 
-  function LoadTaskData(Folder) {
+  function LoadTaskData(Folder: string) {
     setLocalTaskData((prevLocalTaskData) =>
       prevLocalTaskData.filter((task) => task.Folder === Folder)
     );
@@ -77,11 +84,11 @@ function Container() {
 
   //Removes a task filters out the task that needs to be removed
   //By id from the main data and index from the local data
-  function removeTask(index, id) {
+  function removeTask(index: number, id: string) {
     // Local remove task
     setLocalTaskData(function (prevLocalTaskData) {
       return prevLocalTaskData.filter(function (t) {
-        return t.Index !== index;
+        return t.TaskId !== index;
       });
     });
 
@@ -98,15 +105,15 @@ function Container() {
   }
   //Change the true or false value of the task completed for local and main data
   //Send data to the server if we are signed in
-  function Completed(index) {
+  function Completed(index: number) {
     setTaskData(function (prevTaskData) {
       return prevTaskData.map(function (task, i) {
-        return i === index ? { ...task, Completed: !task.Completed } : task;
+        return i === index ? { ...task, Completed: !task.completed } : task;
       });
     });
     setLocalTaskData(function (prevLocalTaskData) {
       return prevLocalTaskData.map(function (task, i) {
-        return i === index ? { ...task, Completed: !task.Completed } : task;
+        return i === index ? { ...task, Completed: !task.completed } : task;
       });
     });
     if (isSignedIn) {
@@ -114,32 +121,22 @@ function Container() {
     }
   }
 
-  //Add inspect to all local tasks
-  function AddInspect() {
-    setLocalTaskData((prevLocalTaskData) =>
-      prevLocalTaskData.map((task, i) => ({ ...task, inspect: false }))
-    );
-  }
   //Inspect task value becomes true or false if true
-  function Inspect(index) {
+  function Inspect(index: number) {
     setLocalTaskData(function (prevLocalTaskData) {
       return prevLocalTaskData.map(function (task, i) {
         return i === index ? { ...task, inspect: !task.inspect } : task;
       });
     });
   }
-  //Add index to all to local tasks
-  function addIndexs() {
-    setLocalTaskData((prevLocalTaskData) =>
-      prevLocalTaskData.map((task, i) => ({ ...task, Index: i }))
-    );
-  }
-
   //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
-    setLocalTaskData(taskData);
-    addIndexs();
-    AddInspect();
+    const extendedTaskData = taskData.map((task, i) => ({
+      ...task,
+      Index: i,
+      inspect: false,
+    }));
+    setLocalTaskData(extendedTaskData);
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
@@ -163,7 +160,7 @@ function Container() {
             <input
               type="checkbox"
               className="CheckBtn"
-              checked={item.Completed ?? false}
+              checked={item.completed ?? false}
               onChange={() => Completed(item.Index)}
             />
           )}
