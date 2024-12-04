@@ -5,7 +5,7 @@ export interface taskStuct {
   Task: task;
   Description: description;
   Folder: foldername;
-  completed: boolean;
+  Completed: boolean;
 }
 
 export interface folderStruct {

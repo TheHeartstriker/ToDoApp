@@ -32,6 +32,7 @@ function Container() {
         options
       );
       const data = await response.json();
+      console.log(data);
       setTaskData(data);
     } catch (error) {
       console.error("Error:", error);
@@ -77,9 +78,15 @@ function Container() {
   }
 
   function LoadTaskData(Folder: string) {
-    setLocalTaskData((prevLocalTaskData) =>
-      prevLocalTaskData.filter((task) => task.Folder === Folder)
-    );
+    const extendedTaskData = taskData
+      .filter((task) => task.Folder === Folder)
+      .map((task, index) => ({
+        ...task,
+        Index: index,
+        inspect: false,
+      }));
+    console.log(extendedTaskData);
+    setLocalTaskData(extendedTaskData);
   }
 
   //Removes a task filters out the task that needs to be removed
@@ -108,12 +115,12 @@ function Container() {
   function Completed(index: number) {
     setTaskData(function (prevTaskData) {
       return prevTaskData.map(function (task, i) {
-        return i === index ? { ...task, Completed: !task.completed } : task;
+        return i === index ? { ...task, Completed: !task.Completed } : task;
       });
     });
     setLocalTaskData(function (prevLocalTaskData) {
       return prevLocalTaskData.map(function (task, i) {
-        return i === index ? { ...task, Completed: !task.completed } : task;
+        return i === index ? { ...task, Completed: !task.Completed } : task;
       });
     });
     if (isSignedIn) {
@@ -140,12 +147,14 @@ function Container() {
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
+    console.log(taskData);
     if (isSignedIn) {
       loadTaskfromServer();
     } else {
+      console.log("The folders name" + foldername);
       LoadTaskData(foldername);
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, taskData]);
 
   return (
     // This iterates over the items array and renders each item in a div
@@ -160,7 +169,7 @@ function Container() {
             <input
               type="checkbox"
               className="CheckBtn"
-              checked={item.completed ?? false}
+              checked={item.Completed ?? false}
               onChange={() => Completed(item.Index)}
             />
           )}
