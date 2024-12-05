@@ -15,8 +15,9 @@ body {
 
 /* Invisable todo container  */
 .ToDoContainer {
+  position: relative;
   display: grid;
-  height: 100%;
+  height: 100vh;
   width: 100vw;
   gap: 100px;
   grid-template-columns: repeat(4, 1fr);
@@ -39,15 +40,15 @@ body {
   border-radius: 5px;
   color: #ffffff;
   padding: 10px;
-  height: 50%;
-  width: 50%;
+  height: 15vw;
+  width: 15vw;
+  transition: all 1s ease;
 }
 /* The taskname */
 .Task h3 {
   color: #ffffff;
   z-index: 1;
   position: relative;
-  top: -15%;
 }
 /* The elements that are applyed when a task is to be inspected */
 .Task.inspected {
@@ -87,8 +88,8 @@ body {
   z-index: 2;
   top: 50%;
   left: 50%;
-  height: 20%;
-  width: 20%;
+  height: 5vh;
+  width: 5vh;
   transform: translate(-50%, -50%);
   cursor: pointer;
   border-radius: 50%;

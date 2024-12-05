@@ -85,7 +85,6 @@ function Container() {
         Index: index,
         inspect: false,
       }));
-    console.log(extendedTaskData);
     setLocalTaskData(extendedTaskData);
   }
 
@@ -147,11 +146,9 @@ function Container() {
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
-    console.log(taskData);
     if (isSignedIn) {
       loadTaskfromServer();
     } else {
-      console.log("The folders name" + foldername);
       LoadTaskData(foldername);
     }
   }, [isSignedIn, taskData]);
