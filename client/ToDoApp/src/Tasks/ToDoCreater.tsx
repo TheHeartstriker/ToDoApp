@@ -1,24 +1,29 @@
 import { useState, useContext, useRef, useEffect } from "react";
-import { TaskContext } from "../TaskProvider";
+import { TaskContext, Contexts } from "../TaskProvider";
 import { v4 as uuidv4 } from "uuid";
+import { taskStuct } from "../Provider";
 
 function ToDoCreater() {
   //Main task data thats given to the server
-  const { taskData, setTaskData } = useContext(TaskContext);
+  const { taskData, setTaskData } = useContext(TaskContext) as Contexts;
   //User Id thats saved in Login.jsx and sent to the server when creating new tasks
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
-  const { foldername, setFoldername } = useContext(TaskContext);
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
+  const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
 
   //Seters for the task name and description
-  const [TaskName, setTaskName] = useState("");
-  const [TaskDescription, setTaskDescription] = useState("");
+  const [TaskName, setTaskName] = useState<string>("");
+  const [TaskDescription, setTaskDescription] = useState<string>("");
   //Ref for the border ani
-  const borderRef = useRef(null);
+  const borderRef = useRef<HTMLDivElement>(null);
   // For visualzation and to subtly show the user that the task was added
   // Plus is stoping the user from spamming the create button
-  function AnimateBorder() {
+  function AnimateBorder(): Promise<void> {
     return new Promise((resolve) => {
       const border = borderRef.current;
+      if (!border) {
+        resolve();
+        return;
+      }
       border.classList.add("animate-border");
       setTimeout(() => {
         border.classList.remove("animate-border");
@@ -28,7 +33,7 @@ function ToDoCreater() {
   }
 
   //Handles the task name and description changes
-  const handleTaskNameChange = (event) => {
+  const handleTaskNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 149) {
       alert("Task name is too long");
       return;
@@ -37,12 +42,14 @@ function ToDoCreater() {
     }
   };
 
-  const handleTaskDesChange = (event) => {
+  const handleTaskDesChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setTaskDescription(event.target.value);
   };
 
   //Adds a task to the main data and sends it to the server
-  const addTask = async (task, description) => {
+  const addTask = async (task: string, description: string) => {
     // Unique id for each task
     const id = uuidv4();
 
@@ -66,13 +73,13 @@ function ToDoCreater() {
     return updatedTaskData;
   };
   //Sends the individual task data to the server
-  async function sendTaskData(datatosend) {
+  async function sendTaskData(datatosend: taskStuct): Promise<void> {
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify(datatosend),
     };
     try {
@@ -106,7 +113,6 @@ function ToDoCreater() {
           onChange={handleTaskNameChange}
         />
         <textarea
-          type="text"
           className="DescriptTask"
           placeholder="Task Description"
           value={TaskDescription}

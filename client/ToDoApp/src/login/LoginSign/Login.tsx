@@ -1,43 +1,48 @@
 import { useState, useContext, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { TaskContext } from "../../TaskProvider";
+import { TaskContext, Contexts } from "../../TaskProvider";
+import React from "react";
 
 function Login() {
   //Important context values used across the app
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext);
+  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
   //Stores the username and password
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   //Used to see which button name and function to use
-  const [login, setLogin] = useState(false);
-  const [signup, setSignup] = useState(false);
+  const [login, setLogin] = useState<boolean>(false);
+  const [signup, setSignup] = useState<boolean>(false);
   //Used in junction with the animation to stop the user from clicking multiple times
-  const [CanClick, setCanClick] = useState(true);
+  const [CanClick, setCanClick] = useState<boolean>(true);
 
-  const borderRef = useRef(null);
+  const borderRef = useRef<HTMLInputElement>(null);
   //Indicates faliure
   function AnimateBorderRed() {
     const border = borderRef.current;
-    border.classList.add("AnimatePulseRed");
-    setCanClick(false);
-    setTimeout(() => {
-      border.classList.remove("AnimatePulseRed");
-      setCanClick(true);
-    }, 1500);
+    if (border) {
+      border.classList.add("AnimatePulseRed");
+      setCanClick(false);
+      setTimeout(() => {
+        border.classList.remove("AnimatePulseRed");
+        setCanClick(true);
+      }, 1500);
+    }
   }
   //Indicates success
   function AnimateBorderGreen() {
     const border = borderRef.current;
-    border.classList.add("AnimatePulseGreen");
-    setCanClick(false);
-    setTimeout(() => {
-      setCanClick(true);
-      border.classList.remove("AnimatePulseGreen");
-    }, 1500);
+    if (border) {
+      border.classList.add("AnimatePulseGreen");
+      setCanClick(false);
+      setTimeout(() => {
+        setCanClick(true);
+        border.classList.remove("AnimatePulseGreen");
+      }, 1500);
+    }
   }
 
   //Handling the event changes
-  const handleUsernameChange = (event) => {
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 49) {
       alert("Username is too long");
       return;
@@ -49,7 +54,7 @@ function Login() {
     }
   };
 
-  const handlePasswordChange = (event) => {
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 49) {
       alert("Password is too long");
       return;
@@ -61,7 +66,7 @@ function Login() {
     }
   };
   //Switch between login and signup
-  const handleSwitch = () => {
+  const handleSwitch = (): void => {
     if (login) {
       setLogin(false);
       setSignup(true);
@@ -71,7 +76,7 @@ function Login() {
     }
   };
   //Handle the server realted to login or signup
-  const handleSignOrLog = () => {
+  const handleSignOrLog = (): void => {
     if (!CanClick) {
       return;
     }
@@ -83,13 +88,13 @@ function Login() {
   };
   //Sends the sign up data to be checked by the server and returns a response
   //The response returns the user id and a true value if the sign up was successful that is used in creating tasks
-  const handleLogin = async () => {
-    const options = {
+  const handleLogin = async (): Promise<void> => {
+    const options: RequestInit = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ username, password }),
     };
 
@@ -114,8 +119,8 @@ function Login() {
     }
   };
   //Sends the data to the server to be inserted into the database
-  const handleSignup = async () => {
-    if ((await CheckIfInUse(username)) === true) {
+  const handleSignup = async (): Promise<void> => {
+    if ((await CheckIfInUse()) === true) {
       alert("Username is already in use");
       AnimateBorderRed();
       return;
@@ -126,7 +131,7 @@ function Login() {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ username, password, UserId }),
     };
     try {
@@ -139,7 +144,7 @@ function Login() {
     }
   };
   //Checks if the username is in use by sending the username to the server and returning a response
-  async function CheckIfInUse() {
+  async function CheckIfInUse(): Promise<boolean> {
     const options = {
       method: "POST",
       headers: {
@@ -161,6 +166,7 @@ function Login() {
       }
     } catch (error) {
       console.error("Error:", error);
+      return false;
     }
   }
 
