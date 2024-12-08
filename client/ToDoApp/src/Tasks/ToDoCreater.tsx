@@ -59,7 +59,7 @@ function ToDoCreater() {
       Task: task,
       Description: description,
       Folder: foldername,
-      completed: false,
+      Completed: false,
     };
 
     await AnimateBorder();
