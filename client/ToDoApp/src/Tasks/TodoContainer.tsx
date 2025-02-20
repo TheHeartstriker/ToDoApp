@@ -32,7 +32,6 @@ function Container() {
         options
       );
       const data = await response.json();
-      console.log(data);
       setTaskData(data);
     } catch (error) {
       console.error("Error:", error);
@@ -78,13 +77,11 @@ function Container() {
   }
 
   function LoadTaskData(Folder: string) {
-    const extendedTaskData = taskData
-      .filter((task) => task.Folder === Folder)
-      .map((task, index) => ({
-        ...task,
-        Index: index,
-        inspect: false,
-      }));
+    const extendedTaskData = taskData.map((task, index) => ({
+      ...task,
+      Index: index,
+      inspect: false,
+    }));
     setLocalTaskData(extendedTaskData);
   }
 
@@ -137,11 +134,14 @@ function Container() {
   }
   //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
-    const extendedTaskData = taskData.map((task, i) => ({
-      ...task,
-      Index: i,
-      inspect: false,
-    }));
+    const extendedTaskData = taskData.map((task, i) => {
+      const existingTask = LocalTaskData.find((t) => t.TaskId === task.TaskId);
+      return {
+        ...task,
+        Index: i,
+        inspect: existingTask ? existingTask.inspect : false,
+      };
+    });
     setLocalTaskData(extendedTaskData);
   }, [taskData]);
   //If we are signed in we load the data from the server
@@ -151,12 +151,12 @@ function Container() {
     } else {
       LoadTaskData(foldername);
     }
-  }, [isSignedIn, taskData]);
+  }, [isSignedIn]);
 
   return (
     // This iterates over the items array and renders each item in a div
     <div className="ToDoContainer">
-      {LocalTaskData.map((item, index) => (
+      {LocalTaskData.map((item) => (
         <div
           key={item.TaskId}
           className={`Task ${item.inspect ? "inspected" : ""}`}

@@ -4,6 +4,7 @@ import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import jwt from "jsonwebtoken";
+import { validate as isUuid } from "uuid";
 import cookieParser from "cookie-parser";
 //Importing the functions from the database file
 import {
@@ -72,6 +73,13 @@ app.get("/api/getFolders", authenticateJWT, async (req, res) => {
 //Checks if the username is already in use
 app.post("/api/checkUsername", async (req, res) => {
   const { username } = req.body;
+  if (
+    typeof username !== "string" ||
+    username.length >= 49 ||
+    username.trim() !== username
+  ) {
+    return res.status(400).send({ message: "Invalid username" });
+  }
   try {
     const result = await checkUsername(username);
     if (result) {
@@ -87,17 +95,31 @@ app.post("/api/checkUsername", async (req, res) => {
 app.post("/api/setFolder", authenticateJWT, async (req, res) => {
   try {
     const folderNaming = req.body.folder;
-    console.log(folderNaming);
     foldername = folderNaming;
     res.status(200).send();
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
   }
 });
-
+// Here
 // Simply sends a username and password to the database to be inserted
 app.post("/api/signup", async (req, res) => {
   const { username, password, UserId } = req.body;
+  // Validating the username and password
+  if (
+    typeof username !== "string" ||
+    username.length >= 49 ||
+    username.trim() !== username
+  ) {
+    return res.status(400).send({ message: "Invalid username" });
+  } else if (
+    typeof password !== "string" ||
+    password.length >= 49 ||
+    password.trim() !== password
+  ) {
+    return res.status(400).send({ message: "Invalid password" });
+  }
+
   try {
     userIdGet = UserId;
     await signup(username, password, UserId);
@@ -118,6 +140,20 @@ app.post("/api/signup", async (req, res) => {
 // Sends username and login to the database and if successful sends the user id back to the front
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
+  if (
+    typeof username !== "string" ||
+    username.length >= 49 ||
+    username.trim() !== username
+  ) {
+    return res.status(400).send({ message: "Invalid username" });
+  } else if (
+    typeof password !== "string" ||
+    password.length >= 49 ||
+    password.trim() !== password
+  ) {
+    return res.status(400).send({ message: "Invalid password" });
+  }
+
   try {
     const result = await login(username, password);
     if (result) {
@@ -147,8 +183,16 @@ app.post("/api/createToDo", authenticateJWT, async (req, res) => {
     Description: Description,
     TaskId: TaskId,
     Folder: Folder,
-    completed: Completed,
+    Completed: Completed,
   } = req.body;
+  if (
+    typeof Header !== "string" ||
+    typeof Description !== "string" ||
+    !isUuid(TaskId)
+  ) {
+    return res.status(400).send({ message: "Invalid input" });
+  }
+  console.log(Header, Description, TaskId, userIdGet, Folder, Completed);
   try {
     await CreateToDo(Header, Description, TaskId, userIdGet, Folder, Completed);
     res.status(201).send();
@@ -169,6 +213,9 @@ app.delete("/api/deleteToDo", authenticateJWT, async (req, res) => {
 //Deletes all tasks related to a folder therefore deleting the folder and contents
 app.delete("/api/deleteFolder", authenticateJWT, async (req, res) => {
   const { folder: FolderName } = req.body;
+  if (typeof FolderName !== "string") {
+    return res.status(400).send({ message: "Invalid input" });
+  }
   try {
     await deleteFolder(FolderName);
     res.status(204).send();
