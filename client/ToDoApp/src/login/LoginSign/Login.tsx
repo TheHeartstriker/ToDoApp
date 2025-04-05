@@ -88,7 +88,7 @@ function Login() {
   };
   //Sends the sign up data to be checked by the server and returns a response
   //The response returns the user id and a true value if the sign up was successful that is used in creating tasks
-  const handleLogin = async (): Promise<void> => {
+  async function handleLogin() {
     const options: RequestInit = {
       method: "POST",
       headers: {
@@ -109,7 +109,7 @@ function Login() {
         AnimateBorderGreen();
         setIsSignedIn(true);
       } else {
-        //If the login fails
+        // If the login fails
         AnimateBorderRed();
         setIsSignedIn(false);
         alert("Incorrect username or password");
@@ -117,56 +117,25 @@ function Login() {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-  //Sends the data to the server to be inserted into the database
-  const handleSignup = async (): Promise<void> => {
-    if ((await CheckIfInUse()) === true) {
-      alert("Username is already in use");
-      AnimateBorderRed();
-      return;
-    }
-    let UserId = uuidv4();
+  }
+
+  // Sends the data to the server to be inserted into the database
+  async function handleSignup() {
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ username, password, UserId }),
+      body: JSON.stringify({ username, password }),
     };
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/signup`, options);
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/register`, options);
       setIsSignedIn(true);
       AnimateBorderGreen();
     } catch (error) {
       AnimateBorderRed();
       console.error("Error:", error);
-    }
-  };
-  //Checks if the username is in use by sending the username to the server and returning a response
-  async function CheckIfInUse(): Promise<boolean> {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username }),
-    };
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/checkusername`,
-        options
-      );
-      const responseData = await response.json();
-      console.log("Name in use", responseData);
-      if (responseData) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      return false;
     }
   }
 

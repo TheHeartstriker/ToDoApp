@@ -101,25 +101,7 @@ function Groups() {
       console.error("Error:", error);
     }
   }
-  //Give the server the current folder so it knows what data to grab from the database
-  async function sendCurrentFolder(folderName: string) {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ folder: folderName }),
-    };
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/setFolder`,
-        options
-      );
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
+
   //Delete a folder from the database
   async function deleteFolderFromDB(FolderName: string) {
     const options = {
@@ -128,7 +110,7 @@ function Groups() {
         "Content-Type": "application/json",
       },
       credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ folder: FolderName }),
+      body: JSON.stringify({ FolderName }),
     };
     try {
       const response = await fetch(
@@ -150,12 +132,6 @@ function Groups() {
   useEffect(() => {
     CurrentFolder();
   }, [folders]);
-  //Send the current folder to the server
-  useEffect(() => {
-    if (isSignedIn) {
-      sendCurrentFolder(foldername);
-    }
-  }, [foldername]);
 
   return (
     <>
