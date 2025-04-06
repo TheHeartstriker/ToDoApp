@@ -14,7 +14,7 @@ const ConfigDb = new Sequelize(
   }
 );
 
-if (process.env.Sync) {
+if (process.env.Sync === "true") {
   ConfigDb.sync({ force: true })
     .then(() => {
       console.log("Database & tables created!");

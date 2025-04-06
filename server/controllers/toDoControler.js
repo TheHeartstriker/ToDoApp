@@ -1,4 +1,5 @@
 import ToDo from "../models/ToDoModel.js";
+import { v4 as uuidv4 } from "uuid";
 
 async function getFolders(req, res, next) {
   try {
@@ -166,33 +167,34 @@ async function updateTaskComplete(req, res, next) {
 
 async function createTask(req, res, next) {
   try {
-    const { Task, Description, Folder, Completed } = req.body;
+    const { Task, Description, Folder } = req.body;
     const userId = req.user.id;
+
     // Input validation
     if (
       typeof Task !== "string" ||
-      Task.length < 149 ||
+      Task.length > 149 || // Corrected length check
       typeof Description !== "string" ||
       typeof Folder !== "string" ||
-      Folder.length < 39 ||
-      typeof Completed !== "boolean"
+      Folder.length > 39 // Corrected length check
     ) {
       return res
         .status(400)
-        .json({ message: "Invalid format len or type", success: false });
+        .json({ message: "Invalid format length or type", success: false });
     }
 
+    // Attempt to create the task
     const task = await ToDo.create({
       task_id: uuidv4(),
-      Task: Task,
+      ToDoHeader: Task,
       Description: Description,
       Folder: Folder,
-      Completed: Completed,
-      userId: userId,
+      Completed: false,
+      UserId: userId,
     });
 
     // Check if task was created successfully
-    if (!task) {
+    if (!task || !task.task_id) {
       return res
         .status(500)
         .json({ message: "Failed to create task", success: false });
@@ -204,4 +206,11 @@ async function createTask(req, res, next) {
   }
 }
 
-export { getFolders, deleteFolder };
+export {
+  getFolders,
+  deleteFolder,
+  loadTasks,
+  deleteTask,
+  updateTaskComplete,
+  createTask,
+};

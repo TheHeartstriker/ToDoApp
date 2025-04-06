@@ -16,7 +16,7 @@ const ToDo = ConfigDb.define(
     },
     Folder: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     ToDoHeader: {
       type: DataTypes.STRING,
@@ -32,8 +32,8 @@ const ToDo = ConfigDb.define(
     },
   },
   {
-    timestamps: true,
-    tableName: "todo_data",
+    timestamps: false,
+    tableName: "tododata",
   }
 );
 

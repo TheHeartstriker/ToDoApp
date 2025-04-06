@@ -87,6 +87,8 @@ function ToDoCreater() {
         `${import.meta.env.VITE_API_BASE_URL}/api/createToDo`,
         options
       );
+      const responseData = await response.json();
+      console.log("Response from server:", responseData.message);
     } catch (error) {
       console.error("Error:", error);
     }
