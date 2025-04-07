@@ -55,8 +55,8 @@ function ToDoCreater() {
 
     // Given to the server and used to create a new task locally in TaskData
     const newTask = {
-      TaskId: id,
-      Task: task,
+      task_id: id,
+      ToDoHeader: task,
       Description: description,
       Folder: foldername,
       Completed: false,
@@ -87,6 +87,8 @@ function ToDoCreater() {
         `${import.meta.env.VITE_API_BASE_URL}/api/createToDo`,
         options
       );
+      const responseData = await response.json();
+      console.log("Response from server:", responseData.message);
     } catch (error) {
       console.error("Error:", error);
     }

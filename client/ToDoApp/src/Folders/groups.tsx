@@ -84,14 +84,16 @@ function Groups() {
       if (!response.ok) {
         throw new Error("Network response was not ok" + response.status);
       }
-      const data: { Folder: string }[] = await response.json();
+      const responseData = await response.json();
+      console.log("Response from server:", responseData.folders);
+      const data: { folder: string }[] = responseData.folders;
       // Merge the fetched data with the existing folders state
       const folderData: folderStruct[] = data.map((folder, index: number) => {
         const existingFolder = folders.find(
-          (f) => f.folderName === folder.Folder
+          (f) => f.folderName === folder.folder
         );
         return {
-          folderName: folder.Folder,
+          folderName: folder.folder,
           folderOn: existingFolder ? existingFolder.folderOn : false,
           index: index,
         };
@@ -101,25 +103,7 @@ function Groups() {
       console.error("Error:", error);
     }
   }
-  //Give the server the current folder so it knows what data to grab from the database
-  async function sendCurrentFolder(folderName: string) {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ folder: folderName }),
-    };
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/setFolder`,
-        options
-      );
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
+
   //Delete a folder from the database
   async function deleteFolderFromDB(FolderName: string) {
     const options = {
@@ -128,13 +112,15 @@ function Groups() {
         "Content-Type": "application/json",
       },
       credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ folder: FolderName }),
+      body: JSON.stringify({ FolderName }),
     };
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/api/deleteFolder`,
         options
       );
+      const responseData = await response.json();
+      console.log("Response from server:", responseData.message);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -150,12 +136,6 @@ function Groups() {
   useEffect(() => {
     CurrentFolder();
   }, [folders]);
-  //Send the current folder to the server
-  useEffect(() => {
-    if (isSignedIn) {
-      sendCurrentFolder(foldername);
-    }
-  }, [foldername]);
 
   return (
     <>
