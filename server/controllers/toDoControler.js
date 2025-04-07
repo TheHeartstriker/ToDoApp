@@ -32,7 +32,7 @@ async function deleteFolder(req, res, next) {
     const { FolderName } = req.body;
     const userId = req.user.id;
     //Input validation
-    if (typeof FolderName !== "string") {
+    if (typeof FolderName !== "string" || FolderName.length > 249) {
       return res
         .status(400)
         .json({ message: "Invalid format len or type", success: false });
@@ -62,7 +62,7 @@ async function loadTasks(req, res, next) {
     const userId = req.user.id;
     const folderName = req.query.foldername;
     //Input validation
-    if (typeof folderName !== "string") {
+    if (typeof folderName !== "string" || folderName.length > 249) {
       return res
         .status(400)
         .json({ message: "Invalid format len or type", success: false });
