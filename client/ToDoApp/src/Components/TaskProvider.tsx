@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, ReactNode } from "react";
-import { taskStuct, folderStruct } from "./Provider";
+import { taskStuct, folderStruct } from "../Types/Provider";
 //Type definitions for the context
 export interface Contexts {
   taskData: taskStuct[];

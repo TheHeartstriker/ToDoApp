@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { TaskContext, Contexts } from "../TaskProvider";
-import { taskStuct } from "../Provider";
+import { TaskContext, Contexts } from "../../Components/TaskProvider";
+import { taskStuct } from "../../Types/Provider";
 
 interface ExtendedTask extends taskStuct {
   inspect?: boolean;

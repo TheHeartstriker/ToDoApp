@@ -1,7 +1,7 @@
 import { useState, useContext, useRef, useEffect } from "react";
-import { TaskContext, Contexts } from "../TaskProvider";
+import { TaskContext, Contexts } from "../../Components/TaskProvider";
 import { v4 as uuidv4 } from "uuid";
-import { taskStuct } from "../Provider";
+import { taskStuct } from "../../Types/Provider";
 
 function ToDoCreater() {
   //Main task data thats given to the server

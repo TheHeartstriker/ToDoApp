@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
-import { TaskContext, Contexts } from "../TaskProvider";
-import { folderStruct } from "../Provider";
+import { TaskContext, Contexts } from "../../Components/TaskProvider";
+import { folderStruct } from "../../Types/Provider";
 
 function Groups() {
   //Local state for the folder creator screen and the folders indvidual name
