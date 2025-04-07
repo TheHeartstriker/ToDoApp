@@ -55,8 +55,8 @@ function ToDoCreater() {
 
     // Given to the server and used to create a new task locally in TaskData
     const newTask = {
-      TaskId: id,
-      Task: task,
+      task_id: id,
+      ToDoHeader: task,
       Description: description,
       Folder: foldername,
       Completed: false,

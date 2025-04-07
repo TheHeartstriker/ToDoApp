@@ -84,14 +84,16 @@ function Groups() {
       if (!response.ok) {
         throw new Error("Network response was not ok" + response.status);
       }
-      const data: { Folder: string }[] = await response.json();
+      const responseData = await response.json();
+      console.log("Response from server:", responseData.folders);
+      const data: { folder: string }[] = responseData.folders;
       // Merge the fetched data with the existing folders state
       const folderData: folderStruct[] = data.map((folder, index: number) => {
         const existingFolder = folders.find(
-          (f) => f.folderName === folder.Folder
+          (f) => f.folderName === folder.folder
         );
         return {
-          folderName: folder.Folder,
+          folderName: folder.folder,
           folderOn: existingFolder ? existingFolder.folderOn : false,
           index: index,
         };
@@ -117,6 +119,8 @@ function Groups() {
         `${import.meta.env.VITE_API_BASE_URL}/api/deleteFolder`,
         options
       );
+      const responseData = await response.json();
+      console.log("Response from server:", responseData.message);
     } catch (error) {
       console.error("Error:", error);
     }

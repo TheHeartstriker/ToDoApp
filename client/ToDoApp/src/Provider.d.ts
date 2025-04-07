@@ -1,8 +1,8 @@
 //TypeScript type definitions for Provider.tsx
 //Task data structure
 export interface taskStuct {
-  TaskId: id;
-  Task: task;
+  task_id: id;
+  ToDoHeader: task;
   Description: description;
   Folder: foldername;
   Completed: boolean;

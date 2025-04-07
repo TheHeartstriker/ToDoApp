@@ -28,11 +28,14 @@ function Container() {
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/getTododata`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/api/getTododata?foldername=${encodeURIComponent(foldername)}`,
         options
       );
       const data = await response.json();
-      setTaskData(data);
+      console.log("Response from server:", data.tasks, data.message);
+      setTaskData(data.tasks);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -45,32 +48,36 @@ function Container() {
         "Content-Type": "application/json",
       },
       credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ Task: LocalTaskData[index].TaskId }),
+      body: JSON.stringify({ Task: LocalTaskData[index].task_id }),
     };
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/api/deleteToDo`,
         options
       );
+      const data = await response.json();
+      console.log("Response from server:", data);
     } catch (error) {
       console.error("Error:", error);
     }
   }
 
-  async function UpdataTaskComplete(TaskId: string): Promise<void> {
+  async function UpdataTaskComplete(task_id: string): Promise<void> {
     let options = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ Task: TaskId }),
+      body: JSON.stringify({ task_id }),
     };
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/api/updateToDo`,
         options
       );
+      const data = await response.json();
+      console.log("Response from server:", data, data.message);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -91,14 +98,14 @@ function Container() {
     // Local remove task
     setLocalTaskData(function (prevLocalTaskData) {
       return prevLocalTaskData.filter(function (t) {
-        return t.TaskId !== index;
+        return t.task_id !== index;
       });
     });
 
     // Remove task from main data
     setTaskData(function (prevTaskData) {
       return prevTaskData.filter(function (t) {
-        return t.TaskId !== id;
+        return t.task_id !== id;
       });
     });
 
@@ -120,7 +127,7 @@ function Container() {
       });
     });
     if (isSignedIn) {
-      UpdataTaskComplete(LocalTaskData[index].TaskId);
+      UpdataTaskComplete(LocalTaskData[index].task_id);
     }
   }
 
@@ -134,8 +141,11 @@ function Container() {
   }
   //Every time the task data changes(when we remove a task) we re run
   useEffect(() => {
+    if (!taskData) return;
     const extendedTaskData = taskData.map((task, i) => {
-      const existingTask = LocalTaskData.find((t) => t.TaskId === task.TaskId);
+      const existingTask = LocalTaskData.find(
+        (t) => t.task_id === task.task_id
+      );
       return {
         ...task,
         Index: i,
@@ -156,12 +166,12 @@ function Container() {
   return (
     // This iterates over the items array and renders each item in a div
     <div className="ToDoContainer">
-      {LocalTaskData.map((item) => (
+      {LocalTaskData.map((item, index) => (
         <div
-          key={item.TaskId}
+          key={item.task_id}
           className={`Task ${item.inspect ? "inspected" : ""}`}
         >
-          <h3>{item.Task}</h3>
+          <h3>{item.ToDoHeader}</h3>
           {!item.inspect && (
             <input
               type="checkbox"
@@ -173,7 +183,7 @@ function Container() {
           {item.inspect && (
             <button
               className="DeleteBtn"
-              onClick={() => removeTask(item.Index, item.TaskId)}
+              onClick={() => removeTask(item.Index, item.task_id)}
             >
               Delete
             </button>

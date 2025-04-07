@@ -1,23 +1,18 @@
 import ToDo from "../models/ToDoModel.js";
 import { v4 as uuidv4 } from "uuid";
+import { Op } from "sequelize";
 
 async function getFolders(req, res, next) {
   try {
-    const { folder } = req.body;
     const userId = req.user.id;
-    //Input validation
-    if (typeof folder !== "string" || folder.length < 39) {
-      return res
-        .status(400)
-        .json({ message: "Invalid format len or type", success: false });
-    }
     //Find all realted folders
     const folders = await ToDo.findAll({
       where: {
         folder: { [Op.ne]: "" },
         userId: userId,
       },
-      atrributes: { exlude: ["userId"] },
+      attributes: ["folder"],
+      group: ["folder"],
     });
     //Check if folders exist
     if (!folders) {
@@ -34,10 +29,10 @@ async function getFolders(req, res, next) {
 
 async function deleteFolder(req, res, next) {
   try {
-    const { folderName } = req.body;
-    userId = req.user.id;
+    const { FolderName } = req.body;
+    const userId = req.user.id;
     //Input validation
-    if (typeof folderName !== "string" || folderName.length < 39) {
+    if (typeof FolderName !== "string") {
       return res
         .status(400)
         .json({ message: "Invalid format len or type", success: false });
@@ -46,7 +41,7 @@ async function deleteFolder(req, res, next) {
     //Delete folder
     const folder = await ToDo.destroy({
       where: {
-        folder: folderName,
+        folder: FolderName,
         userId: userId,
       },
     });
@@ -57,17 +52,17 @@ async function deleteFolder(req, res, next) {
         .json({ message: "Folder not found", success: false });
     }
     res.status(200).json({ message: "Folder deleted", success: true });
-  } catch {
+  } catch (error) {
     next(error);
   }
 }
 
 async function loadTasks(req, res, next) {
   try {
-    const { folderName } = req.body;
-    userId = req.user.id;
+    const userId = req.user.id;
+    const folderName = req.query.foldername;
     //Input validation
-    if (typeof folderName !== "string" || folderName.length < 39) {
+    if (typeof folderName !== "string") {
       return res
         .status(400)
         .json({ message: "Invalid format len or type", success: false });
@@ -78,7 +73,7 @@ async function loadTasks(req, res, next) {
         folder: folderName,
         userId: userId,
       },
-      atrributes: { exlude: ["userId"] },
+      attributes: { exclude: ["UserId"] },
     });
     //Check if tasks exist
     if (!tasks) {
@@ -94,10 +89,10 @@ async function loadTasks(req, res, next) {
 
 async function deleteTask(req, res, next) {
   try {
-    const { taskId } = req.body;
-    userId = req.user.id;
+    const { Task } = req.body;
+    const userId = req.user.id;
     //Input validation
-    if (typeof taskId !== "string" || taskId.length < 39) {
+    if (typeof Task !== "string" || Task.length !== 36) {
       return res
         .status(400)
         .json({ message: "Invalid format len or type", success: false });
@@ -105,7 +100,7 @@ async function deleteTask(req, res, next) {
     //Delete task
     const task = await ToDo.destroy({
       where: {
-        task_id: taskId,
+        task_id: Task,
         userId: userId,
       },
     });
@@ -123,11 +118,11 @@ async function deleteTask(req, res, next) {
 
 async function updateTaskComplete(req, res, next) {
   try {
-    const { taskId } = req.body;
+    const { task_id } = req.body;
     const userId = req.user.id;
 
     // Input validation
-    if (typeof taskId !== "string" || taskId.length < 39) {
+    if (typeof task_id !== "string" || task_id.length !== 36) {
       return res
         .status(400)
         .json({ message: "Invalid format len or type", success: false });
@@ -136,7 +131,7 @@ async function updateTaskComplete(req, res, next) {
     // Find the task to get its current Completed status
     const task = await ToDo.findOne({
       where: {
-        task_id: taskId,
+        task_id: task_id,
         userId: userId,
       },
     });
@@ -153,11 +148,18 @@ async function updateTaskComplete(req, res, next) {
       { Completed: !task.Completed },
       {
         where: {
-          task_id: taskId,
+          task_id: task_id,
           userId: userId,
         },
       }
     );
+
+    // Check if the update was successful
+    if (!updatedTask) {
+      return res
+        .status(500)
+        .json({ message: "Failed to update task", success: false });
+    }
 
     res.status(200).json({ message: "Task updated", success: true });
   } catch (error) {
@@ -167,16 +169,16 @@ async function updateTaskComplete(req, res, next) {
 
 async function createTask(req, res, next) {
   try {
-    const { Task, Description, Folder } = req.body;
+    const { ToDoHeader, Description, Folder } = req.body;
     const userId = req.user.id;
 
     // Input validation
     if (
-      typeof Task !== "string" ||
-      Task.length > 149 || // Corrected length check
+      typeof ToDoHeader !== "string" ||
+      ToDoHeader.length > 149 ||
       typeof Description !== "string" ||
       typeof Folder !== "string" ||
-      Folder.length > 39 // Corrected length check
+      Folder.length > 39
     ) {
       return res
         .status(400)
@@ -186,7 +188,7 @@ async function createTask(req, res, next) {
     // Attempt to create the task
     const task = await ToDo.create({
       task_id: uuidv4(),
-      ToDoHeader: Task,
+      ToDoHeader: ToDoHeader,
       Description: Description,
       Folder: Folder,
       Completed: false,
