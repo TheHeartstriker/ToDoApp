@@ -12,7 +12,6 @@ function Container() {
   //Main task data thats given to the server
   const { taskData, setTaskData } = useContext(TaskContext) as Contexts;
   //Check if we need to request things of the server
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
   //Folder name that we are currently in
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
   //Local used so we dont save or send unnecessary data to the server
@@ -109,9 +108,7 @@ function Container() {
       });
     });
 
-    if (isSignedIn) {
-      IfSignDelete(index);
-    }
+    IfSignDelete(index);
   }
   //Change the true or false value of the task completed for local and main data
   //Send data to the server if we are signed in
@@ -126,9 +123,7 @@ function Container() {
         return i === index ? { ...task, Completed: !task.Completed } : task;
       });
     });
-    if (isSignedIn) {
-      UpdataTaskComplete(LocalTaskData[index].task_id);
-    }
+    UpdataTaskComplete(LocalTaskData[index].task_id);
   }
 
   //Inspect task value becomes true or false if true
@@ -156,12 +151,8 @@ function Container() {
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
-    if (isSignedIn) {
-      loadTaskfromServer();
-    } else {
-      LoadTaskData(foldername);
-    }
-  }, [isSignedIn]);
+    loadTaskfromServer();
+  }, []);
 
   return (
     // This iterates over the items array and renders each item in a div

@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { TaskContext, Contexts } from "../../Components/TaskProvider";
 import { folderStruct } from "../../Types/Provider";
+import { GetFolders, deleteFolder } from "../../Services/toDoApi";
 
 function Groups() {
   //Local state for the folder creator screen and the folders indvidual name
@@ -9,7 +10,6 @@ function Groups() {
   //Context values
   const { folders, setFolders } = useContext(TaskContext) as Contexts;
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
 
   const handleFolderNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -32,7 +32,7 @@ function Groups() {
     setShowFolderCreate(!ShowFolderCreate);
   }
   //Delete a folder based on index
-  function deleteFolder(index: number) {
+  function deleteFolderLocal(index: number) {
     setFolders(folders.filter((folder) => folder.index !== index));
   }
   //If we have been clicked then name of the folder to the overhead
@@ -66,28 +66,11 @@ function Groups() {
     });
     setFolders(newFolders);
   }
-  //Gets the folders related to the user and converts them to the correct format
-  //Something to note this does not get the default "" folder
-  async function GetFolders(): Promise<void> {
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-    };
+
+  async function fetchAndSetFolders() {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/getFolders`,
-        options
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok" + response.status);
-      }
-      const responseData = await response.json();
-      console.log("Response from server:", responseData.folders);
+      const responseData = await GetFolders();
       const data: { folder: string }[] = responseData.folders;
-      // Merge the fetched data with the existing folders state
       const folderData: folderStruct[] = data.map((folder, index: number) => {
         const existingFolder = folders.find(
           (f) => f.folderName === folder.folder
@@ -100,38 +83,13 @@ function Groups() {
       });
       setFolders(folderData);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Failed to fetch folders:", error);
     }
   }
-
-  //Delete a folder from the database
-  async function deleteFolderFromDB(FolderName: string) {
-    const options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ FolderName }),
-    };
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/deleteFolder`,
-        options
-      );
-      const responseData = await response.json();
-      console.log("Response from server:", responseData.message);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
   useEffect(() => {
-    if (isSignedIn) {
-      //This get excludes the default "" folder
-      GetFolders();
-    }
-  }, [isSignedIn]);
+    //This get excludes the default "" folder
+    GetFolders();
+  }, []);
   //Re checks the folder values and sees if the foldername needs to be updated
   useEffect(() => {
     CurrentFolder();
@@ -150,8 +108,8 @@ function Groups() {
           <button
             className="FolderDelete"
             onClick={() => {
-              deleteFolder(folder.index);
-              deleteFolderFromDB(folder.folderName);
+              deleteFolderLocal(folder.index);
+              deleteFolder(folder.folderName);
             }}
           >
             Delete
