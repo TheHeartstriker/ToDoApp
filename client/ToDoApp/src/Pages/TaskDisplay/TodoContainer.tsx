@@ -1,6 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { TaskContext, Contexts } from "../../Components/TaskProvider";
 import { taskStuct } from "../../Types/Provider";
+import {
+  loadTaskData,
+  deleteTask,
+  updateTaskComplete,
+} from "../../Services/toDoApi";
 
 interface ExtendedTask extends taskStuct {
   inspect?: boolean;
@@ -16,69 +21,16 @@ function Container() {
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
   //Local used so we dont save or send unnecessary data to the server
   const [LocalTaskData, setLocalTaskData] = useState<ExtendedTask[]>([]);
-  //Load task info from server
-  async function loadTaskfromServer(): Promise<void> {
-    let options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-    };
-    try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_API_BASE_URL
-        }/api/getTododata?foldername=${encodeURIComponent(foldername)}`,
-        options
-      );
-      const data = await response.json();
-      console.log("Response from server:", data.tasks, data.message);
-      setTaskData(data.tasks);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
   //Delete request to server
-  async function IfSignDelete(index: number): Promise<void> {
-    let options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ Task: LocalTaskData[index].task_id }),
-    };
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/deleteToDo`,
-        options
-      );
-      const data = await response.json();
-      console.log("Response from server:", data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
 
-  async function UpdataTaskComplete(task_id: string): Promise<void> {
-    let options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-      body: JSON.stringify({ task_id }),
-    };
+  async function fetchTaskData() {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/updateToDo`,
-        options
-      );
-      const data = await response.json();
-      console.log("Response from server:", data, data.message);
+      const data = await loadTaskData(foldername);
+      if (data && data.tasks) {
+        setTaskData(data.tasks);
+      }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error loading task data:", error);
     }
   }
 
@@ -108,7 +60,7 @@ function Container() {
       });
     });
 
-    IfSignDelete(index);
+    deleteTask(taskData[index].task_id);
   }
   //Change the true or false value of the task completed for local and main data
   //Send data to the server if we are signed in
@@ -123,7 +75,8 @@ function Container() {
         return i === index ? { ...task, Completed: !task.Completed } : task;
       });
     });
-    UpdataTaskComplete(LocalTaskData[index].task_id);
+    console.log("Completed", LocalTaskData[index]);
+    updateTaskComplete(taskData[index].task_id);
   }
 
   //Inspect task value becomes true or false if true
@@ -151,8 +104,8 @@ function Container() {
   }, [taskData]);
   //If we are signed in we load the data from the server
   useEffect(() => {
-    loadTaskfromServer();
-  }, []);
+    fetchTaskData();
+  }, [foldername]);
 
   return (
     // This iterates over the items array and renders each item in a div
