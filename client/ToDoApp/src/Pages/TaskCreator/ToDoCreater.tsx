@@ -1,13 +1,12 @@
 import { useState, useContext, useRef, useEffect } from "react";
-import { TaskContext, Contexts } from "../TaskProvider";
+import { TaskContext, Contexts } from "../../Components/TaskProvider";
 import { v4 as uuidv4 } from "uuid";
-import { taskStuct } from "../Provider";
-
+import { taskStuct } from "../../Types/Provider";
+import { sendTaskData } from "../../Services/toDoApi";
 function ToDoCreater() {
   //Main task data thats given to the server
   const { taskData, setTaskData } = useContext(TaskContext) as Contexts;
   //User Id thats saved in Login.jsx and sent to the server when creating new tasks
-  const { isSignedIn, setIsSignedIn } = useContext(TaskContext) as Contexts;
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
 
   //Seters for the task name and description
@@ -65,34 +64,12 @@ function ToDoCreater() {
     await AnimateBorder();
 
     // Data sent to the server
-    if (isSignedIn) {
-      sendTaskData(newTask);
-    }
+    sendTaskData(newTask);
     // Data added to the main local task data
     const updatedTaskData = [...taskData, newTask];
     return updatedTaskData;
   };
-  //Sends the individual task data to the server
-  async function sendTaskData(datatosend: taskStuct): Promise<void> {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include" as RequestCredentials,
-      body: JSON.stringify(datatosend),
-    };
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/createToDo`,
-        options
-      );
-      const responseData = await response.json();
-      console.log("Response from server:", responseData.message);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
+
   //Reset button on click
   const handleReset = () => {
     setTaskName("");
