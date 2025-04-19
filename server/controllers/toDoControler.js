@@ -166,20 +166,14 @@ async function createTask(req, res, next) {
   try {
     const { ToDoHeader, Description, Folder } = req.body;
     const userId = req.user.id;
-
-    // Input validation
-    if (
-      typeof ToDoHeader !== "string" ||
-      ToDoHeader.length > 149 ||
-      typeof Description !== "string" ||
-      typeof Folder !== "string" ||
-      Folder.length > 39
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Invalid format length or type", success: false });
-    }
-
+    const validate = [
+      { ToDoHeader: ToDoHeader, Description: Description, Folder: Folder },
+    ];
+    validateData(validate, [
+      ["ToDoHeader", "string", 249],
+      ["Description", "string", 249],
+      ["Folder", "string", 249],
+    ]);
     // Attempt to create the task
     const task = await ToDo.create({
       task_id: uuidv4(),
@@ -189,14 +183,12 @@ async function createTask(req, res, next) {
       Completed: false,
       UserId: userId,
     });
-
     // Check if task was created successfully
-    if (!task || !task.task_id) {
+    if (!task || task.length === 0) {
       return res
         .status(500)
         .json({ message: "Failed to create task", success: false });
     }
-
     res.status(201).json({ message: "Task created", success: true });
   } catch (error) {
     next(error);

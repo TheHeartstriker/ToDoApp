@@ -44,40 +44,28 @@ export async function deleteFolder(FolderName: string) {
   }
 }
 
-export async function sendTaskData(datatosend: taskStuct): Promise<void> {
-  const options: RequestInit = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-    body: JSON.stringify(datatosend),
-  };
+export async function sendTaskData(datatosend: taskStuct) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/createToDo`,
-      options
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datatosend),
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const responseData = await response.json();
-    console.log("Response from server:", responseData.message);
-    if (responseData.success) {
-      console.log(responseData.success, responseData.message || "No message");
-      return responseData;
-    } else {
-      console.error(
-        "Login failed:",
-        responseData.message || "No message",
-        responseData.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
