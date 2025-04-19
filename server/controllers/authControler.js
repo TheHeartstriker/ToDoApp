@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
+import { validateData } from "../utils/dataValidation.js";
 
-import User from "../models/AuthModel.js";
+import User from "../Models/authModel.js";
 
 dotenv.config();
 
@@ -13,21 +14,12 @@ const PassUserMax = 249;
 async function register(req, res, next) {
   try {
     const { username, password } = req.body;
+    let validation = [{ username: username, password: password }];
     // Data validation
-    if (
-      username === undefined ||
-      password === undefined ||
-      typeof username !== "string" ||
-      typeof password !== "string" ||
-      username.length > PassUserMax ||
-      password.length > PassUserMax
-    ) {
-      return res.status(400).json({
-        message: "Invalid data, length, type or existance",
-        success: false,
-      });
-    }
-
+    validateData(validation, [
+      ["username", "string", PassUserMax],
+      ["password", "string", PassUserMax],
+    ]);
     // Check if username exists already
     const existUser = await User.findOne({
       where: {
@@ -61,12 +53,14 @@ async function register(req, res, next) {
         expiresIn: "1d",
       }
     );
+    // Set the token in a cookie
     res.cookie("jwtToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "true",
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     });
+    //Send
     return res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -80,20 +74,12 @@ async function register(req, res, next) {
 async function login(req, res, next) {
   try {
     const { username, password } = req.body;
+    const validation = [{ username: username, password: password }];
     // Data validation
-    if (
-      username === undefined ||
-      password === undefined ||
-      typeof username !== "string" ||
-      typeof password !== "string" ||
-      username.length > PassUserMax ||
-      password.length > PassUserMax
-    ) {
-      return res.status(400).json({
-        message: "Invalid data, length, type or existance",
-        success: false,
-      });
-    }
+    validateData(validation, [
+      ["username", "string", PassUserMax],
+      ["password", "string", PassUserMax],
+    ]);
     // Check if username exists
     const user = await User.findOne({
       where: {

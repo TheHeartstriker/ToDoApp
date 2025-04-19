@@ -31,13 +31,8 @@ async function deleteFolder(req, res, next) {
   try {
     const { FolderName } = req.body;
     const userId = req.user.id;
-    //Input validation
-    if (typeof FolderName !== "string" || FolderName.length > 249) {
-      return res
-        .status(400)
-        .json({ message: "Invalid format len or type", success: false });
-    }
-
+    const validate = [{ FolderName: FolderName }];
+    validateData(validate, [["FolderName", "string", 249]]);
     //Delete folder
     const folder = await ToDo.destroy({
       where: {
@@ -46,7 +41,7 @@ async function deleteFolder(req, res, next) {
       },
     });
     //Check if folder exists
-    if (!folder) {
+    if (!folder || folder.length === 0) {
       return res
         .status(404)
         .json({ message: "Folder not found", success: false });

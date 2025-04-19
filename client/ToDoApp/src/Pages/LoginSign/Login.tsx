@@ -1,6 +1,13 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { handleLogin, handleSignup } from "../../Services/authApi";
 import React from "react";
+
+const MAX_INPUT_LENGTH = 50;
+const COOLDOWN_TIME = 30000;
+const PULSE_TYPES = {
+  SUCCESS: "Gpulse",
+  ERROR: "Rpulse",
+};
 
 function Login() {
   //Stores the username and password
@@ -9,71 +16,107 @@ function Login() {
   //Used to see which button name and function to use
   const [login, setLogin] = useState<boolean>(false);
   //Used in junction with the animation to stop the user from clicking multiple times
-  const [CanClick, setCanClick] = useState<boolean>(true);
+  const [coolDown, setCoolDown] = useState<boolean>(false);
+  const [pulse, setPulse] = useState<string>("");
 
   //Handling the event changes
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length > 49) {
-      alert("Username is too long");
-      return;
-    }
-    if (event.target.value.includes(" ")) {
-      alert("Username cannot contain spaces");
-    } else {
-      setUsername(event.target.value);
-    }
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length > 49) {
-      alert("Password is too long");
+  function handleChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+    setter: "username" | "password"
+  ): void {
+    if (event.target.value.length > MAX_INPUT_LENGTH) {
+      alert("Username or password cannot be longer than 50 characters");
       return;
     }
     if (event.target.value.includes(" ")) {
       alert("Password cannot contain spaces");
     } else {
-      setPassword(event.target.value);
+      if (setter === "username") {
+        setUsername(event.target.value);
+      } else if (setter === "password") {
+        setPassword(event.target.value);
+      }
     }
-  };
+  }
+  function handlePulse(type: string) {
+    setPulse(type);
+    setTimeout(() => {
+      setPulse("");
+    }, 5000);
+  }
   //Switch between login and signup
   function handleSwitch() {
     setLogin((prevLogin) => !prevLogin);
   }
   //Handle the server realted to login or signup
-  const handleSignOrLog = (): void => {
-    if (!CanClick) {
-      return;
+  async function handleSignOrLog(
+    login: boolean,
+    username: string,
+    password: string
+  ): Promise<void> {
+    try {
+      if (login) {
+        await handleLogin(username, password);
+      } else {
+        await handleSignup(username, password);
+        setCoolDown(true);
+      }
+      handlePulse(PULSE_TYPES.SUCCESS);
+    } catch (error) {
+      handlePulse(PULSE_TYPES.ERROR);
+      console.error("Error", error);
     }
-    if (login) {
-      handleLogin(username, password);
-    } else {
-      handleSignup(username, password);
-    }
-  };
+  }
 
+  useEffect(() => {
+    if (coolDown) {
+      const timer = setTimeout(() => setCoolDown(false), COOLDOWN_TIME);
+      return () => clearTimeout(timer);
+    }
+  }, [coolDown]);
   return (
     <>
       {/* Outside container */}
       <div className="LogSignContainer">
         {/* The inside container that holds the text boxes */}
         <div className="LogSignPage">
-          <div className="Input">
+          <div
+            className={`input ${
+              pulse === PULSE_TYPES.SUCCESS
+                ? PULSE_TYPES.SUCCESS
+                : pulse === PULSE_TYPES.ERROR
+                ? PULSE_TYPES.ERROR
+                : ""
+            }`}
+          >
             <input
               type="text"
               value={username}
-              onChange={handleUsernameChange}
+              onChange={(event) => handleChange(event, "username")}
               placeholder="Username"
             />
           </div>
-          <div className="Input">
+          <div
+            className={`input ${
+              pulse === PULSE_TYPES.SUCCESS
+                ? PULSE_TYPES.SUCCESS
+                : pulse === PULSE_TYPES.ERROR
+                ? PULSE_TYPES.ERROR
+                : ""
+            }`}
+          >
             <input
               type="password"
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(event) => handleChange(event, "password")}
               placeholder="Password"
             />
           </div>
-          <button className="loginOrSign" onClick={handleSignOrLog}>
+          <button
+            className="loginOrSign"
+            onClick={() => handleSignOrLog(login, username, password)}
+            disabled={coolDown}
+          >
             {login ? "Login" : "Signup"}
           </button>
           <button className="Switch" onClick={handleSwitch}>

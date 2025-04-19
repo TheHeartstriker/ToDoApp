@@ -8,7 +8,7 @@ function Groups() {
   const [ShowFolderCreate, setShowFolderCreate] = useState<boolean>(true);
   const [folderMainName, setFolderMainName] = useState<string>("");
   //Context values
-  const { folders, setFolders } = useContext(TaskContext) as Contexts;
+  const { folders = [], setFolders } = useContext(TaskContext) as Contexts;
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
 
   const handleFolderNameChange = (
