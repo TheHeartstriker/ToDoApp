@@ -4,12 +4,12 @@ export interface taskStuct {
   task_id: id;
   ToDoHeader: task;
   Description: description;
-  Folder: foldername;
+  Folder: folder;
   Completed: boolean;
 }
 
 export interface folderStruct {
-  folderName: folderName;
   folderOn: boolean;
   index: folders;
+  folder: folder;
 }

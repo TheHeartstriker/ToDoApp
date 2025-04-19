@@ -1,40 +1,22 @@
 import { taskStuct } from "../Types/Provider";
+import { errorChecker } from "../utils/errorApi";
 
-export async function GetFolders() {
-  const options: RequestInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-  };
+export async function getFolders() {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/getFolders`,
-      options
+      {
+        signal: controller.signal,
+        credentials: "include" as RequestCredentials,
+      }
     );
-    // Check if the response is ok (status code 200-299)
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    // Parse the response data and log it
-    const responseData = await response.json();
-
-    if (responseData.success) {
-      console.log(responseData.success, responseData.message || "No message");
-      return responseData;
-    } else {
-      console.error(
-        "Login failed:",
-        responseData.message || "No message",
-        responseData.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 

@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { TaskContext, Contexts } from "../../Components/TaskProvider";
 import { folderStruct } from "../../Types/Provider";
-import { GetFolders, deleteFolder } from "../../Services/toDoApi";
+import { getFolders, deleteFolder } from "../../Services/toDoApi";
 
 function Groups() {
   //Local state for the folder creator screen and the folders indvidual name
@@ -20,7 +20,7 @@ function Groups() {
   //Add a folder to the local object with realted mete data
   function addFolder(folderName: string) {
     const newFolder: folderStruct = {
-      folderName: folderName,
+      folder: folderName,
       folderOn: false,
       index: folders.length,
     };
@@ -40,7 +40,7 @@ function Groups() {
     let folderFound = false;
     folders.forEach((folder) => {
       if (folder.folderOn) {
-        setFoldername(folder.folderName);
+        setFoldername(folder.folder);
         folderFound = true;
       }
     });
@@ -67,55 +67,48 @@ function Groups() {
     setFolders(newFolders);
   }
 
-  async function fetchAndSetFolders() {
+  async function awaitFolders() {
     try {
-      const responseData = await GetFolders();
-      const data: { folder: string }[] = responseData.folders;
-      const folderData: folderStruct[] = data.map((folder, index: number) => {
-        const existingFolder = folders.find(
-          (f) => f.folderName === folder.folder
-        );
-        return {
-          folderName: folder.folder,
-          folderOn: existingFolder ? existingFolder.folderOn : false,
-          index: index,
-        };
-      });
-      setFolders(folderData);
+      const data = await getFolders();
+      setFolders(data.folders);
     } catch (error) {
-      console.error("Failed to fetch folders:", error);
+      console.error("Error fetching folders:", error);
     }
   }
+
   useEffect(() => {
     //This get excludes the default "" folder
-    GetFolders();
+    awaitFolders();
   }, []);
   //Re checks the folder values and sees if the foldername needs to be updated
   useEffect(() => {
-    CurrentFolder();
+    if (folders.length > 0) {
+      CurrentFolder();
+    }
   }, [folders]);
 
   return (
     <>
-      {folders.map((folder, index) => (
-        <div className="Folder" key={folder.folderName}>
-          <button
-            className={`FolderName ${folder.folderOn ? "FolderNameOn" : ""}`}
-            onClick={() => TrueFalseFolder(folder.index)}
-          >
-            {folder.folderName}
-          </button>
-          <button
-            className="FolderDelete"
-            onClick={() => {
-              deleteFolderLocal(folder.index);
-              deleteFolder(folder.folderName);
-            }}
-          >
-            Delete
-          </button>
-        </div>
-      ))}
+      {folders.length > 0 &&
+        folders.map((folder, index) => (
+          <div className="Folder" key={folder.folder}>
+            <button
+              className={`FolderName ${folder.folderOn ? "FolderNameOn" : ""}`}
+              onClick={() => TrueFalseFolder(folder.index)}
+            >
+              {folder.folder}
+            </button>
+            <button
+              className="FolderDelete"
+              onClick={() => {
+                deleteFolderLocal(folder.index);
+                deleteFolder(folder.folder);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
       {ShowFolderCreate && (
         <div className="FolderCreate">
           <input
