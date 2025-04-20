@@ -70,109 +70,74 @@ export async function sendTaskData(datatosend: taskStuct) {
 }
 
 export async function loadTaskData(foldername: string) {
-  const options: RequestInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-  };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${
         import.meta.env.VITE_API_BASE_URL
       }/api/getTododata?foldername=${encodeURIComponent(foldername)}`,
-      options
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const data = await response.json();
-    if (data.success) {
-      console.log("Response from server:", data.tasks, data.message);
-      return data;
-    } else {
-      console.error(
-        "Login failed:",
-        data.message || "No message",
-        data.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
 export async function deleteTask(task_id: string) {
-  const options: RequestInit = {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-    body: JSON.stringify({ Task: task_id }),
-  };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/deleteToDo`,
-      options
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task_id }),
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const data = await response.json();
-    if (data.success) {
-      console.log("Response from server:", data.message, data.success);
-      return data;
-    } else {
-      console.error(
-        "Login failed:",
-        data.message || "No message",
-        data.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
 export async function updateTaskComplete(task_id: string) {
-  const options: RequestInit = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-    body: JSON.stringify({ task_id }),
-  };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/updateToDo`,
-      options
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task_id }),
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const data = await response.json();
-    if (data.success) {
-      console.log("Response from server:", data.message, data.success);
-    } else {
-      console.error(
-        "Login failed:",
-        data.message || "No message",
-        data.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }

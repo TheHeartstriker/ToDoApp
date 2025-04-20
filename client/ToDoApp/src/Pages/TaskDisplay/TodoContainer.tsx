@@ -26,21 +26,10 @@ function Container() {
   async function fetchTaskData() {
     try {
       const data = await loadTaskData(foldername);
-      if (data && data.tasks) {
-        setTaskData(data.tasks);
-      }
+      setTaskData(data.tasks);
     } catch (error) {
       console.error("Error loading task data:", error);
     }
-  }
-
-  function LoadTaskData(Folder: string) {
-    const extendedTaskData = taskData.map((task, index) => ({
-      ...task,
-      Index: index,
-      inspect: false,
-    }));
-    setLocalTaskData(extendedTaskData);
   }
 
   //Removes a task filters out the task that needs to be removed
