@@ -26,7 +26,6 @@ export async function handleLogin(username: string, password: string) {
     return await errorChecker(response);
   } catch (error) {
     clearTimeout(timeoutId);
-    console.error("Error:", error);
     throw error;
   }
 }
@@ -55,7 +54,6 @@ export async function handleSignup(username: string, password: string) {
     return await errorChecker(response);
   } catch (error) {
     clearTimeout(timeoutId);
-    console.error("Error:", error);
     throw error;
   }
 }

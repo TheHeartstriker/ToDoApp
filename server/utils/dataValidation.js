@@ -1,7 +1,7 @@
 //
 // Example:
 // const var = 123;
-// const data = [{ var}];
+// const data = [{ var:var}];
 // const fieldTypes = [["var", "number", 3]];
 // validateData(data, fieldTypes);
 

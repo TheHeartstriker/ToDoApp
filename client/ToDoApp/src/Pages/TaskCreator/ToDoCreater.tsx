@@ -5,7 +5,7 @@ import { taskStuct } from "../../Types/Provider";
 import { sendTaskData } from "../../Services/toDoApi";
 function ToDoCreater() {
   //Main task data thats given to the server
-  const { taskData, setTaskData } = useContext(TaskContext) as Contexts;
+  const [taskData, setTaskData] = useState<taskStuct[]>([]);
   //User Id thats saved in Login.jsx and sent to the server when creating new tasks
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
 

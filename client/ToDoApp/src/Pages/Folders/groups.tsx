@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { TaskContext, Contexts } from "../../Components/TaskProvider";
 import { folderStruct } from "../../Types/Provider";
 import { getFolders, deleteFolder } from "../../Services/toDoApi";
@@ -8,16 +8,10 @@ function Groups() {
   const [ShowFolderCreate, setShowFolderCreate] = useState<boolean>(true);
   const [folderMainName, setFolderMainName] = useState<string>("");
   //Context values
-  const { folders = [], setFolders } = useContext(TaskContext) as Contexts;
+  const [folders, setFolders] = useState<folderStruct[]>([]);
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
 
-  const handleFolderNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFolderMainName(event.target.value);
-  };
-
-  //Add a folder to the local object with realted mete data
+  //Add a folder to local
   function addFolder(folderName: string) {
     const newFolder: folderStruct = {
       folder: folderName,
@@ -26,16 +20,7 @@ function Groups() {
     };
     setFolders((prevFolders) => [...prevFolders, newFolder]);
   }
-
-  //On of to show the folder creator
-  function ShowFolder() {
-    setShowFolderCreate(!ShowFolderCreate);
-  }
-  //Delete a folder based on index
-  function deleteFolderLocal(index: number) {
-    setFolders(folders.filter((folder) => folder.index !== index));
-  }
-  //If we have been clicked then name of the folder to the overhead
+  //Save current folder name
   function CurrentFolder() {
     let folderFound = false;
     folders.forEach((folder) => {
@@ -44,10 +29,15 @@ function Groups() {
         folderFound = true;
       }
     });
-    //If we have not found a folder then set the foldername to nothing
+    //Default folder
     if (!folderFound) {
       setFoldername("");
     }
+  }
+
+  //Delete a folder based on index
+  function deleteFolderLocal(index: number) {
+    setFolders(folders.filter((folder) => folder.index !== index));
   }
   //Used to change the folderOn value using the index
   function TrueFalseFolder(index: number) {
@@ -116,18 +106,24 @@ function Groups() {
             className="HeaderTask"
             placeholder="FolderName"
             value={folderMainName}
-            onChange={handleFolderNameChange}
+            onChange={() => setFolderMainName(folderMainName)}
           />
           <button id="AddFolder" onClick={() => addFolder(folderMainName)}>
             Create
           </button>
-          <button id="Clear" onClick={() => ShowFolder()}>
+          <button
+            id="Clear"
+            onClick={() => setShowFolderCreate(!ShowFolderCreate)}
+          >
             Clear
           </button>
         </div>
       )}
       {!ShowFolderCreate && (
-        <button className="ShowFolderCreate" onClick={() => ShowFolder()}>
+        <button
+          className="ShowFolderCreate"
+          onClick={() => setShowFolderCreate(!ShowFolderCreate)}
+        >
           View Creator
         </button>
       )}

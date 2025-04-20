@@ -20,5 +20,8 @@ router.get("/getTododata", authenticate, loadTasks);
 router.delete("/deleteFolder", authenticate, deleteFolder);
 router.delete("/deleteToDo", authenticate, deleteTask);
 router.put("/updateToDo", authenticate, updateTaskComplete);
+router.get("/validate", authenticate, (req, res) => {
+  res.status(200).json({ message: "Token is valid", success: true });
+});
 
 export default router;

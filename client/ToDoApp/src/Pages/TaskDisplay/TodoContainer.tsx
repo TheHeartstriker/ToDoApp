@@ -15,7 +15,7 @@ interface ExtendedTask extends taskStuct {
 function Container() {
   //Something is wrong in here that causes data that is loaded from the server to need another render to show up
   //Main task data thats given to the server
-  const { taskData, setTaskData } = useContext(TaskContext) as Contexts;
+  const [taskData, setTaskData] = useState<taskStuct[]>([]);
   //Check if we need to request things of the server
   //Folder name that we are currently in
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
