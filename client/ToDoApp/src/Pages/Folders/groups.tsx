@@ -1,121 +1,71 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { TaskContext, Contexts } from "../../Components/TaskProvider";
 import { folderStruct } from "../../Types/Provider";
-import { GetFolders, deleteFolder } from "../../Services/toDoApi";
+import { getFolders, deleteFolder } from "../../Services/toDoApi";
 
 function Groups() {
   //Local state for the folder creator screen and the folders indvidual name
   const [ShowFolderCreate, setShowFolderCreate] = useState<boolean>(true);
   const [folderMainName, setFolderMainName] = useState<string>("");
   //Context values
-  const { folders, setFolders } = useContext(TaskContext) as Contexts;
+  const [folders, setFolders] = useState<folderStruct[]>([]);
   const { foldername, setFoldername } = useContext(TaskContext) as Contexts;
 
-  const handleFolderNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFolderMainName(event.target.value);
-  };
-
-  //Add a folder to the local object with realted mete data
+  //Add a folder to local
   function addFolder(folderName: string) {
     const newFolder: folderStruct = {
-      folderName: folderName,
+      folder: folderName,
       folderOn: false,
       index: folders.length,
     };
     setFolders((prevFolders) => [...prevFolders, newFolder]);
   }
 
-  //On of to show the folder creator
-  function ShowFolder() {
-    setShowFolderCreate(!ShowFolderCreate);
-  }
   //Delete a folder based on index
   function deleteFolderLocal(index: number) {
     setFolders(folders.filter((folder) => folder.index !== index));
   }
-  //If we have been clicked then name of the folder to the overhead
-  function CurrentFolder() {
-    let folderFound = false;
-    folders.forEach((folder) => {
-      if (folder.folderOn) {
-        setFoldername(folder.folderName);
-        folderFound = true;
+
+  async function awaitFolders() {
+    try {
+      const data = await getFolders();
+      if (data.folders) {
+        setFolders(data.folders);
       }
-    });
-    //If we have not found a folder then set the foldername to nothing
-    if (!folderFound) {
-      setFoldername("");
+    } catch (error) {
+      console.error("Error fetching folders:", error);
     }
-  }
-  //Used to change the folderOn value using the index
-  function TrueFalseFolder(index: number) {
-    const newFolders = folders.map((folder) => {
-      if (folder.index === index) {
-        return {
-          ...folder,
-          folderOn: !folder.folderOn,
-        };
-      } else {
-        return {
-          ...folder,
-          folderOn: false,
-        };
-      }
-    });
-    setFolders(newFolders);
   }
 
-  async function fetchAndSetFolders() {
-    try {
-      const responseData = await GetFolders();
-      const data: { folder: string }[] = responseData.folders;
-      const folderData: folderStruct[] = data.map((folder, index: number) => {
-        const existingFolder = folders.find(
-          (f) => f.folderName === folder.folder
-        );
-        return {
-          folderName: folder.folder,
-          folderOn: existingFolder ? existingFolder.folderOn : false,
-          index: index,
-        };
-      });
-      setFolders(folderData);
-    } catch (error) {
-      console.error("Failed to fetch folders:", error);
-    }
-  }
   useEffect(() => {
-    //This get excludes the default "" folder
-    GetFolders();
+    awaitFolders();
   }, []);
-  //Re checks the folder values and sees if the foldername needs to be updated
-  useEffect(() => {
-    CurrentFolder();
-  }, [folders]);
 
   return (
     <>
-      {folders.map((folder, index) => (
-        <div className="Folder" key={folder.folderName}>
-          <button
-            className={`FolderName ${folder.folderOn ? "FolderNameOn" : ""}`}
-            onClick={() => TrueFalseFolder(folder.index)}
-          >
-            {folder.folderName}
-          </button>
-          <button
-            className="FolderDelete"
-            onClick={() => {
-              deleteFolderLocal(folder.index);
-              deleteFolder(folder.folderName);
-            }}
-          >
-            Delete
-          </button>
-        </div>
-      ))}
+      {folders.length > 0 &&
+        folders.map((folder, index) => (
+          <div className="Folder" key={folder.folder}>
+            <button
+              className={`FolderName ${
+                folder.folder === foldername ? "FolderNameOn" : ""
+              }`}
+              onClick={() => setFoldername(folder.folder)}
+              onDoubleClick={() => setFoldername("")}
+            >
+              {folder.folder}
+            </button>
+            <button
+              className="FolderDelete"
+              onClick={() => {
+                deleteFolderLocal(folder.index);
+                deleteFolder(folder.folder);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
       {ShowFolderCreate && (
         <div className="FolderCreate">
           <input
@@ -123,18 +73,24 @@ function Groups() {
             className="HeaderTask"
             placeholder="FolderName"
             value={folderMainName}
-            onChange={handleFolderNameChange}
+            onChange={(e) => setFolderMainName(e.target.value)}
           />
           <button id="AddFolder" onClick={() => addFolder(folderMainName)}>
             Create
           </button>
-          <button id="Clear" onClick={() => ShowFolder()}>
+          <button
+            id="Clear"
+            onClick={() => setShowFolderCreate(!ShowFolderCreate)}
+          >
             Clear
           </button>
         </div>
       )}
       {!ShowFolderCreate && (
-        <button className="ShowFolderCreate" onClick={() => ShowFolder()}>
+        <button
+          className="ShowFolderCreate"
+          onClick={() => setShowFolderCreate(!ShowFolderCreate)}
+        >
           View Creator
         </button>
       )}

@@ -10,7 +10,7 @@ const ConfigDb = new Sequelize(
   {
     host: process.env.MY_HOST,
     dialect: "mysql",
-    logging: false,
+    logging: console.log,
   }
 );
 

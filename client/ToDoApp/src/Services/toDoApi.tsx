@@ -1,222 +1,143 @@
 import { taskStuct } from "../Types/Provider";
+import { errorChecker } from "../utils/errorApi";
 
-export async function GetFolders() {
-  const options: RequestInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-  };
+export async function getFolders() {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/getFolders`,
-      options
+      {
+        signal: controller.signal,
+        credentials: "include" as RequestCredentials,
+      }
     );
-    // Check if the response is ok (status code 200-299)
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    // Parse the response data and log it
-    const responseData = await response.json();
-
-    if (responseData.success) {
-      console.log(responseData.success, responseData.message || "No message");
-      return responseData;
-    } else {
-      console.error(
-        "Login failed:",
-        responseData.message || "No message",
-        responseData.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
 export async function deleteFolder(FolderName: string) {
-  const options: RequestInit = {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-    body: JSON.stringify({ FolderName }),
-  };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/deleteFolder`,
-      options
+      {
+        signal: controller.signal,
+        credentials: "include" as RequestCredentials,
+        method: "DELETE",
+        body: JSON.stringify({ FolderName }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
-    // Check if the response is ok (status code 200-299)
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    // Parse the response data and log it
-    const responseData = await response.json();
-    if (responseData.success) {
-      console.log(responseData.success, responseData.message || "No message");
-      return responseData;
-    } else {
-      console.error(
-        "Login failed:",
-        responseData.message || "No message",
-        responseData.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
-export async function sendTaskData(datatosend: taskStuct): Promise<void> {
-  const options: RequestInit = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-    body: JSON.stringify(datatosend),
-  };
+export async function sendTaskData(datatosend: taskStuct) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/createToDo`,
-      options
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datatosend),
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const responseData = await response.json();
-    console.log("Response from server:", responseData.message);
-    if (responseData.success) {
-      console.log(responseData.success, responseData.message || "No message");
-      return responseData;
-    } else {
-      console.error(
-        "Login failed:",
-        responseData.message || "No message",
-        responseData.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
 export async function loadTaskData(foldername: string) {
-  const options: RequestInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-  };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${
         import.meta.env.VITE_API_BASE_URL
       }/api/getTododata?foldername=${encodeURIComponent(foldername)}`,
-      options
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const data = await response.json();
-    if (data.success) {
-      console.log("Response from server:", data.tasks, data.message);
-      return data;
-    } else {
-      console.error(
-        "Login failed:",
-        data.message || "No message",
-        data.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
 export async function deleteTask(task_id: string) {
-  const options: RequestInit = {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-    body: JSON.stringify({ Task: task_id }),
-  };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/deleteToDo`,
-      options
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task_id }),
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const data = await response.json();
-    if (data.success) {
-      console.log("Response from server:", data.message, data.success);
-      return data;
-    } else {
-      console.error(
-        "Login failed:",
-        data.message || "No message",
-        data.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
 
 export async function updateTaskComplete(task_id: string) {
-  const options: RequestInit = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include" as RequestCredentials,
-    body: JSON.stringify({ task_id }),
-  };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/api/updateToDo`,
-      options
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task_id }),
+        credentials: "include" as RequestCredentials,
+        signal: controller.signal,
+      }
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error:", errorData.message);
-      return;
-    }
-    const data = await response.json();
-    if (data.success) {
-      console.log("Response from server:", data.message, data.success);
-    } else {
-      console.error(
-        "Login failed:",
-        data.message || "No message",
-        data.success || "No success message"
-      );
-      return;
-    }
+    clearTimeout(timeoutId);
+    return await errorChecker(response);
   } catch (error) {
-    console.error("Error:", error);
+    clearTimeout(timeoutId);
+    return error;
   }
 }
