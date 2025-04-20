@@ -1,3 +1,6 @@
+import ToDo from "../models/ToDoModel.js";
+import { Op } from "sequelize";
+import { validateData } from "../utils/dataValidation.js";
 async function getFolders(req, res, next) {
   try {
     const userId = req.user.id;
@@ -16,6 +19,7 @@ async function getFolders(req, res, next) {
         .status(404)
         .json({ message: "No folders found", success: false });
     }
+
     res.status(200).json({ folders, success: true });
   } catch (error) {
     next(error);

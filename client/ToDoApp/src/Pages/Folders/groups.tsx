@@ -20,62 +20,26 @@ function Groups() {
     };
     setFolders((prevFolders) => [...prevFolders, newFolder]);
   }
-  //Save current folder name
-  function CurrentFolder() {
-    let folderFound = false;
-    folders.forEach((folder) => {
-      if (folder.folderOn) {
-        setFoldername(folder.folder);
-        folderFound = true;
-      }
-    });
-    //Default folder
-    if (!folderFound) {
-      setFoldername("");
-    }
-  }
 
   //Delete a folder based on index
   function deleteFolderLocal(index: number) {
     setFolders(folders.filter((folder) => folder.index !== index));
   }
-  //Used to change the folderOn value using the index
-  function TrueFalseFolder(index: number) {
-    const newFolders = folders.map((folder) => {
-      if (folder.index === index) {
-        return {
-          ...folder,
-          folderOn: !folder.folderOn,
-        };
-      } else {
-        return {
-          ...folder,
-          folderOn: false,
-        };
-      }
-    });
-    setFolders(newFolders);
-  }
 
   async function awaitFolders() {
     try {
       const data = await getFolders();
-      setFolders(data.folders);
+      if (data.folders) {
+        setFolders(data.folders);
+      }
     } catch (error) {
       console.error("Error fetching folders:", error);
     }
   }
 
   useEffect(() => {
-    //This get excludes the default "" folder
     awaitFolders();
   }, []);
-  //Re checks the folder values and sees if the foldername needs to be updated
-  useEffect(() => {
-    if (folders.length > 0) {
-      CurrentFolder();
-    }
-  }, [folders]);
 
   return (
     <>
@@ -83,8 +47,11 @@ function Groups() {
         folders.map((folder, index) => (
           <div className="Folder" key={folder.folder}>
             <button
-              className={`FolderName ${folder.folderOn ? "FolderNameOn" : ""}`}
-              onClick={() => TrueFalseFolder(folder.index)}
+              className={`FolderName ${
+                folder.folder === foldername ? "FolderNameOn" : ""
+              }`}
+              onClick={() => setFoldername(folder.folder)}
+              onDoubleClick={() => setFoldername("")}
             >
               {folder.folder}
             </button>
@@ -106,7 +73,7 @@ function Groups() {
             className="HeaderTask"
             placeholder="FolderName"
             value={folderMainName}
-            onChange={() => setFolderMainName(folderMainName)}
+            onChange={(e) => setFolderMainName(e.target.value)}
           />
           <button id="AddFolder" onClick={() => addFolder(folderMainName)}>
             Create
