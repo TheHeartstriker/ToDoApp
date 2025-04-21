@@ -2,37 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import { animate, stagger, utils } from "animejs";
 function GridAnimation() {
   const gridSizeRef = useRef({ cols: 0, rows: 0 });
-  function handleResize() {
-    const gridElement = document.querySelector(".grid") as HTMLElement;
-    if (!gridElement) return;
-    // Clear the grid element
-    gridElement.innerHTML = "";
+  const isAnimatingRef = useRef(false);
+  const animationIdRef = useRef<number | null>(null);
+  const animationRef = useRef<any>(null);
 
-    // Calculate the number of columns and rows
-    const columns = Math.floor(gridElement.clientWidth / 100);
-    const rows = Math.floor(gridElement.clientHeight / 100);
-    gridElement.style.setProperty("--cols", columns.toString());
-    gridElement.style.setProperty("--rows", rows.toString());
-
-    gridSizeRef.current = { cols: columns, rows: rows };
-
-    // Create tiles directly in the grid element
-    createTiles(gridElement, columns, rows);
-  }
-
+  //Creates a single tile with a parent container
   function createTile(gridElement: HTMLElement, columns: number, rows: number) {
-    // Create a parent container for the tile
     const tileContainer = document.createElement("div");
     tileContainer.className = "tile-container";
 
-    // Create the tile itself
     const tile = document.createElement("div");
     tile.className = "tile";
 
-    // Append the tile to the parent container
     tileContainer.appendChild(tile);
 
-    // Append the parent container to the grid
     gridElement.appendChild(tileContainer);
   }
 
@@ -45,17 +28,30 @@ function GridAnimation() {
       createTile(gridElement, columns, rows);
     }
   }
+  //Handles screen resize manipulating grid size
+  function handleResize() {
+    const gridElement = document.querySelector(".grid") as HTMLElement;
+    if (!gridElement) return;
+    // Clear the grid element
+    gridElement.innerHTML = "";
+    const columns = Math.floor(gridElement.clientWidth / 100);
+    const rows = Math.floor(gridElement.clientHeight / 100);
+    gridElement.style.setProperty("--cols", columns.toString());
+    gridElement.style.setProperty("--rows", rows.toString());
 
-  let isAnimating = false;
+    gridSizeRef.current = { cols: columns, rows: rows };
 
+    createTiles(gridElement, columns, rows);
+  }
+
+  //Uses animejs to animate the tiles in a loop
   function animateTiles() {
     const gridElement = document.querySelector(".grid") as HTMLElement;
     if (!gridElement) return;
-    if (isAnimating) return;
-    isAnimating = true;
-
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
     const tiles = document.querySelectorAll(".tile");
-    animate(tiles, {
+    const animation = animate(tiles, {
       scale: [{ to: [0, 1.25] }, { to: 0 }],
       boxShadow: [
         { to: "0 0 3rem 0 currentColor" },
@@ -71,17 +67,26 @@ function GridAnimation() {
       duration: 1000,
       easing: "inOutElastic",
       onComplete: () => {
-        isAnimating = false;
-        requestAnimationFrame(animateTiles);
+        isAnimatingRef.current = false;
+        animationIdRef.current = requestAnimationFrame(animateTiles);
       },
     });
+    animationRef.current = animation;
   }
 
   useEffect(() => {
     const gridElement = document.querySelector(".grid") as HTMLElement;
     if (!gridElement) return;
-
     animateTiles();
+    return () => {
+      // Clean aniframe and animation instance
+      if (animationRef.current) {
+        animationRef.current.cancel();
+      }
+      if (animationIdRef.current !== null) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {

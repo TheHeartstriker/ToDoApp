@@ -1,7 +1,7 @@
 import { useState, useContext, useRef, useEffect } from "react";
-import { handleLogin, handleSignup } from "../../Services/authApi";
+import { handleLogin, handleSignup } from "../../services/authApi";
 import GridAnimation from "./grid";
-import React from "react";
+import "./navLogin.css";
 
 const MAX_INPUT_LENGTH = 50;
 const COOLDOWN_TIME = 30000;

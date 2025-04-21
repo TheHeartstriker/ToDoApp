@@ -1,8 +1,9 @@
 import { useState, useContext, useRef, useEffect } from "react";
-import { TaskContext, Contexts } from "../../Components/TaskProvider";
+import { TaskContext, Contexts } from "../../components/taskProvider";
 import { v4 as uuidv4 } from "uuid";
-import { taskStuct } from "../../Types/Provider";
-import { sendTaskData } from "../../Services/toDoApi";
+import { taskStuct } from "../../types/Provider";
+import { sendTaskData } from "../../services/toDoApi";
+import "./creator.css";
 function ToDoCreater() {
   //Main task data thats given to the server
   const [taskData, setTaskData] = useState<taskStuct[]>([]);

@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { TaskContext, Contexts } from "../../Components/TaskProvider";
-import { taskStuct } from "../../Types/Provider";
+import { TaskContext, Contexts } from "../../components/taskProvider";
+import { taskStuct } from "../../types/Provider";
 import {
   loadTaskData,
   deleteTask,
   updateTaskComplete,
-} from "../../Services/toDoApi";
+} from "../../services/toDoApi";
+import "./task.css";
 
 interface ExtendedTask extends taskStuct {
   inspect?: boolean;

@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { TaskContext, Contexts } from "../../Components/TaskProvider";
-import { folderStruct } from "../../Types/Provider";
-import { getFolders, deleteFolder } from "../../Services/toDoApi";
+import { TaskContext, Contexts } from "../../components/taskProvider";
+import { folderStruct } from "../../types/Provider";
+import { getFolders, deleteFolder } from "../../services/toDoApi";
+import "./check-Folder.css";
 
 function Groups() {
   //Local state for the folder creator screen and the folders indvidual name

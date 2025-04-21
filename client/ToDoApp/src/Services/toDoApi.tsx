@@ -1,4 +1,4 @@
-import { taskStuct } from "../Types/Provider";
+import { taskStuct } from "../types/Provider";
 import { errorChecker } from "../utils/errorApi";
 
 export async function getFolders() {
