@@ -1,5 +1,6 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { handleLogin, handleSignup } from "../../Services/authApi";
+import GridAnimation from "./grid";
 import React from "react";
 
 const MAX_INPUT_LENGTH = 50;
@@ -78,8 +79,10 @@ function Login() {
     <>
       {/* Outside container */}
       <div className="LogSignContainer">
+        {/* The grid animation */}
+        <GridAnimation />
         {/* The inside container that holds the text boxes */}
-        <div className="LogSignPage">
+        {/* <div className="LogSignPage">
           <div
             className={`input ${
               pulse === PULSE_TYPES.SUCCESS
@@ -122,14 +125,7 @@ function Login() {
           <button className="Switch" onClick={handleSwitch}>
             {login ? "Switch to Signup" : "Switch to Login"}
           </button>
-        </div>
-        <div className="AniWrap">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+        </div> */}
       </div>
     </>
   );

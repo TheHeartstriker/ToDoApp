@@ -15,6 +15,7 @@ import "./Pages/Folders/Check-Folder.css";
 import "./Pages/TaskDisplay/Task.css";
 import "./Pages/TaskCreator/Creator.css";
 import "./Components/Nav/Nav.css";
+import "./Site.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <TaskProvider>
