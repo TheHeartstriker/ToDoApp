@@ -16,25 +16,18 @@
   border-radius: 5px;
   height: 12vh;
   width: 100vw;
-  background: linear-gradient(to right, var(--Light-Cyan), var(--Dark-pink));
+  background: black;
   font-size: 1rem;
 }
 /* Buttons contained at the top of the page */
 .ContainerHeader button {
-  font-size: 0.8em;
-  border: 5px solid var(--Dark-pink);
-  background-color: var(--Light-pink);
+  font-size: 1em;
+  /* font-family: "Roboto Mono", sans-serif; */
+  background-color: #b7ff54;
   border-radius: 5px;
-  margin: 10px;
+  margin: 20px;
   padding: 10px;
   height: 10vh;
   width: 10vh;
-  transition: background-color 0.5s ease;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.ContainerHeader button:hover {
-  background-color: var(--Middle-Pink);
+  border: none;
 }

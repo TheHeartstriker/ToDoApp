@@ -82,7 +82,7 @@ function Login() {
         {/* The grid animation */}
         <GridAnimation />
         {/* The inside container that holds the text boxes */}
-        {/* <div className="LogSignPage">
+        <div className="LogSignPage">
           <div
             className={`input ${
               pulse === PULSE_TYPES.SUCCESS
@@ -125,7 +125,7 @@ function Login() {
           <button className="Switch" onClick={handleSwitch}>
             {login ? "Switch to Signup" : "Switch to Login"}
           </button>
-        </div> */}
+        </div>
       </div>
     </>
   );

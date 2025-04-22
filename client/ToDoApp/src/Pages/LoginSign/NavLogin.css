@@ -15,6 +15,7 @@
 
 /* Container that holds the LogSingin box */
 .LogSignContainer {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,23 +32,9 @@
   justify-content: center;
   height: 65vh;
   width: 65vh;
-  background: linear-gradient(to bottom, var(--Dark-pink), var(--Cyan));
+  background: #070707;
   border-radius: 15px;
-  overflow: hidden;
-}
-
-.LogSignPage::before {
-  z-index: -1;
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 5px solid transparent;
-  border-image: linear-gradient(to right, var(--Dark-pink), var(--Cyan)) 1;
-  border-radius: 15px;
-  pointer-events: none;
+  border: #94cc44 solid 3px;
 }
 
 /* The Input is the text boxes the are used to send the username and password */
@@ -63,10 +50,8 @@
   border-radius: 2.5px;
   flex: 1;
   border: 5px solid transparent;
-  background-color: var(--Middle-Pink);
+  background-color: #a9eb4c;
   margin: 10px 0;
-  box-shadow: 0 8px 16px var(--Dark-pink);
-  text-shadow: 2px 2px 4px rgba(17, 154, 196, 0.3);
 }
 .input.Gpulse input {
   animation: pulse-animationG 2.5s ease-in-out;
@@ -78,26 +63,29 @@
 }
 /* The switch button */
 .Switch {
-  background-color: var(--Middle-Pink);
+  background-color: #739933;
   margin: 10px;
   border-radius: 5px;
   height: 10%;
   width: 10%;
-  border: 3.5px var(--Silver-Blue) solid;
+  border: none;
 }
 /* The button that either logs the user in or signs them up */
 .loginOrSign {
   height: 10%;
   width: 20%;
-  background-color: var(--Cyan);
+  background-color: #739933;
   border: 3.5px solid var(--Silver-Blue);
   border-radius: 5px;
   margin: 10px;
+  border: none;
 }
 
 .grid {
-  position: relative;
+  position: absolute;
   overflow: hidden;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: grid;
@@ -120,26 +108,10 @@
   height: 100%;
 
   border-radius: 15px;
-  background-color: #6aff65;
-  color: #6aff65;
+  background-color: #7db62d;
+  color: #7db62d;
   transform: scale(0);
 }
-/* .tile::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.3),
-    rgba(0, 0, 0, 0.1)
-  );
-  border-radius: 15px;
-  z-index: -1;
-  pointer-events: none;
-} */
 
 /* Animations to notifiy the user if something was successful */
 .AnimatePulseRed {
