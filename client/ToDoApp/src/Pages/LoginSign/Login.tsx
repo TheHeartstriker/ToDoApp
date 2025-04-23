@@ -1,6 +1,5 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { handleLogin, handleSignup } from "../../services/authApi";
-import GridAnimation from "./grid";
 import "./navLogin.css";
 
 const MAX_INPUT_LENGTH = 50;
@@ -78,9 +77,7 @@ function Login() {
   return (
     <>
       {/* Outside container */}
-      <GridAnimation />
       <div className="LogSignContainer">
-        {/* The grid animation */}
         {/* The inside container that holds the text boxes */}
         <div className="LogSignPage">
           <div

@@ -87,38 +87,6 @@
   cursor: pointer;
 }
 
-.grid {
-  position: absolute;
-  overflow: hidden;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  gap: 15px;
-  grid-template-rows: repeat(var(--rows), 1fr);
-  grid-template-columns: repeat(var(--cols), 1fr);
-}
-
-.tile-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  border-radius: 15px;
-}
-
-.tile {
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  border-radius: 15px;
-  background-color: var(--accent3);
-  color: var(--accent3);
-  transform: scale(0);
-}
-
 /* Animations to notifiy the user if something was successful */
 .AnimatePulseRed {
   animation: PulseRed 3s ease-in-out;

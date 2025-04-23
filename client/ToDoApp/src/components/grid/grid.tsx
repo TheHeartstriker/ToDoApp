@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, stagger, utils } from "animejs";
+import "./grid.css";
 function GridAnimation() {
   const gridSizeRef = useRef({ cols: 0, rows: 0 });
   const isAnimatingRef = useRef(false);

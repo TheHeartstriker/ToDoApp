@@ -65,17 +65,19 @@ function ToDoCreater() {
           value={TaskDescription}
           onChange={(event) => handleTaskChange(event, "description")}
         />
-        <button
-          className="Add"
-          onClick={async () => {
-            await addTask(TaskName, TaskDescription);
-          }}
-        >
-          Create
-        </button>
-        <button className="Reset" onClick={handleReset}>
-          Reset
-        </button>
+        <div className="btn-container">
+          <button
+            className="btn_submit"
+            onClick={async () => {
+              await addTask(TaskName, TaskDescription);
+            }}
+          >
+            Create
+          </button>
+          <button className="btn_submit" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
       </div>
     </>
   );

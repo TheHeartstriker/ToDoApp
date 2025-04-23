@@ -76,6 +76,7 @@ function Container() {
               onChange={() => Completed(item.Index)}
             />
           )}
+          {item.inspect && <p>{item.Description}</p>}
           {item.inspect && (
             <button
               className="DeleteBtn"
@@ -84,7 +85,6 @@ function Container() {
               Delete
             </button>
           )}
-          {item.inspect && <p>{item.Description}</p>}
           <div className="Inspect">
             <button onClick={() => Inspect(item.Index)}></button>
           </div>
