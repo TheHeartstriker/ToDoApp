@@ -1,16 +1,10 @@
 :root {
-  --Dark-pink: hsl(340, 76%, 50%);
-  --Light-pink: hsl(355, 100%, 81%);
-  --Middle-Pink: #ff577e;
-  /* Pink and blue are opposite on the color wheel */
-  --Dark-Blue: rgb(0, 0, 128);
-  --Cyan: rgb(43, 195, 226);
-  --Light-Cyan: rgb(150, 195, 226);
-  /* Netural silver blue */
-  --Silver-Blue: rgb(200, 255, 250);
-  /* Grid */
-  --rows: 0;
-  --cols: 0;
+  --main-: #b7ff54;
+  --background: #0d0d0d;
+  --cardColor: #070707;
+  --accent1: #94cc44;
+  --accent2: #739933;
+  --accent3: #7db62d;
 }
 
 /* Container that holds the LogSingin box */
@@ -34,7 +28,7 @@
   width: 65vh;
   background: #070707;
   border-radius: 15px;
-  border: #94cc44 solid 3px;
+  border: var(--accent1) solid 3px;
 }
 
 /* The Input is the text boxes the are used to send the username and password */
@@ -47,11 +41,14 @@
 }
 
 .input input {
-  border-radius: 2.5px;
+  border-radius: 20px;
   flex: 1;
   border: 5px solid transparent;
-  background-color: #a9eb4c;
+  background-color: var(--accent1);
+  font-family: "Roboto Mono", sans-serif;
+  font-size: 1em;
   margin: 10px 0;
+  outline: none;
 }
 .input.Gpulse input {
   animation: pulse-animationG 2.5s ease-in-out;
@@ -63,22 +60,25 @@
 }
 /* The switch button */
 .Switch {
-  background-color: #739933;
+  background-color: var(--accent2);
   margin: 10px;
-  border-radius: 5px;
+  border-radius: 50%;
   height: 10%;
   width: 10%;
   border: none;
+  cursor: pointer;
 }
 /* The button that either logs the user in or signs them up */
 .loginOrSign {
   height: 10%;
   width: 20%;
-  background-color: #739933;
+  background-color: var(--accent2);
   border: 3.5px solid var(--Silver-Blue);
-  border-radius: 5px;
+  color: var(--main-);
+  border-radius: 10px;
   margin: 10px;
   border: none;
+  cursor: pointer;
 }
 
 .grid {
@@ -108,8 +108,8 @@
   height: 100%;
 
   border-radius: 15px;
-  background-color: #7db62d;
-  color: #7db62d;
+  background-color: var(--accent3);
+  color: var(--accent3);
   transform: scale(0);
 }
 

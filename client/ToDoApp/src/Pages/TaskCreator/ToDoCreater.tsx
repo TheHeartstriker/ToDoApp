@@ -54,7 +54,7 @@ function ToDoCreater() {
       <div className="Creator">
         <input
           type="text"
-          className="HeaderTask"
+          className="headerTask"
           placeholder="Task Name"
           value={TaskName}
           onChange={(event) => handleTaskChange(event, "name")}
