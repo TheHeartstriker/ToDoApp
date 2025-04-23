@@ -78,9 +78,9 @@ function Login() {
   return (
     <>
       {/* Outside container */}
+      <GridAnimation />
       <div className="LogSignContainer">
         {/* The grid animation */}
-        <GridAnimation />
         {/* The inside container that holds the text boxes */}
         <div className="LogSignPage">
           <div

@@ -1,22 +1,29 @@
 :root {
-  --Dark-pink: hsl(340, 76%, 50%);
-  --Light-pink: hsl(355, 100%, 81%);
-  --Middle-Pink: #ff577e;
-  /* Pink and blue are opposite on the color wheel */
-  --Dark-Blue: rgb(0, 0, 128);
-  --Cyan: rgb(43, 195, 226);
-  --Light-Cyan: rgb(150, 195, 226);
+  --main-: #b7ff54;
+  --cardColor: #d4ff92;
+  --accent1: #c6ff75;
+  /* Tile color */
+  --accent3: #c6ff75;
+  /* Darker contrast greens */
+  --pine: #235c2d;
+  --darkGreen: #144d36;
+
+  --textColor: #1a1a1a;
+  --shadowColor: #3c3c3c;
 }
 /* The naviagtion bar realted at the top of the page */
 .ContainerHeader {
   position: relative;
   z-index: 1;
   display: flex;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
-  border-radius: 5px;
-  height: 12vh;
-  width: 100vw;
-  background: black;
+  height: 13vh;
+  width: 35vw;
+  background: #235c2d;
   font-size: 1rem;
 }
 /* Buttons contained at the top of the page */

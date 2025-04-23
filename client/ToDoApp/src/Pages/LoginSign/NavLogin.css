@@ -1,10 +1,15 @@
 :root {
   --main-: #b7ff54;
-  --background: #0d0d0d;
-  --cardColor: #070707;
-  --accent1: #94cc44;
-  --accent2: #739933;
-  --accent3: #7db62d;
+  --cardColor: #d4ff92;
+  --accent1: #c6ff75;
+  /* Tile color */
+  --accent3: #c6ff75;
+  /* Darker contrast greens */
+  --pine: #235c2d;
+  --darkGreen: #144d36;
+
+  --textColor: #1a1a1a;
+  --shadowColor: #3c3c3c;
 }
 
 /* Container that holds the LogSingin box */
@@ -26,9 +31,9 @@
   justify-content: center;
   height: 65vh;
   width: 65vh;
-  background: #070707;
+  background: var(--cardColor);
   border-radius: 15px;
-  border: var(--accent1) solid 3px;
+  border: var(--darkGreen) solid 3px;
 }
 
 /* The Input is the text boxes the are used to send the username and password */
@@ -45,6 +50,7 @@
   flex: 1;
   border: 5px solid transparent;
   background-color: var(--accent1);
+  color: var(--textColor);
   font-family: "Roboto Mono", sans-serif;
   font-size: 1em;
   margin: 10px 0;
@@ -60,7 +66,8 @@
 }
 /* The switch button */
 .Switch {
-  background-color: var(--accent2);
+  background-color: var(--pine);
+  color: var(--main-);
   margin: 10px;
   border-radius: 50%;
   height: 10%;
@@ -72,8 +79,7 @@
 .loginOrSign {
   height: 10%;
   width: 20%;
-  background-color: var(--accent2);
-  border: 3.5px solid var(--Silver-Blue);
+  background-color: var(--pine);
   color: var(--main-);
   border-radius: 10px;
   margin: 10px;
