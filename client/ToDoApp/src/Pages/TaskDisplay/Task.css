@@ -1,95 +1,64 @@
 :root {
-  --Dark-pink: hsl(340, 76%, 50%);
-  --Light-pink: hsl(355, 100%, 81%);
-  --Middle-Pink: #ff577e;
-  --Cyan: rgb(43, 195, 226);
-  --Light-Cyan: rgb(150, 195, 226);
-}
+  --main-: #b7ff54;
+  --cardColor: #d4ff92;
+  --accent1: #c6ff75;
+  /* Tile color */
+  --accent3: #c6ff75;
+  /* Darker contrast greens */
+  --pine: #235c2d;
+  --darkGreen: #144d36;
 
-body {
-  background-color: hsl(0, 5%, 5%);
-  font-family: "Roboto", sans-serif;
-  margin: 0;
-  padding: 0;
+  --textColor: #1a1a1a;
+  --shadowColor: #3c3c3c;
 }
 
 /* Invisable todo container  */
 .ToDoContainer {
   position: relative;
   display: grid;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   gap: 100px;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  background-color: hsl(0, 5%, 5%);
-  border-color: #000000;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 /* The grid items(the visable tasks that are created) */
 .Task {
   position: relative;
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  border: 5px solid var(--Light-Cyan);
-  box-shadow: 0 0 10px var(--Light-Cyan);
-
-  background-color: var(--Dark-pink);
-
-  margin: 75px;
-  aspect-ratio: 1 / 1;
-  border-radius: 5px;
-  color: #ffffff;
-  padding: 10px;
-  height: 15vw;
-  width: 15vw;
+  border: 5px solid var(--darkGreen);
+  background-color: var(--accent1);
+  cursor: pointer;
+  margin: 100px;
+  border-radius: 15px;
+  height: auto;
+  aspect-ratio: 1;
   transition: all 1s ease;
 }
 /* The taskname */
 .Task h3 {
-  color: #ffffff;
-  z-index: 1;
   position: relative;
 }
 /* The elements that are applyed when a task is to be inspected */
 .Task.inspected {
-  z-index: 3;
-  position: absolute;
-  text-align: center;
-  border: 5px solid var(--Middle-Pink);
-  background-color: hsl(340, 76%, 50%);
-
-  left: 50%;
-  top: 50%;
-  margin: 0;
-  transform: translate(-50%, -50%);
-  height: 800px;
-  width: 800px;
-  opacity: 1;
+  transform: scale(1.4);
 }
 
-.Task.inspected h1 {
-  color: #ffffff;
-  z-index: 2;
-  position: relative;
-}
 /* Hide any overflow */
 .Task.inspected h3 {
   visibility: hidden;
 }
 
-.Task.inspected p {
-  color: #ffffff;
-  z-index: 2;
-  position: relative;
-}
 /* The checkbox inside the Task aka the task */
 .CheckBtn {
   position: absolute;
   z-index: 2;
   top: 50%;
   left: 50%;
-  height: 5vh;
-  width: 5vh;
+  height: 15%;
+  width: 15%;
   transform: translate(-50%, -50%);
   cursor: pointer;
   border-radius: 50%;
@@ -115,12 +84,15 @@ body {
 
 .DeleteBtn {
   position: absolute;
-  background-color: var(--Middle-Pink);
-  right: 0%;
-  bottom: 0%;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: var(--darkGreen);
   border: none;
   height: 10%;
-  width: 100%;
+  width: 50%;
   z-index: 2;
 }
 /* The button that applys inspect to an element */
@@ -133,4 +105,19 @@ body {
   width: 100%;
   bottom: 0;
   right: 0;
+}
+
+@media (max-width: 1000px) {
+  .Task {
+    margin: 50px;
+  }
+  .ToDoContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1500px) {
+  .Task {
+    margin: 50px;
+  }
 }

@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from "react";
-import { handleLogin, handleSignup } from "../../Services/authApi";
-import React from "react";
+import { handleLogin, handleSignup } from "../../services/authApi";
+import "./navLogin.css";
 
 const MAX_INPUT_LENGTH = 50;
 const COOLDOWN_TIME = 30000;
@@ -122,13 +122,6 @@ function Login() {
           <button className="Switch" onClick={handleSwitch}>
             {login ? "Switch to Signup" : "Switch to Login"}
           </button>
-        </div>
-        <div className="AniWrap">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
         </div>
       </div>
     </>

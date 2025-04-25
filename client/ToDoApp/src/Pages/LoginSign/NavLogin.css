@@ -1,17 +1,20 @@
 :root {
-  --Dark-pink: hsl(340, 76%, 50%);
-  --Light-pink: hsl(355, 100%, 81%);
-  --Middle-Pink: #ff577e;
-  /* Pink and blue are opposite on the color wheel */
-  --Dark-Blue: rgb(0, 0, 128);
-  --Cyan: rgb(43, 195, 226);
-  --Light-Cyan: rgb(150, 195, 226);
-  /* Netural silver blue */
-  --Silver-Blue: rgb(200, 255, 250);
+  --main-: #b7ff54;
+  --cardColor: #d4ff92;
+  --accent1: #c6ff75;
+  /* Tile color */
+  --accent3: #c6ff75;
+  /* Darker contrast greens */
+  --pine: #235c2d;
+  --darkGreen: #144d36;
+
+  --textColor: #1a1a1a;
+  --shadowColor: #3c3c3c;
 }
 
 /* Container that holds the LogSingin box */
 .LogSignContainer {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,23 +31,9 @@
   justify-content: center;
   height: 65vh;
   width: 65vh;
-  background: linear-gradient(to bottom, var(--Dark-pink), var(--Cyan));
+  background: var(--cardColor);
   border-radius: 15px;
-  overflow: hidden;
-}
-
-.LogSignPage::before {
-  z-index: -1;
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 5px solid transparent;
-  border-image: linear-gradient(to right, var(--Dark-pink), var(--Cyan)) 1;
-  border-radius: 15px;
-  pointer-events: none;
+  border: var(--darkGreen) solid 3px;
 }
 
 /* The Input is the text boxes the are used to send the username and password */
@@ -57,13 +46,15 @@
 }
 
 .input input {
-  border-radius: 2.5px;
+  border-radius: 20px;
   flex: 1;
   border: 5px solid transparent;
-  background-color: var(--Middle-Pink);
+  background-color: var(--accent1);
+  color: var(--textColor);
+  font-family: "Roboto Mono", sans-serif;
+  font-size: 1em;
   margin: 10px 0;
-  box-shadow: 0 8px 16px var(--Dark-pink);
-  text-shadow: 2px 2px 4px rgba(17, 154, 196, 0.3);
+  outline: none;
 }
 .input.Gpulse input {
   animation: pulse-animationG 2.5s ease-in-out;
@@ -75,83 +66,29 @@
 }
 /* The switch button */
 .Switch {
-  background-color: var(--Middle-Pink);
+  background-color: var(--pine);
+  color: var(--main-);
+  font-family: "Roboto Mono", sans-serif;
   margin: 10px;
-  border-radius: 5px;
-  height: 10%;
-  width: 10%;
-  border: 3.5px var(--Silver-Blue) solid;
+  border-radius: 50%;
+  height: 13%;
+  width: 13%;
+  border: none;
+  cursor: pointer;
 }
 /* The button that either logs the user in or signs them up */
 .loginOrSign {
   height: 10%;
-  width: 20%;
-  background-color: var(--Cyan);
-  border: 3.5px solid var(--Silver-Blue);
-  border-radius: 5px;
+  width: 25%;
+  background-color: var(--pine);
+  font-family: "Roboto Mono", sans-serif;
+  color: var(--main-);
+  border-radius: 10px;
   margin: 10px;
-}
-/* Background spining cubes */
-.AniWrap span {
-  position: fixed;
-  bottom: -180px;
-  height: 50px;
-  width: 50px;
-  z-index: -1;
-  background-color: rgb(0, 0, 0);
-  box-shadow: 0 0 50px var(--Dark-pink), 0 0 100px var(--Dark-pink),
-    0 0 150px var(--Dark-pink), 0 0 200px var(--Dark-pink);
-  animation: animate 10s linear infinite;
+  border: none;
+  cursor: pointer;
 }
 
-.AniWrap span:nth-child(1) {
-  left: 10%;
-  animation-delay: 1s;
-  width: 80px;
-  height: 80px;
-}
-
-.AniWrap span:nth-child(2) {
-  left: 30%;
-  animation-delay: 0.5s;
-  width: 50px;
-  height: 50px;
-}
-
-.AniWrap span:nth-child(3) {
-  left: 50%;
-  animation-delay: 5s;
-  width: 130px;
-  height: 130px;
-}
-
-.AniWrap span:nth-child(4) {
-  left: 80%;
-  animation-delay: 0.5s;
-  width: 50px;
-  height: 50px;
-}
-
-.AniWrap span:nth-child(5) {
-  left: 100%;
-  animation-delay: 1.5s;
-  width: 100px;
-  height: 100px;
-}
-
-@keyframes animate {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(-1000px) rotate(720deg);
-    opacity: 0;
-  }
-}
 /* Animations to notifiy the user if something was successful */
 .AnimatePulseRed {
   animation: PulseRed 3s ease-in-out;

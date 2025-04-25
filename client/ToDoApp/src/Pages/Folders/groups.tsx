@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { TaskContext, Contexts } from "../../Components/TaskProvider";
-import { folderStruct } from "../../Types/Provider";
-import { getFolders, deleteFolder } from "../../Services/toDoApi";
+import { TaskContext, Contexts } from "../../components/taskProvider";
+import { folderStruct } from "../../types/Provider";
+import { getFolders, deleteFolder } from "../../services/toDoApi";
+import "./check-Folder.css";
 
 function Groups() {
   //Local state for the folder creator screen and the folders indvidual name
@@ -21,8 +22,12 @@ function Groups() {
     setFolders((prevFolders) => [...prevFolders, newFolder]);
   }
 
-  //Delete a folder based on index
+  //Delete a folder based on index and set to "" if deleted folder is the current one
   function deleteFolderLocal(index: number) {
+    const folderToDelete = folders.find((folder) => folder.index === index);
+    if (folderToDelete && folderToDelete.folder === foldername) {
+      setFoldername("");
+    }
     setFolders(folders.filter((folder) => folder.index !== index));
   }
 
@@ -75,11 +80,14 @@ function Groups() {
             value={folderMainName}
             onChange={(e) => setFolderMainName(e.target.value)}
           />
-          <button id="AddFolder" onClick={() => addFolder(folderMainName)}>
+          <button
+            className="action_btn"
+            onClick={() => addFolder(folderMainName)}
+          >
             Create
           </button>
           <button
-            id="Clear"
+            className="action_btn"
             onClick={() => setShowFolderCreate(!ShowFolderCreate)}
           >
             Clear

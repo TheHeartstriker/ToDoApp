@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { TaskContext, Contexts } from "../../Components/TaskProvider";
-import { taskStuct } from "../../Types/Provider";
+import { TaskContext, Contexts } from "../../components/taskProvider";
+import { taskStuct } from "../../types/Provider";
 import {
   loadTaskData,
   deleteTask,
   updateTaskComplete,
-} from "../../Services/toDoApi";
+} from "../../services/toDoApi";
+import "./task.css";
 
 interface ExtendedTask extends taskStuct {
   inspect?: boolean;
@@ -34,7 +35,8 @@ function Container() {
     setTaskData((prevTaskData) =>
       prevTaskData.filter((task) => task.task_id !== id)
     );
-    deleteTask(id);
+
+    deleteTask(taskData[index].task_id);
   }
 
   function Completed(index: number) {
@@ -75,6 +77,7 @@ function Container() {
               onChange={() => Completed(item.Index)}
             />
           )}
+          {item.inspect && <p>{item.Description}</p>}
           {item.inspect && (
             <button
               className="DeleteBtn"
@@ -83,7 +86,6 @@ function Container() {
               Delete
             </button>
           )}
-          {item.inspect && <p>{item.Description}</p>}
           <div className="Inspect">
             <button onClick={() => Inspect(item.Index)}></button>
           </div>

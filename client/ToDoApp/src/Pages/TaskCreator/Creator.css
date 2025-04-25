@@ -1,25 +1,29 @@
 /* Create todo styles */
 :root {
-  --Dark-pink: hsl(340, 76%, 50%);
-  --Light-pink: hsl(355, 100%, 81%);
-  --Middle-Pink: #ff577e;
-  --Cyan: rgb(43, 195, 226);
-  --Light-Cyan: rgb(150, 195, 226);
-  /* Neutral silver blue */
-  --Silver-Blue: rgb(200, 255, 250);
+  --main-: #b7ff54;
+  --cardColor: #d4ff92;
+  --accent1: #c6ff75;
+  /* Tile color */
+  --accent3: #c6ff75;
+  /* Darker contrast greens */
+  --pine: #235c2d;
+  --darkGreen: #144d36;
+
+  --textColor: #1a1a1a;
+  --shadowColor: #3c3c3c;
 }
 /* The box that containers the container related elements */
 .Creator {
   position: absolute;
-  width: 95vw;
-  height: 70vh;
-
+  width: 60vh;
+  height: 60vh;
   display: flex;
   flex-direction: column;
-  border: 5px solid lightpink;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
-  background-color: hsl(0, 5%, 15%);
-  color: #ffffff;
+  background-color: var(--cardColor);
+  border: var(--darkGreen) solid 3px;
   padding: 10px;
   top: 50%;
   left: 50%;
@@ -47,45 +51,60 @@
     border-color: lightpink;
   }
 }
-/* The add button in the bottom left */
-.Add {
-  height: 75px;
-  width: 75px;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  border: 5px solid var(--Silver-Blue);
-  border-radius: 50%;
-  background-image: radial-gradient(circle, var(--Cyan), hsl(340, 76%, 50%));
+
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin-top: 20px;
 }
 
 /* The button in the bottom right */
-.Reset {
+.btn_submit {
   height: 75px;
-  width: 75px;
-  position: absolute;
+  width: 40%;
+  position: relative;
   bottom: 10px;
   right: 10px;
-  border: 5px solid var(--Silver-Blue);
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--Cyan), hsl(340, 76%, 50%));
+  border-radius: 15px;
+  background-color: var(--darkGreen);
+  color: var(--accent1);
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: "Roboto Mono", sans-serif;
 }
 
 /* Typing boxes */
 /* Top task in parent element */
-.HeaderTask {
+.headerTask {
+  font-size: 1rem;
+  font-family: "Roboto Mono", sans-serif;
   margin: 20px;
   border: none;
-  background-color: hsla(340, 76%, 50%, 0.5);
   border-radius: 5px;
+  width: 50%;
   height: 10%;
-  text-align: center;
+  background-color: var(--accent1);
+  outline: none;
 }
+.headerTask:focus {
+  border: 3px solid var(--darkGreen);
+}
+
 /* Bottom text box */
 .DescriptTask {
+  font-family: "Roboto Mono", sans-serif;
+
   border: none;
-  background-color: hsla(355, 100%, 81%, 0.5);
+  background-color: var(--accent1);
   border-radius: 5px;
-  height: 70%;
-  text-align: center;
+  width: 50%;
+  height: 30%;
+  resize: none;
+  overflow: auto;
+  outline: none;
+}
+.DescriptTask:focus {
+  border: 3px solid var(--darkGreen);
 }

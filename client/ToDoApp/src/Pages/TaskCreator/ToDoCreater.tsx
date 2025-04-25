@@ -1,8 +1,9 @@
 import { useState, useContext, useRef, useEffect } from "react";
-import { TaskContext, Contexts } from "../../Components/TaskProvider";
+import { TaskContext, Contexts } from "../../components/taskProvider";
 import { v4 as uuidv4 } from "uuid";
-import { taskStuct } from "../../Types/Provider";
-import { sendTaskData } from "../../Services/toDoApi";
+import { taskStuct } from "../../types/Provider";
+import { sendTaskData } from "../../services/toDoApi";
+import "./creator.css";
 function ToDoCreater() {
   //Main task data thats given to the server
   const [taskData, setTaskData] = useState<taskStuct[]>([]);
@@ -53,7 +54,7 @@ function ToDoCreater() {
       <div className="Creator">
         <input
           type="text"
-          className="HeaderTask"
+          className="headerTask"
           placeholder="Task Name"
           value={TaskName}
           onChange={(event) => handleTaskChange(event, "name")}
@@ -64,17 +65,19 @@ function ToDoCreater() {
           value={TaskDescription}
           onChange={(event) => handleTaskChange(event, "description")}
         />
-        <button
-          className="Add"
-          onClick={async () => {
-            await addTask(TaskName, TaskDescription);
-          }}
-        >
-          Create
-        </button>
-        <button className="Reset" onClick={handleReset}>
-          Reset
-        </button>
+        <div className="btn-container">
+          <button
+            className="btn_submit"
+            onClick={async () => {
+              await addTask(TaskName, TaskDescription);
+            }}
+          >
+            Create
+          </button>
+          <button className="btn_submit" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
       </div>
     </>
   );
