@@ -22,8 +22,12 @@ function Groups() {
     setFolders((prevFolders) => [...prevFolders, newFolder]);
   }
 
-  //Delete a folder based on index
+  //Delete a folder based on index and set to "" if deleted folder is the current one
   function deleteFolderLocal(index: number) {
+    const folderToDelete = folders.find((folder) => folder.index === index);
+    if (folderToDelete && folderToDelete.folder === foldername) {
+      setFoldername("");
+    }
     setFolders(folders.filter((folder) => folder.index !== index));
   }
 

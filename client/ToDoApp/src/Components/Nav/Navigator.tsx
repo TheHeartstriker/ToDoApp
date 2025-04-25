@@ -1,16 +1,12 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { TaskContext, Contexts } from "../taskProvider";
-import {
-  createDraggable,
-  createSpring,
-  createAnimatable,
-  utils,
-} from "animejs";
+import { createAnimatable, utils } from "animejs";
 import "./Nav.css";
 
 function Nav() {
   const navigate = useNavigate();
+  const frameIdRef = useRef<number | null>(null);
+
   function initAnimate() {
     const squares = Array.from(document.querySelectorAll(".move-nav-btn"));
     const animatable = squares.map((square) =>
@@ -24,9 +20,9 @@ function Nav() {
     return { squares, animatable };
   }
 
-  function onMouseMove(e: MouseEvent, animatable: any[], squares: any[]) {
+  function onMouseMove(mouse: any, animatable: any[], squares: any[]) {
     if (!squares || !animatable) return;
-    const { clientX, clientY } = e;
+    const { clientX, clientY } = mouse;
     squares.forEach((square: any, index: number) => {
       const boundingRect = square.getBoundingClientRect();
       const { top, left, width, height } = boundingRect;
@@ -54,31 +50,50 @@ function Nav() {
 
   useEffect(() => {
     const { squares, animatable } = initAnimate();
-    console.log("squares", squares, animatable);
-    const handleMouseMove = (e: MouseEvent) =>
-      onMouseMove(e, animatable, squares);
-    window.addEventListener("mousemove", handleMouseMove);
+    let mouse = { x: 0, y: 0 };
+    let prevMouse = { x: 0, y: 0 };
+    function mouseMove(e: MouseEvent) {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    }
+    function update() {
+      if (mouse.x !== prevMouse.x || mouse.y !== prevMouse.y) {
+        onMouseMove(
+          { clientX: mouse.x, clientY: mouse.y },
+          animatable,
+          squares
+        );
+        prevMouse.x = mouse.x;
+        prevMouse.y = mouse.y;
+      }
+      frameIdRef.current = requestAnimationFrame(update);
+    }
 
+    frameIdRef.current = requestAnimationFrame(update);
+    window.addEventListener("mousemove", mouseMove);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", mouseMove);
+      if (frameIdRef.current) {
+        cancelAnimationFrame(frameIdRef.current);
+      }
     };
   }, []);
 
   return (
     <>
       <div className="ContainerHeader">
-        <Link to="/container">
-          <button className="move-nav-btn">ToDo's</button>
-        </Link>
-        <Link to="/create">
-          <button className="move-nav-btn">Create</button>
-        </Link>
-        <Link to="/">
-          <button className="move-nav-btn">Login</button>
-        </Link>
-        <Link to="/groups">
-          <button className="move-nav-btn">Groups</button>
-        </Link>
+        <button className="move-nav-btn" onClick={() => navigate("/container")}>
+          ToDo's
+        </button>
+        <button className="move-nav-btn" onClick={() => navigate("/create")}>
+          Create
+        </button>
+        <button className="move-nav-btn" onClick={() => navigate("/")}>
+          Login
+        </button>
+        <button className="move-nav-btn" onClick={() => navigate("/groups")}>
+          Groups
+        </button>
       </div>
     </>
   );
