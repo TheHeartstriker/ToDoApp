@@ -35,10 +35,11 @@ function GridAnimation() {
     if (!gridElement) return;
     // Clear the grid element
     gridElement.innerHTML = "";
-    const columns = Math.floor(gridElement.clientWidth / 100);
-    const rows = Math.floor(gridElement.clientHeight / 100);
+    const columns = Math.floor(document.documentElement.scrollWidth / 100);
+    const rows = Math.floor(document.documentElement.scrollHeight / 100);
     gridElement.style.setProperty("--cols", columns.toString());
     gridElement.style.setProperty("--rows", rows.toString());
+    gridElement.style.height = `${document.documentElement.scrollHeight}px`;
 
     gridSizeRef.current = { cols: columns, rows: rows };
 
@@ -93,8 +94,16 @@ function GridAnimation() {
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
+
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+
+    resizeObserver.observe(document.documentElement);
+
     return () => {
       window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();
     };
   }, []);
 

@@ -15,8 +15,8 @@
 .FolderCreate {
   position: absolute;
   /* Need to adjust */
-  width: 30vw;
-  height: 15vw;
+  width: 40%;
+  height: 20%;
 
   display: flex;
   flex-direction: column;

@@ -31,11 +31,10 @@
   border: 5px solid var(--darkGreen);
   background-color: var(--accent1);
   cursor: pointer;
-  margin: 75px;
-  aspect-ratio: 1 / 1;
+  margin: 100px;
   border-radius: 15px;
-  height: 15vw;
-  width: 15vw;
+  height: auto;
+  aspect-ratio: 1;
   transition: all 1s ease;
 }
 /* The taskname */
@@ -58,8 +57,8 @@
   z-index: 2;
   top: 50%;
   left: 50%;
-  height: 5vh;
-  width: 5vh;
+  height: 15%;
+  width: 15%;
   transform: translate(-50%, -50%);
   cursor: pointer;
   border-radius: 50%;
@@ -106,4 +105,19 @@
   width: 100%;
   bottom: 0;
   right: 0;
+}
+
+@media (max-width: 1000px) {
+  .Task {
+    margin: 50px;
+  }
+  .ToDoContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1500px) {
+  .Task {
+    margin: 50px;
+  }
 }
