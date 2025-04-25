@@ -35,7 +35,8 @@ function Container() {
     setTaskData((prevTaskData) =>
       prevTaskData.filter((task) => task.task_id !== id)
     );
-    deleteTask(id);
+
+    deleteTask(taskData[index].task_id);
   }
 
   function Completed(index: number) {

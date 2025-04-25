@@ -32,15 +32,15 @@ async function loadTasks(req, res, next) {
 
 async function deleteTask(req, res, next) {
   try {
-    const { Task } = req.body;
+    const { task_id } = req.body;
     const userId = req.user.id;
     //Input validation
-    const validate = [{ Task: Task }];
-    validateData(validate, [["Task", "string", 36]]);
+    const validate = [{ task_id: task_id }];
+    validateData(validate, [["task_id", "string", 36]]);
     //Delete task
     const task = await ToDo.destroy({
       where: {
-        task_id: Task,
+        task_id: task_id,
         userId: userId,
       },
     });

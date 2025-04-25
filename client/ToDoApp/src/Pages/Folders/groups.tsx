@@ -76,11 +76,14 @@ function Groups() {
             value={folderMainName}
             onChange={(e) => setFolderMainName(e.target.value)}
           />
-          <button id="AddFolder" onClick={() => addFolder(folderMainName)}>
+          <button
+            className="action_btn"
+            onClick={() => addFolder(folderMainName)}
+          >
             Create
           </button>
           <button
-            id="Clear"
+            className="action_btn"
             onClick={() => setShowFolderCreate(!ShowFolderCreate)}
           >
             Clear

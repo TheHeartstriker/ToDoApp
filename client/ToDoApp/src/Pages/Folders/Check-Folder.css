@@ -1,25 +1,28 @@
 :root {
-  --Dark-pink: hsl(340, 76%, 50%);
-  --Light-pink: hsl(355, 100%, 81%);
-  --Middle-Pink: #ff577e;
-  /* Pink and blue are opposite on the color wheel */
-  --Dark-Blue: rgb(0, 0, 128);
-  --Cyan: rgb(43, 195, 226);
-  --Light-Cyan: rgb(150, 195, 226);
-  /* Neutral silver blue */
-  --Silver-Blue: rgb(200, 255, 250);
+  --main: #b7ff54;
+  --cardColor: #d4ff92;
+  --accent1: #c6ff75;
+  /* Tile color */
+  --accent3: #c6ff75;
+  /* Darker contrast greens */
+  --pine: #235c2d;
+  --darkGreen: #144d36;
+
+  --textColor: #1a1a1a;
+  --shadowColor: #3c3c3c;
 }
 /* The creation screen for folders */
 .FolderCreate {
   position: absolute;
   /* Need to adjust */
-  width: 95vw;
-  height: 70vh;
+  width: 30vw;
+  height: 15vw;
 
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  background-color: hsl(0, 5%, 15%);
+  background-color: var(--cardColor);
+  border: var(--darkGreen) solid 3px;
   color: #ffffff;
   padding: 10px;
   top: 50%;
@@ -29,29 +32,36 @@
 
 /* Typing boxes for the creator */
 .HeaderTask {
+  height: 25%;
   margin: 20px;
   border: none;
-  background-color: hsla(340, 76%, 50%, 0.5);
-  border-radius: 5px;
-  height: 10%;
+  background-color: var(--accent1);
+  border-radius: 10px;
+  font-family: "Roboto mono", sans-serif;
   text-align: center;
+  outline: none;
+}
+
+.HeaderTask:focus {
+  outline: 2px solid var(--pine);
 }
 
 /* For the button that reveals the folder creator at the bottom */
 .ShowFolderCreate {
   position: absolute;
-  background-color: var(--Light-pink);
+  background-color: var(--pine);
   height: 50px;
   width: 500px;
   border: none;
-  border-radius: 5px;
-  bottom: -20px;
+  border-radius: 10px;
+  bottom: -25px;
   left: 50%;
+  color: var(--main);
   transform: translate(-50%, -50%);
 }
 /* The box that containers the task name and info */
 .FolderName {
-  background-color: var(--Light-pink);
+  background-color: var(--accent1);
   border: none;
   height: 100px;
   width: 70vw;
@@ -61,15 +71,15 @@
 }
 /* Changes the folder color based on true or false values(in groups.jsx) */
 .FolderNameOn {
-  background-color: var(--Middle-Pink);
+  background-color: var(--pine);
 }
 
 .FolderName:hover {
-  background-color: var(--Middle-Pink);
+  background-color: var(--pine);
 }
 /* The folder delete button */
 .FolderDelete {
-  background-color: var(--Light-pink);
+  background-color: var(--accent1);
   border: none;
   height: 100px;
   width: 20vw;
@@ -77,25 +87,14 @@
   border-radius: 5px;
 }
 
-/* The add button in the bottom left */
-#AddFolder {
-  height: 75px;
-  width: 75px;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  border-radius: 50%;
-  border: 5px solid var(--Silver-Blue);
-  background: radial-gradient(circle, hsl(350, 100%, 90%), hsl(340, 76%, 50%));
-}
-/* Clears the folder create screen */
-#Clear {
-  height: 75px;
-  width: 75px;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  border-radius: 50%;
-  border: 5px solid var(--Silver-Blue);
-  background: radial-gradient(circle, hsl(350, 100%, 90%), hsl(340, 76%, 50%));
+.action_btn {
+  background-color: var(--pine);
+  border: none;
+  width: 100%;
+  color: var(--main-);
+  font-family: "Roboto Mono", sans-serif;
+  font-size: 1rem;
+  margin-top: 20px;
+  padding: 5px;
+  border-radius: 10px;
 }
