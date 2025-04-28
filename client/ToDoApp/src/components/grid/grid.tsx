@@ -39,7 +39,6 @@ function GridAnimation() {
     const rows = Math.floor(document.documentElement.scrollHeight / 100);
     gridElement.style.setProperty("--cols", columns.toString());
     gridElement.style.setProperty("--rows", rows.toString());
-    gridElement.style.height = `${document.documentElement.scrollHeight}px`;
 
     gridSizeRef.current = { cols: columns, rows: rows };
 
@@ -95,15 +94,8 @@ function GridAnimation() {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    const resizeObserver = new ResizeObserver(() => {
-      handleResize();
-    });
-
-    resizeObserver.observe(document.documentElement);
-
     return () => {
       window.removeEventListener("resize", handleResize);
-      resizeObserver.disconnect();
     };
   }, []);
 

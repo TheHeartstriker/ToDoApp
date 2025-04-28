@@ -17,9 +17,10 @@
   position: relative;
   display: flex;
   align-items: center;
+
   justify-content: center;
-  height: 88vh; /* 100% - 12vh */
-  width: 100vw;
+  height: 100vh;
+  width: 100%;
 }
 
 /* The visable box that contains the text boxes */

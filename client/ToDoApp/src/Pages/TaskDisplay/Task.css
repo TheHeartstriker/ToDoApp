@@ -19,6 +19,7 @@
   height: 100%;
   width: 100%;
   gap: 100px;
+  transform: translateY(150px);
   grid-template-columns: repeat(3, 1fr);
 }
 
@@ -107,9 +108,21 @@
   right: 0;
 }
 
+@media (max-width: 600px) {
+  .Task {
+    font-size: 2rem;
+    margin: 20px;
+    transform: scale(1.3);
+  }
+  .ToDoContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 1000px) {
   .Task {
     margin: 50px;
+    font-size: 1.5rem;
   }
   .ToDoContainer {
     grid-template-columns: repeat(2, 1fr);
